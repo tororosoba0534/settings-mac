@@ -25,6 +25,10 @@ else
 	echo "Please run 'tmux attach' command."
 fi
 
+#
+# fzf setting
+export FZF_DEFAULT_COMMAND='rg --hidden -l "" -g "!.git/"'
+
 # 
 # Custom man command
 function man() {
