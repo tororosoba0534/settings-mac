@@ -21,6 +21,9 @@ require("lazy").setup({
 	"mbbill/undotree",
 	"nvim-tree/nvim-tree.lua",
 	{ 'akinsho/bufferline.nvim', version = "v3.*", dependencies = 'nvim-tree/nvim-web-devicons' },
+	-- fzf-lua
+	-- You need "fzf" & "rg"
+	{ 'ibhagwan/fzf-lua', dependencies = 'nvim-tree/nvim-web-devicons' },
 	'neovim/nvim-lspconfig',
 	{
 		"williamboman/mason.nvim",
@@ -66,6 +69,13 @@ require('nvim-web-devicons').setup({})
 
 require("nvim-tree").setup()
 vim.api.nvim_set_keymap('n', '<M-f>', ':NvimTreeToggle<CR>', { noremap = true })
+
+vim.api.nvim_set_keymap('n', '<M-S-f>', ':FzfLua files<CR>', { noremap = true })
+vim.api.nvim_create_augroup("fzf", { clear = true })
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = {"fzf"},
+	command = "tnoremap <buffer> <M-S-f> <ESC>",
+})
 
 vim.api.nvim_set_var('undotree_SetFocusWhenToggle', 1)
 vim.api.nvim_set_keymap('n', '<M-u>', ':UndotreeToggle<CR>', { noremap = true })
