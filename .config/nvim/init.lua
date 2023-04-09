@@ -24,6 +24,7 @@ require("lazy").setup({
 	-- fzf-lua
 	-- You need "fzf" & "rg"
 	{ 'ibhagwan/fzf-lua', dependencies = 'nvim-tree/nvim-web-devicons' },
+	{'akinsho/toggleterm.nvim', version = "*", config = true},
 	'neovim/nvim-lspconfig',
 	{
 		"williamboman/mason.nvim",
@@ -79,6 +80,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 vim.api.nvim_set_var('undotree_SetFocusWhenToggle', 1)
 vim.api.nvim_set_keymap('n', '<M-u>', ':UndotreeToggle<CR>', { noremap = true })
+
+require("toggleterm").setup{
+	start_in_insert = false,
+}
+vim.keymap.set('n', '<M-t>', ':ToggleTerm<CR>i')
+vim.keymap.set('t', '<M-t>', '<C-\\><C-n>:ToggleTerm<CR>')
 
 vim.opt.termguicolors = true
 require("bufferline").setup {}
