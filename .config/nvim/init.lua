@@ -1,3 +1,9 @@
+-- Disable netrw at the very start of your init.lua
+-- Strongly recommended when you use nvim-tree.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+
 -- lazy.nvim -- plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -13,6 +19,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	"mbbill/undotree",
+	"nvim-tree/nvim-tree.lua",
 	{ 'akinsho/bufferline.nvim', version = "v3.*", dependencies = 'nvim-tree/nvim-web-devicons' },
 	'neovim/nvim-lspconfig',
 	{
@@ -56,6 +63,9 @@ require("mason-lspconfig").setup_handlers {
 }
 
 require('nvim-web-devicons').setup({})
+
+require("nvim-tree").setup()
+vim.api.nvim_set_keymap('n', '<M-f>', ':NvimTreeToggle<CR>', { noremap = true })
 
 vim.api.nvim_set_var('undotree_SetFocusWhenToggle', 1)
 vim.api.nvim_set_keymap('n', '<M-u>', ':UndotreeToggle<CR>', { noremap = true })
