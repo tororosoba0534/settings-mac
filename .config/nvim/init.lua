@@ -15,6 +15,9 @@ require("lazy").setup({
   "mbbill/undotree"
 })
 
+vim.api.nvim_set_var('undotree_SetFocusWhenToggle', 1)
+vim.api.nvim_set_keymap('n', '<M-u>', ':UndotreeToggle<CR>', {noremap = true})
+
 
 vim.o.scrolloff = 10
 vim.o.wrap = true
