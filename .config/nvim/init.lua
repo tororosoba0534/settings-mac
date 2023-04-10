@@ -31,8 +31,10 @@ require("lazy").setup({
 		build = ":MasonUpdate" -- :MasonUpdate updates registry contents
 	},
 	'williamboman/mason-lspconfig.nvim',
+	'L3MON4D3/LuaSnip',
 	"hrsh7th/nvim-cmp",
 	"hrsh7th/cmp-nvim-lsp",
+	'saadparwaiz1/cmp_luasnip',
 })
 
 
@@ -49,22 +51,73 @@ require("mason-lspconfig").setup()
 -- see :h mason-lspconfig-automatic-server-setup
 require("mason-lspconfig").setup_handlers {
 	function(server_name)
-		require("lspconfig")[server_name].setup {}
+		local capabilities = require('cmp_nvim_lsp').default_capabilities()
+		require("lspconfig")[server_name].setup {
+			capabilities = capabilities
+		}
 	end,
 	-- -- you can provide a dedicated handler for specific servers. for example:
 	-- ["rust_analyzer"] = function ()
 	--   require("rust-tools").setup {}
 	-- end,
 	["lua_ls"] = function()
+		local capabilities = require('cmp_nvim_lsp').default_capabilities()
 		require("lspconfig").lua_ls.setup {
 			settings = {
 				Lua = {
 					diagnostics = { globals = { "vim" } }
 				}
-			}
+			},
+			capabilities = capabilities
 		}
 	end,
 }
+
+vim.keymap.set('n', 'gh',  '<cmd>lua vim.lsp.buf.hover()<CR>')
+vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
+vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+vim.keymap.set('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+vim.keymap.set('n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+vim.keymap.set('n', 'ge', '<cmd>lua vim.diagnostic.open_float()<CR>')
+vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+
+vim.cmd [[
+set updatetime=500
+highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+augroup lsp_document_highlight
+  autocmd!
+  autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
+augroup END
+]]
+
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+local cmp = require'cmp'
+cmp.setup({
+	snippet = {
+		expand = function(args)
+			require('luasnip').lsp_expand(args.body)
+		end,
+	},
+	sources = cmp.config.sources({
+		{name = 'nvim_lsp'},
+		{name = 'luasnip'},
+	}),
+	mapping = cmp.mapping.preset.insert({
+		["<C-p>"] = cmp.mapping.select_prev_item(),
+    		["<C-n>"] = cmp.mapping.select_next_item(),
+    		['<C-l>'] = cmp.mapping.complete(),
+    		['<C-e>'] = cmp.mapping.abort(),
+    		["<CR>"] = cmp.mapping.confirm { select = true },
+	}),
+})
 
 require('nvim-web-devicons').setup({})
 
@@ -97,6 +150,7 @@ vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = '>>>'
 vim.o.statusline = '%F%=%l/%L lines (%p%%)'
+vim.o.guicursor = 'i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150'
 
 vim.api.nvim_create_user_command('Sv', 'source $MYVIMRC', {})
 
