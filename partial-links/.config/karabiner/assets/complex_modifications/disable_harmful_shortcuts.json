@@ -1,0 +1,31 @@
+{
+	"title": "Disable harmful shortcuts",
+	"rules": [
+		{
+			"description": "Disable CMD-h (left & right)",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "h",
+						"modifiers": {
+		            				"mandatory": ["left_command"],
+		            				"optional": ["caps_lock", "option"]
+		        			}
+		    			}
+				},
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "h",
+						"modifiers": {
+		            				"mandatory": ["right_command"],
+		            				"optional": ["caps_lock", "option"]
+		        			}
+		    			}
+				}
+			]
+		}
+	]
+}
+
