@@ -63,24 +63,24 @@ require("mason-lspconfig").setup_handlers({
 	-- -- you can provide a dedicated handler for specific servers. for example:
 	-- ["rust_analyzer"] = function ()
 	--   require("rust-tools").setup {}
-	-- end,
-	["lua_ls"] = function()
-		local capabilities = require("cmp_nvim_lsp").default_capabilities()
-		require("lspconfig").lua_ls.setup({
-			settings = {
-				Lua = {
-					diagnostics = { globals = { "vim" } },
-				},
+-- end,
+["lua_ls"] = function()
+	local capabilities = require("cmp_nvim_lsp").default_capabilities()
+	require("lspconfig").lua_ls.setup({
+		settings = {
+			Lua = {
+				diagnostics = { globals = { "vim" } },
 			},
-			capabilities = capabilities,
-		})
-	end,
-	["tsserver"] = function()
-		local capabilities = require("cmp_nvim_lsp").default_capabilities()
-		require("lspconfig").tsserver.setup({
-			filetypes = { "typescript", "typescriptreact" },
-		})
-	end,
+		},
+		capabilities = capabilities,
+	})
+end,
+["tsserver"] = function()
+	local capabilities = require("cmp_nvim_lsp").default_capabilities()
+	require("lspconfig").tsserver.setup({
+		filetypes = { "typescript", "typescriptreact" },
+	})
+end,
 })
 
 vim.keymap.set("n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>")
@@ -111,47 +111,48 @@ vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 local cmp = require("cmp")
 cmp.setup({
-	snippet = {
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
-		end,
-	},
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-	}),
-	mapping = cmp.mapping.preset.insert({
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<C-l>"] = cmp.mapping.complete(),
-		["<C-e>"] = cmp.mapping.abort(),
-		["<CR>"] = cmp.mapping.confirm({ select = true }),
-	}),
+snippet = {
+	expand = function(args)
+		require("luasnip").lsp_expand(args.body)
+	end,
+},
+sources = cmp.config.sources({
+	{ name = "nvim_lsp" },
+	{ name = "luasnip" },
+}),
+mapping = cmp.mapping.preset.insert({
+	["<C-p>"] = cmp.mapping.select_prev_item(),
+	["<C-n>"] = cmp.mapping.select_next_item(),
+	["<C-l>"] = cmp.mapping.complete(),
+	["<C-e>"] = cmp.mapping.abort(),
+	["<CR>"] = cmp.mapping.confirm({ select = true }),
+}),
 })
 
 local augroup_null_ls_formatting = vim.api.nvim_create_augroup("LspFormatting", {})
 require("null-ls").setup({
-	sources = {
-		require("null-ls").builtins.formatting.stylua,
-	},
-	on_attach = function(client, bufnr)
-		if client.supports_method("textDocument/formatting") then
-			vim.api.nvim_clear_autocmds({ group = augroup_null_ls_formatting, buffer = bufnr })
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				group = augroup_null_ls_formatting,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.formatting_sync()
-				end,
-			})
-		end
-	end,
+sources = {
+	require("null-ls").builtins.formatting.stylua,
+},
+on_attach = function(client, bufnr)
+	if client.supports_method("textDocument/formatting") then
+		vim.api.nvim_clear_autocmds({ group = augroup_null_ls_formatting, buffer = bufnr })
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = augroup_null_ls_formatting,
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.formatting_sync()
+			end,
+		})
+	end
+end,
 })
 
 require("nvim-web-devicons").setup({})
 
 require("nvim-tree").setup()
-vim.api.nvim_set_keymap("n", "<M-f>", ":NvimTreeToggle<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>F", ":NvimTreeToggle<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>S", ":NvimTreeToggle ~/settings-mac<CR>", { noremap = true })
 
 require("fzf-lua").setup({
 	lsp = {
@@ -159,27 +160,26 @@ require("fzf-lua").setup({
 		async_or_timeout = 3000,
 	},
 })
-vim.api.nvim_set_keymap("n", "<M-S-f>", ":FzfLua files<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>f", ":FzfLua files<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>s", ":FzfLua files cwd=~/settings-mac<CR>", { noremap = true })
 vim.api.nvim_create_augroup("fzf", { clear = true })
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = { "fzf" },
-	command = "tnoremap <buffer> <M-S-f> <ESC>",
+	command = "tnoremap <buffer> <C-w>f <ESC>",
+})
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "fzf" },
+	command = "tnoremap <buffer> <C-w>s <ESC>",
 })
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
-vim.api.nvim_set_keymap("n", "<M-u>", ":UndotreeToggle<CR>", { noremap = true })
-
-require("toggleterm").setup({
-	start_in_insert = false,
-})
-vim.keymap.set("n", "<M-t>", ":ToggleTerm<CR>i")
-vim.keymap.set("t", "<M-t>", "<C-\\><C-n>:ToggleTerm<CR>")
+vim.api.nvim_set_keymap("n", "<C-w>u", ":UndotreeToggle<CR>", { noremap = true })
 
 vim.opt.termguicolors = true
 require("bufferline").setup({})
 
 require("trouble").setup({})
-vim.api.nvim_set_keymap("n", "<A-e>", ":TroubleToggle<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>e", ":TroubleToggle<CR>", { noremap = true })
 
 vim.o.number = true
 vim.o.scrolloff = 10
@@ -188,7 +188,7 @@ vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 
-vim.api.nvim_create_user_command("Sv", "source $MYVIMRC", {})
+vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
 vim.api.nvim_set_keymap("", "<C-g>", "<ESC>", { noremap = true })
 vim.api.nvim_set_keymap("!", "<C-g>", "<ESC>", { noremap = true })
@@ -211,7 +211,9 @@ vim.api.nvim_set_keymap("i", "<C-k>", "<ESC>lDa", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>/", ":below vsplit<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>-", ":below split<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>c", ":close<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>D", ":bn | bd#<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>C", ":only<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>d", ":bn | bd#<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<C-w>D", ":%bd | e# | bd#<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>j", ":wincmd w<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>k", ":wincmd W<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>h", ":bprev<CR>", { noremap = true })
