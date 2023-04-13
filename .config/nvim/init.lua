@@ -27,6 +27,7 @@ require("lazy").setup({
 	-- fzf-lua
 	-- You need "fzf" & "rg"
 	{ "ibhagwan/fzf-lua", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
 	{
@@ -74,6 +75,12 @@ require("mason-lspconfig").setup_handlers({
 			capabilities = capabilities,
 		})
 	end,
+	["tsserver"] = function()
+		local capabilities = require("cmp_nvim_lsp").default_capabilities()
+		require("lspconfig").tsserver.setup({
+			filetypes = { "typescript", "typescriptreact" },
+		})
+	end,
 })
 
 vim.keymap.set("n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>")
@@ -89,17 +96,17 @@ vim.keymap.set("n", "ge", "<cmd>lua vim.diagnostic.open_float()<CR>")
 vim.keymap.set("n", "g]", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 
-vim.cmd([[
-set updatetime=500
-highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-augroup lsp_document_highlight
-  autocmd!
-  autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
-  autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
-augroup END
-]])
+-- vim.cmd([[
+-- set updatetime=500
+-- highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+-- highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+-- highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+-- augroup lsp_document_highlight
+--   autocmd!
+--   autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
+--   autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
+-- augroup END
+-- ]])
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 local cmp = require("cmp")
@@ -171,6 +178,10 @@ vim.keymap.set("t", "<M-t>", "<C-\\><C-n>:ToggleTerm<CR>")
 vim.opt.termguicolors = true
 require("bufferline").setup({})
 
+require("trouble").setup({})
+vim.api.nvim_set_keymap("n", "<A-e>", ":TroubleToggle<CR>", { noremap = true })
+
+vim.o.number = true
 vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
@@ -191,6 +202,11 @@ vim.api.nvim_set_keymap("", "<C-p>", "gk", { noremap = true })
 vim.api.nvim_set_keymap("!", "<C-p>", "<Up>", { noremap = true })
 vim.api.nvim_set_keymap("n", "J", "j<C-e>", { noremap = true })
 vim.api.nvim_set_keymap("n", "K", "k<C-y>", { noremap = true })
+vim.api.nvim_set_keymap("", "<C-a>", "<HOME>", { noremap = true })
+vim.api.nvim_set_keymap("!", "<C-a>", "<HOME>", { noremap = true })
+vim.api.nvim_set_keymap("", "<C-e>", "<END>", { noremap = true })
+vim.api.nvim_set_keymap("!", "<C-e>", "<END>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-k>", "<ESC>lDa", { noremap = true })
 
 vim.api.nvim_set_keymap("n", "<C-w>/", ":below vsplit<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>-", ":below split<CR>", { noremap = true })
