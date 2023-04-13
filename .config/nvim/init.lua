@@ -40,6 +40,14 @@ require("lazy").setup({
 	"hrsh7th/cmp-nvim-lsp",
 	"saadparwaiz1/cmp_luasnip",
 	{ "jose-elias-alvarez/null-ls.nvim", dependencies = "nvim-lua/plenary.nvim" },
+	"MunifTanjim/prettier.nvim",
+	  {
+	    "iamcco/markdown-preview.nvim",
+	    ft = "markdown",
+	    build = function()
+		    vim.fn["mkdp#util#install"]()
+	    end,
+  },
 })
 
 -- LSP settings
@@ -49,38 +57,67 @@ require("lazy").setup({
 -- 3. language server setups through nvim-lspconfig
 --
 require("mason").setup()
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+	ensure_installed = { "lua_ls", "tsserver" },
+})
 -- Automatic server setup
 -- If you use this approach, make sure you don't also manually set up servers directory via lspconfig as this will cause duplicated launches.
 -- see :h mason-lspconfig-automatic-server-setup
-require("mason-lspconfig").setup_handlers({
-	function(server_name)
-		local capabilities = require("cmp_nvim_lsp").default_capabilities()
-		require("lspconfig")[server_name].setup({
-			capabilities = capabilities,
+local lspconfig = require("lspconfig")
+-- local protocol = require("vim.lsp.protocol")
+local on_attach = function(client, bufnr)
+	vim.api.nvim_buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+	if client.server_capabilities.documentFormattingProvider then
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = vim.api.nvim_create_augroup("Format", { clear = true }),
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.formatting_seq_sync()
+			end,
 		})
-	end,
-	-- -- you can provide a dedicated handler for specific servers. for example:
-	-- ["rust_analyzer"] = function ()
-	--   require("rust-tools").setup {}
--- end,
-["lua_ls"] = function()
-	local capabilities = require("cmp_nvim_lsp").default_capabilities()
-	require("lspconfig").lua_ls.setup({
-		settings = {
-			Lua = {
-				diagnostics = { globals = { "vim" } },
-			},
+	end
+end
+-- local capabilities = require("cmp_nvim_lsp").default_capabilities(protocol.make_client_capabilities())
+lspconfig.lua_ls.setup({
+	on_attach = on_attach,
+	settings = {
+		Lua = {
+			diagnostics = { globals = { "vim" } },
 		},
-		capabilities = capabilities,
-	})
-end,
-["tsserver"] = function()
-	local capabilities = require("cmp_nvim_lsp").default_capabilities()
-	require("lspconfig").tsserver.setup({
-		filetypes = { "typescript", "typescriptreact" },
-	})
-end,
+		workspace = {
+			library = vim.api.nvim_get_runtime_file("", true),
+			checkThirdParty = false,
+		},
+	},
+})
+lspconfig.tsserver.setup({
+	on_attach = on_attach,
+	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+	-- root_dir = function()
+	-- 	return vim.loop.cwd()
+	-- end,
+	cmd = { "typescript-language-server", "--stdio" },
+})
+local cmp = require("cmp")
+cmp.setup({
+	snippet = {
+		expand = function(args)
+			require("luasnip").lsp_expand(args.body)
+		end,
+	},
+	mapping = cmp.mapping.preset.insert({
+		["<C-p>"] = cmp.mapping.select_prev_item(),
+		["<C-n>"] = cmp.mapping.select_next_item(),
+		["<C-l>"] = cmp.mapping.complete(),
+		["<C-e>"] = cmp.mapping.abort(),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		}),
+	}),
+	sources = cmp.config.sources({
+		{ name = "nvim_lsp" },
+	}),
 })
 
 vim.keymap.set("n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>")
@@ -109,43 +146,29 @@ vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 -- ]])
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-local cmp = require("cmp")
-cmp.setup({
-snippet = {
-	expand = function(args)
-		require("luasnip").lsp_expand(args.body)
-	end,
-},
-sources = cmp.config.sources({
-	{ name = "nvim_lsp" },
-	{ name = "luasnip" },
-}),
-mapping = cmp.mapping.preset.insert({
-	["<C-p>"] = cmp.mapping.select_prev_item(),
-	["<C-n>"] = cmp.mapping.select_next_item(),
-	["<C-l>"] = cmp.mapping.complete(),
-	["<C-e>"] = cmp.mapping.abort(),
-	["<CR>"] = cmp.mapping.confirm({ select = true }),
-}),
-})
 
-local augroup_null_ls_formatting = vim.api.nvim_create_augroup("LspFormatting", {})
-require("null-ls").setup({
-sources = {
-	require("null-ls").builtins.formatting.stylua,
-},
-on_attach = function(client, bufnr)
-	if client.supports_method("textDocument/formatting") then
-		vim.api.nvim_clear_autocmds({ group = augroup_null_ls_formatting, buffer = bufnr })
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = augroup_null_ls_formatting,
-			buffer = bufnr,
-			callback = function()
-				vim.lsp.buf.formatting_sync()
-			end,
+local null_ls = require("null-ls")
+null_ls.setup({
+	sources = {
+		-- null_ls.builtins.formatting.prettierd,
+		null_ls.builtins.diagnostics.eslint_d.with({
+			diagnostics_format = '[eslint] #{m}\n(#{c})'
 		})
-	end
-end,
+	},
+})
+local prettier = require("prettier")
+prettier.setup({
+	bin = "prettierd",
+	filetypes = {
+		"css",
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"json",
+		"scss",
+		"less",
+	},
 })
 
 require("nvim-web-devicons").setup({})
