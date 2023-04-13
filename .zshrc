@@ -1,4 +1,10 @@
-# 
+# Disable CTRL-S lock
+if [[ -t 0 ]]; then
+  stty stop undef
+  stty start undef
+fi
+
+#
 # Autostart tmux
 tmux_count=$(ps aux | grep tmux | grep -v grep | wc -l)
 tmux_window_name_settings="settings"
@@ -46,4 +52,4 @@ function man() {
 
 #
 # Custom commands
-alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua .zshrc .tmux.conf'
+alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
