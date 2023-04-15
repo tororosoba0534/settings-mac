@@ -105,20 +105,20 @@ lspconfig.lua_ls.setup({
 		Lua = {
 			diagnostics = { globals = { "vim" } },
 		},
-		workspace = {
-			library = vim.api.nvim_get_runtime_file("", true),
-			checkThirdParty = false,
-		},
+		-- workspace = {
+		-- 	library = vim.api.nvim_get_runtime_file("", true),
+		-- 	checkThirdParty = false,
+		-- },
 	},
 	capabilities = capabilities,
 })
 lspconfig.tsserver.setup({
 	-- on_attach = on_attach,
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-	-- root_dir = function()
-	-- 	return vim.loop.cwd()
-	-- end,
-	cmd = { "typescript-language-server", "--stdio" },
+	-- -- root_dir = function()
+	-- -- 	return vim.loop.cwd()
+	-- -- end,
+	-- cmd = { "typescript-language-server", "--stdio" },
 	capabilities = capabilities,
 })
 
@@ -154,6 +154,12 @@ local null_ls = require("null-ls")
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.diagnostics.eslint.with({
+			prefer_local = "node_modules/.bin",
+		}),
+		null_ls.builtins.formatting.prettier.with({
+			prefer_local = "node_modules/.bin",
+		}),
 		-- null_ls.builtins.formatting.prettierd,
 		-- null_ls.builtins.diagnostics.eslint_d.with({
 		-- 	diagnostics_format = '[eslint] #{m}\n(#{c})'
