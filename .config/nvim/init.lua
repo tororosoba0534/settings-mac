@@ -58,10 +58,40 @@ require("lazy").setup({
 -- 3. language server setups through nvim-lspconfig
 --
 require("mason").setup()
-require("mason-lspconfig").setup({
+local mason_lspconfig = require("mason-lspconfig")
+mason_lspconfig.setup({
 	ensure_installed = { "lua_ls", "tsserver", "jsonls" },
 	automatic_installation = true,
 })
+local lspconfig = require("lspconfig")
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+mason_lspconfig.setup_handlers({
+	function(server_name)
+		lspconfig[server_name].setup({
+			capabilities = capabilities,
+		})
+	end,
+	["lua_ls"] = function()
+		lspconfig.lua_ls.setup({
+			settings = {
+				Lua = {
+					diagnostics = { globals = { "vim" } },
+				},
+			},
+			capabilities = capabilities,
+		})
+	end,
+	["tsserver"] = function()
+		lspconfig.tsserver.setup({
+			filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+			capabilities = capabilities,
+		})
+	end,
+})
+
+-- lspconfig.jsonls.setup({
+-- 	capabilities = capabilities,
+-- })
 
 local cmp = require("cmp")
 cmp.setup({
@@ -83,46 +113,6 @@ cmp.setup({
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
 	}),
-})
-
-local lspconfig = require("lspconfig")
--- local on_attach = function(client, bufnr)
--- 	vim.api.nvim_buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
--- 	if client.server_capabilities.documentFormattingProvider then
--- 		vim.api.nvim_create_autocmd("BufWritePre", {
--- 			group = vim.api.nvim_create_augroup("Format", { clear = true }),
--- 			buffer = bufnr,
--- 			callback = function()
--- 				vim.lsp.buf.formatting_seq_sync()
--- 			end,
--- 		})
--- 	end
--- end
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-lspconfig.lua_ls.setup({
-	-- on_attach = on_attach,
-	settings = {
-		Lua = {
-			diagnostics = { globals = { "vim" } },
-		},
-		-- workspace = {
-		-- 	library = vim.api.nvim_get_runtime_file("", true),
-		-- 	checkThirdParty = false,
-		-- },
-	},
-	capabilities = capabilities,
-})
-lspconfig.tsserver.setup({
-	-- on_attach = on_attach,
-	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-	-- -- root_dir = function()
-	-- -- 	return vim.loop.cwd()
-	-- -- end,
-	-- cmd = { "typescript-language-server", "--stdio" },
-	capabilities = capabilities,
-})
-lspconfig.jsonls.setup({
-	capabilities = capabilities,
 })
 
 vim.keymap.set("n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>")
