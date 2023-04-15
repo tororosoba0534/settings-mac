@@ -28,6 +28,15 @@ require("lazy").setup({
 	-- fzf-lua
 	-- You need "fzf" & "rg"
 	{ "ibhagwan/fzf-lua", dependencies = "nvim-tree/nvim-web-devicons" },
+	{
+		"nvim-telescope/telescope.nvim",
+		tag = "0.1.1",
+		dependencies = { "nvim-lua/plenary.nvim" },
+	},
+	{
+		"nvim-telescope/telescope-file-browser.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+	},
 	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
@@ -192,23 +201,57 @@ require("nvim-tree").setup()
 vim.api.nvim_set_keymap("n", "<C-w>F", ":NvimTreeToggle<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-w>S", ":NvimTreeToggle ~/settings-mac<CR>", { noremap = true })
 
-require("fzf-lua").setup({
-	lsp = {
-		-- needed for null-ls.nvim
-		async_or_timeout = 3000,
+-- require("fzf-lua").setup({
+-- 	lsp = {
+-- 		-- needed for null-ls.nvim
+-- 		async_or_timeout = 3000,
+-- 	},
+-- })
+-- vim.api.nvim_set_keymap("n", "<C-w>f", ":FzfLua files<CR>", { noremap = true })
+-- vim.api.nvim_set_keymap("n", "<C-w>s", ":FzfLua files cwd=~/settings-mac<CR>", { noremap = true })
+-- vim.api.nvim_create_augroup("fzf", { clear = true })
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+-- 	pattern = { "fzf" },
+-- 	command = "tnoremap <buffer> <C-w>f <ESC>",
+-- })
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+-- 	pattern = { "fzf" },
+-- 	command = "tnoremap <buffer> <C-w>s <ESC>",
+-- })
+local telescope = require("telescope")
+local telescope_actions = require("telescope.actions")
+telescope.setup({
+	defaults = {
+		file_ignore_patterns = { "node_modules", ".git" },
+		mappings = {
+			i = {
+				["<C-w>f"] = telescope_actions.close,
+				["<esc>"] = telescope_actions.close,
+				["<C-g>"] = telescope_actions.close,
+				["q"] = telescope_actions.close,
+			},
+			n = {
+				["<C-w>f"] = telescope_actions.close,
+				["<esc>"] = telescope_actions.close,
+				["<C-g>"] = telescope_actions.close,
+				["q"] = telescope_actions.close,
+			},
+		},
+	},
+	pickers = {
+		find_files = {
+			hidden = true,
+			search_dirs = { "./", "~/settings-mac/" },
+		},
+	},
+	extensions = {
+		file_browser = {
+			hidden = true,
+		},
 	},
 })
-vim.api.nvim_set_keymap("n", "<C-w>f", ":FzfLua files<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>s", ":FzfLua files cwd=~/settings-mac<CR>", { noremap = true })
-vim.api.nvim_create_augroup("fzf", { clear = true })
-vim.api.nvim_create_autocmd({ "FileType" }, {
-	pattern = { "fzf" },
-	command = "tnoremap <buffer> <C-w>f <ESC>",
-})
-vim.api.nvim_create_autocmd({ "FileType" }, {
-	pattern = { "fzf" },
-	command = "tnoremap <buffer> <C-w>s <ESC>",
-})
+telescope.load_extension("file_browser")
+vim.api.nvim_set_keymap("n", "<C-w>f", ":Telescope find_files<CR>", { noremap = true })
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
 vim.api.nvim_set_keymap("n", "<C-w>u", ":UndotreeToggle<CR>", { noremap = true })
