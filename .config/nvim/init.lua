@@ -214,26 +214,9 @@ require("nvim-treesitter.configs").setup({
 require("nvim-web-devicons").setup({})
 
 require("nvim-tree").setup()
-vim.api.nvim_set_keymap("n", "<C-w>F", ":NvimTreeToggle<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>S", ":NvimTreeToggle ~/settings-mac<CR>", { noremap = true })
+vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
 
--- require("fzf-lua").setup({
--- 	lsp = {
--- 		-- needed for null-ls.nvim
--- 		async_or_timeout = 3000,
--- 	},
--- })
--- vim.api.nvim_set_keymap("n", "<C-w>f", ":FzfLua files<CR>", { noremap = true })
--- vim.api.nvim_set_keymap("n", "<C-w>s", ":FzfLua files cwd=~/settings-mac<CR>", { noremap = true })
--- vim.api.nvim_create_augroup("fzf", { clear = true })
--- vim.api.nvim_create_autocmd({ "FileType" }, {
--- 	pattern = { "fzf" },
--- 	command = "tnoremap <buffer> <C-w>f <ESC>",
--- })
--- vim.api.nvim_create_autocmd({ "FileType" }, {
--- 	pattern = { "fzf" },
--- 	command = "tnoremap <buffer> <C-w>s <ESC>",
--- })
 local telescope = require("telescope")
 local telescope_actions = require("telescope.actions")
 telescope.setup({
@@ -267,16 +250,16 @@ telescope.setup({
 	},
 })
 telescope.load_extension("file_browser")
-vim.api.nvim_set_keymap("n", "<C-w>f", ":Telescope find_files<CR>", { noremap = true })
+vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
-vim.api.nvim_set_keymap("n", "<C-w>u", ":UndotreeToggle<CR>", { noremap = true })
+vim.keymap.set("n", "<C-w>u", "<cmd>UndotreeToggle<CR>")
 
 vim.opt.termguicolors = true
 require("bufferline").setup({})
 
 require("trouble").setup({})
-vim.api.nvim_set_keymap("n", "<C-w>e", ":TroubleToggle<CR>", { noremap = true })
+vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
 
 vim.o.number = true
 vim.o.scrolloff = 10
@@ -287,36 +270,29 @@ vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
-vim.api.nvim_set_keymap("", "<C-g>", "<ESC>", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-g>", "<ESC>", { noremap = true })
-vim.api.nvim_set_keymap("", "<C-f>", "<Right>", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-f>", "<Right>", { noremap = true })
-vim.api.nvim_set_keymap("", "<C-b>", "<Left>", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-b>", "<Left>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-n>", "gj", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-n>", "<Down>", { noremap = true })
-vim.api.nvim_set_keymap("", "<C-p>", "gk", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-p>", "<Up>", { noremap = true })
-vim.api.nvim_set_keymap("n", "J", "j<C-e>", { noremap = true })
-vim.api.nvim_set_keymap("n", "K", "k<C-y>", { noremap = true })
-vim.api.nvim_set_keymap("", "<C-a>", "<HOME>", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-a>", "<HOME>", { noremap = true })
-vim.api.nvim_set_keymap("", "<C-e>", "<END>", { noremap = true })
-vim.api.nvim_set_keymap("!", "<C-e>", "<END>", { noremap = true })
-vim.api.nvim_set_keymap("i", "<C-k>", "<ESC>lDa", { noremap = true })
-
-vim.api.nvim_set_keymap("n", "<C-w>/", ":below vsplit<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>-", ":below split<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>c", ":close<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>C", ":only<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>d", ":bn | bd#<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>D", ":%bd | e# | bd#<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>j", ":wincmd w<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>k", ":wincmd W<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>h", ":bprev<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>l", ":bnext<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>w", ":vert res +25<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>W", ":vert res -25<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>t", ":res +15<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>T", ":res -15<CR>", { noremap = true })
-vim.api.nvim_set_keymap("n", "<C-w>=", ":horizontal wincmd =<CR>", { noremap = true })
+vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
+vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
+vim.keymap.set({ "", "!" }, "<C-b>", "<LEFT>")
+vim.keymap.set({ "", "!" }, "<C-n>", "<Down>")
+vim.keymap.set({ "", "!" }, "<C-p>", "<Up>")
+vim.keymap.set("n", "J", "k<C-e>")
+vim.keymap.set("n", "K", "k<C-y>")
+vim.keymap.set({ "", "!" }, "<C-a>", "<HOME>")
+vim.keymap.set({ "", "!" }, "<C-e>", "<END>")
+vim.keymap.set("i", "<C-k>", "<ESC>lDa")
+--
+vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
+vim.keymap.set("n", "<C-w>-", ":below split<CR>")
+vim.keymap.set("n", "<C-w>c", ":close<CR>")
+vim.keymap.set("n", "<C-w>C", ":only<CR>")
+vim.keymap.set("n", "<C-w>d", ":bn | bd#<CR>")
+vim.keymap.set("n", "<C-w>D", ":%bd | e# | bd#<CR>")
+vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
+vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
+vim.keymap.set("n", "<C-w>h", ":bprev<CR>")
+vim.keymap.set("n", "<C-w>l", ":bnext<CR>")
+vim.keymap.set("n", "<C-w>w", ":vert res +25<CR>")
+vim.keymap.set("n", "<C-w>W", ":vert res -25<CR>")
+vim.keymap.set("n", "<C-w>t", ":res +15<CR>")
+vim.keymap.set("n", "<C-w>T", ":res -15<CR>")
+vim.keymap.set("n", "<C-w>=", ":horizontal wincmd =<CR>")
