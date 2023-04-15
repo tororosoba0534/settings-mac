@@ -59,7 +59,7 @@ require("lazy").setup({
 --
 require("mason").setup()
 require("mason-lspconfig").setup({
-	ensure_installed = { "lua_ls", "tsserver" },
+	ensure_installed = { "lua_ls", "tsserver", "jsonls" },
 	automatic_installation = true,
 })
 
@@ -119,6 +119,9 @@ lspconfig.tsserver.setup({
 	-- -- 	return vim.loop.cwd()
 	-- -- end,
 	-- cmd = { "typescript-language-server", "--stdio" },
+	capabilities = capabilities,
+})
+lspconfig.jsonls.setup({
 	capabilities = capabilities,
 })
 
