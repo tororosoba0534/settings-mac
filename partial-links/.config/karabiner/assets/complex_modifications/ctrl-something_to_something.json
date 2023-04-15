@@ -1,214 +1,239 @@
 {
-	"title": "CTRL-something to something",
-	"rules": [
-		{
-			"description": "CTRL-g to ESC",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "g",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "escape"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-f to RIGHT",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "f",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "right_arrow"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-b to LEFT",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "b",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "left_arrow"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-n to DOWN",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "n",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "down_arrow"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-p to UP",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "p",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "up_arrow"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-h to BACKSPACE",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "h",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "delete_or_backspace"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-a to HOME",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "a",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "home"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-a to END",
-			"manipulators": [
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "e",
-						"modifiers": {
-		            				"mandatory": ["control"],
-		            				"optional": ["caps_lock", "option"]
-		        			}
-		    			},
-		    			"to": [
-		        			{
-		            				"key_code": "end"
-		        			}
-		    			],
-					"conditions": [
-					       {
-					        	"type": "frontmost_application_unless",
-					        	"bundle_identifiers": ["^com\\.apple\\.Terminal$", "^com\\.googlecode\\.iterm2$"]
-					        }
-					]
-				}
-			]
-		}
-	]
+  "title": "CTRL-something to something",
+  "rules": [
+    {
+      "description": "CTRL-g to ESC",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-f to RIGHT",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-b to LEFT",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-n to DOWN",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-p to UP",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-h to BACKSPACE",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_or_backspace"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-a to HOME",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "home"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.google\\.Chrome$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "CTRL-a to END",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": ["control"],
+              "optional": ["caps_lock", "option"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "end"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_unless",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.google\\.Chrome$"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
-
