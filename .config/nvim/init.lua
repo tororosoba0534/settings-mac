@@ -25,17 +25,10 @@ require("lazy").setup({
 		version = "v3.*",
 		dependencies = "nvim-tree/nvim-web-devicons",
 	},
-	-- fzf-lua
-	-- You need "fzf" & "rg"
-	{ "ibhagwan/fzf-lua", dependencies = "nvim-tree/nvim-web-devicons" },
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
-	},
-	{
-		"nvim-telescope/telescope-file-browser.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 	},
 	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
@@ -109,10 +102,6 @@ mason_lspconfig.setup_handlers({
 	end,
 })
 
--- lspconfig.jsonls.setup({
--- 	capabilities = capabilities,
--- })
-
 local cmp = require("cmp")
 cmp.setup({
 	snippet = {
@@ -148,18 +137,6 @@ vim.keymap.set("n", "ge", "<cmd>lua vim.diagnostic.open_float()<CR>")
 vim.keymap.set("n", "g]", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 
--- vim.cmd([[
--- set updatetime=500
--- highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
--- highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
--- highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
--- augroup lsp_document_highlight
---   autocmd!
---   autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
---   autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
--- augroup END
--- ]])
-
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 local augroup_null_ls_format_on_save = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -173,10 +150,6 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettier.with({
 			prefer_local = "node_modules/.bin",
 		}),
-		-- null_ls.builtins.formatting.prettierd,
-		-- null_ls.builtins.diagnostics.eslint_d.with({
-		-- 	diagnostics_format = '[eslint] #{m}\n(#{c})'
-		-- })
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
@@ -191,20 +164,6 @@ null_ls.setup({
 		end
 	end,
 })
--- local prettier = require("prettier")
--- prettier.setup({
--- 	bin = "prettierd",
--- 	filetypes = {
--- 		"css",
--- 		"javascript",
--- 		"javascriptreact",
--- 		"typescript",
--- 		"typescriptreact",
--- 		"json",
--- 		"scss",
--- 		"less",
--- 	},
--- })
 
 require("nvim-treesitter.configs").setup({
 	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "typescript" },
@@ -261,13 +220,7 @@ telescope.setup({
 			search_dirs = { "./", "~/settings-mac/" },
 		},
 	},
-	extensions = {
-		file_browser = {
-			hidden = true,
-		},
-	},
 })
-telescope.load_extension("file_browser")
 vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
