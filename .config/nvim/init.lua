@@ -219,6 +219,9 @@ vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
 require("nvim-web-devicons").setup({})
 
+-- Usage:
+-- <TAB> -> preview
+-- q     -> close window
 require("nvim-tree").setup()
 vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
