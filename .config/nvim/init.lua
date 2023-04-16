@@ -94,6 +94,13 @@ mason_lspconfig.setup_handlers({
 			capabilities = capabilities,
 		})
 	end,
+	-- typescript-language-server settings
+	-- CAUTION!
+	-- If you use yarn Plug'n'Play installs (.pnp.cjs), you should:
+	-- 1. Install "project-local" typescript-language-server
+	--   `$ yarn add -D typescript-language-server`
+	-- 2. Execute below command to generate a new directory called `.yarn/sdks`
+	--   `$ yarn dlx @yarnpkg/sdks base`
 	["tsserver"] = function()
 		lspconfig.tsserver.setup({
 			filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
