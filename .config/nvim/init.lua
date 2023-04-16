@@ -60,6 +60,8 @@ require("lazy").setup({
 	},
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	"numToStr/Comment.nvim",
+	-- You need "im-select" executable on Mac
+	"keaising/im-select.nvim",
 })
 
 -- LSP settings
@@ -269,6 +271,8 @@ require("bufferline").setup({})
 
 require("trouble").setup({})
 vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
+
+require("im_select").setup()
 
 vim.o.number = true
 vim.o.scrolloff = 10
