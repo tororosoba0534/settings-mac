@@ -59,6 +59,7 @@ require("lazy").setup({
 		end,
 	},
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	"numToStr/Comment.nvim",
 })
 
 -- LSP settings
@@ -210,6 +211,11 @@ require("nvim-treesitter.configs").setup({
 		end,
 	},
 })
+
+-- <C-_> means ctrl + slash(/)
+require("Comment").setup()
+vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
+vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
 require("nvim-web-devicons").setup({})
 
