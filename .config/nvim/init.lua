@@ -30,8 +30,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
+	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -61,6 +61,10 @@ require("lazy").setup({
 	-- sudo chmod 755 /usr/local/bin/im-select
 	-- ```
 	"keaising/im-select.nvim",
+	{
+		"chrisgrieser/nvim-recorder",
+		opts = {},
+	},
 })
 
 -- LSP settings
