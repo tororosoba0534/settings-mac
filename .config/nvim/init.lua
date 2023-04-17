@@ -30,8 +30,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -54,6 +54,12 @@ require("lazy").setup({
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	"numToStr/Comment.nvim",
 	-- You need "im-select" executable on Mac
+	-- https://github.com/daipeihust/im-select
+	-- ```
+	-- # If you use Intel chip on your Mac, change 'apple' to 'intel' in the following code:
+	-- sudo curl -L -o /usr/local/bin/im-select https://github.com/daipeihust/im-select/raw/master/im-select-mac/out/apple/im-select
+	-- sudo chmod 755 /usr/local/bin/im-select
+	-- ```
 	"keaising/im-select.nvim",
 })
 
