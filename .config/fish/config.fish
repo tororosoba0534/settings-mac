@@ -51,4 +51,5 @@ end
 # Custom commands
 alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
 alias md='cd ~/Notes; nvim index.md'
+alias st='tmux source ~/.tmux.conf'
 
