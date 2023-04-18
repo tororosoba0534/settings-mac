@@ -251,6 +251,10 @@ vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 
+local indent_stay_cursor = require("indent-stay-cursor")
+vim.keymap.set({ "n", "i" }, "<TAB>", indent_stay_cursor.shift_right_line, { noremap = true })
+vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { noremap = true })
+
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
