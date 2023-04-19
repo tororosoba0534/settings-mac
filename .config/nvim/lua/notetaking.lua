@@ -88,12 +88,45 @@ local function abs_table_to_rel_table(orig, dest)
 	return result
 end
 
+local function rel_table_to_abs_table(orig_abs, dest_rel)
+	local result = {}
+
+	local i_single_dots = dest_rel[1] == "." and 1 or 0
+	local i_double_dots = 0
+	while dest_rel[i_double_dots + 1] == ".." do
+		i_double_dots = i_double_dots + 1
+	end
+
+	for i = 1, #orig_abs - i_double_dots - 1 do
+		result[i] = orig_abs[i]
+	end
+	local i_dest_start = i_single_dots + i_double_dots + 1
+	for i = i_dest_start, #dest_rel do
+		table.insert(result, dest_rel[i])
+	end
+	return result
+end
+
 local function concat_table_to_string(input_table, sep)
 	local result = table.concat(input_table, sep)
 	return result
 end
 
-function notetaking.path_test()
+function notetaking.path_rel_to_abs_test()
+	local orig_abs_str = "/home/user1/settings-mac/.config/nvim/init.lua"
+	-- local dest_rel_str = "../../partial-links/README.md"
+	-- local dest_rel_str = "./partial-links/README.md"
+	local dest_rel_str = "partial-links/README.md"
+
+	local orig_abs_table = split_string_into_table(orig_abs_str, "/")
+	local dest_rel_table = split_string_into_table(dest_rel_str, "/")
+
+	local dest_abs_table = rel_table_to_abs_table(orig_abs_table, dest_rel_table)
+	local dest_abs_str = concat_table_to_string(dest_abs_table, "/")
+	print(dest_abs_str)
+end
+
+function notetaking.path_abs_to_rel_test()
 	-- local orig_str = "/home/user1/settings-mac/.config/nvim/init.lua"
 	-- local dest_str = "/home/user1/settings-mac/partial-links/README.md"
 
@@ -150,5 +183,6 @@ end
 vim.keymap.set("n", "gb", function()
 	-- notetaking.main()
 	-- notetaking.test()
-	notetaking.path_test()
+	-- notetaking.path_abs_to_rel_test()
 end)
+notetaking.path_rel_to_abs_test()
