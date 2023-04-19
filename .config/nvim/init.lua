@@ -267,6 +267,10 @@ vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { no
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
+-- CHEAT SEAT
+-- :so % <- source current file (useful when you develop plugin in lua or vimscript)
+-- :noh <- turn off syntax hilight
+
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
 vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
 vim.keymap.set({ "", "!" }, "<C-b>", "<LEFT>")
