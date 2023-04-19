@@ -30,8 +30,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -203,6 +203,7 @@ require("nvim-web-devicons").setup({})
 require("nvim-tree").setup()
 vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
+vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
 
 local telescope = require("telescope")
 local telescope_actions = require("telescope.actions")
@@ -227,11 +228,13 @@ telescope.setup({
 	pickers = {
 		find_files = {
 			hidden = true,
-			search_dirs = { "./", "~/settings-mac/" },
+			-- search_dirs = { "./", "~/settings-mac/" },
 		},
 	},
 })
 vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
+vim.keymap.set("n", "<C-w>s", "<cmd>Telescope find_files search_dirs={'~/settings-mac'}<CR>")
+vim.keymap.set("n", "<C-w>n", "<cmd>Telescope find_files search_dirs={'~/Notes'}<CR>")
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
 vim.keymap.set("n", "<C-w>u", "<cmd>UndotreeToggle<CR>")
