@@ -24,27 +24,12 @@ local function does_file_exists(file)
 	return true
 end
 
-function notetaking.test()
-	local cfile = vim.fn.expand("<cfile>")
-	local dir = get_dir_path(cfile)
-	local is_dir = does_dir_exists(dir)
-	local is_file = does_file_exists(cfile)
-
-	local result = "<cfile>: "
-		.. cfile
-		.. ",\n"
-		.. "dir: "
-		.. dir
-		.. ",\n"
-		.. "is_dir: "
-		.. tostring(is_dir)
-		.. ",\n"
-		.. "is_file: "
-		.. tostring(is_file)
-		.. ",\n"
-
-	-- print(vim.inspect(result))
-	vim.notify(result)
+local function is_absolute_path(path)
+	local head = string.sub(path, 1, 1)
+	if head == "/" or head == "~" then
+		return true
+	end
+	return false
 end
 
 local function split_string_into_table(input_str, sep)
@@ -112,77 +97,108 @@ local function concat_table_to_string(input_table, sep)
 	return result
 end
 
-function notetaking.path_rel_to_abs_test()
-	local orig_abs_str = "/home/user1/settings-mac/.config/nvim/init.lua"
-	-- local dest_rel_str = "../../partial-links/README.md"
-	-- local dest_rel_str = "./partial-links/README.md"
-	local dest_rel_str = "partial-links/README.md"
-
-	local orig_abs_table = split_string_into_table(orig_abs_str, "/")
-	local dest_rel_table = split_string_into_table(dest_rel_str, "/")
-
+function notetaking.path_rel_to_abs(orig_abs, dest_rel)
+	local orig_abs_table = split_string_into_table(orig_abs, "/")
+	local dest_rel_table = split_string_into_table(dest_rel, "/")
 	local dest_abs_table = rel_table_to_abs_table(orig_abs_table, dest_rel_table)
-	local dest_abs_str = concat_table_to_string(dest_abs_table, "/")
-	print(dest_abs_str)
+	local dest_abs = concat_table_to_string(dest_abs_table, "/")
+	return "/" .. dest_abs
 end
 
-function notetaking.path_abs_to_rel_test()
-	-- local orig_str = "/home/user1/settings-mac/.config/nvim/init.lua"
-	-- local dest_str = "/home/user1/settings-mac/partial-links/README.md"
-
-	local dest_str = "/home/user1/settings-mac/.config/nvim/init.lua"
-	local orig_str = "/home/user1/settings-mac/partial-links/README.md"
-	-- vim.notify(orig_str .. "\n" .. dest_str)
-	-- print(orig_str)
-	-- print(dest_str)
-
-	local orig_table = split_string_into_table(orig_str, "/")
-	local dest_table = split_string_into_table(dest_str, "/")
-	-- vim.notify(vim.inspect(orig_table) .. "\n" .. vim.inspect(dest_table))
-	-- vim.notify(vim.inspect({ "one", "two", "", "three" }))
-
-	--
-	local rel_table = abs_table_to_rel_table(orig_table, dest_table)
-	-- vim.notify(vim.inspect(rel_table))
-	local rel_str = concat_table_to_string(rel_table, "/")
-	--
-	print(rel_str)
-	-- print("HELLO world")
+function notetaking.path_abs_to_rel(orig_abs, dest_abs)
+	local orig_abs_table = split_string_into_table(orig_abs, "/")
+	local dest_abs_table = split_string_into_table(dest_abs, "/")
+	local dest_rel_table = abs_table_to_rel_table(orig_abs_table, dest_abs_table)
+	local dest_rel = concat_table_to_string(dest_rel_table)
+	return dest_rel
 end
 
--- function notetaking.main()
--- 	local path = vim.fn.expand("<cfile>")
---
--- 	if does_file_exists(path) then
--- 		print("Go to file: " .. path)
--- 		return
--- 	end
---
--- 	local dir = get_dir_path(path)
---
--- 	if not does_dir_exists(dir) then
--- 		print("Directory " .. dir .. " does NOT exists.")
--- 		return
--- 	elseif not is_dot_in_path(path) then
--- 		print("File " .. path .. " does NOT exists.")
--- 		return
--- 	end
---
--- 	vim.ui.input(
--- 		{ prompt = "File " .. path .. " does not exist.\n" .. "Create new file? (if so, press y and Enter): " },
--- 		function(input)
--- 			if input == "y" then
--- 				print("New file created: " .. path)
--- 			else
--- 				print("Cancelled.")
--- 			end
--- 		end
--- 	)
--- end
+function notetaking.main()
+	local dest_rel = vim.fn.expand("<cfile>")
+	local is_abs = is_absolute_path(dest_rel)
+	local orig_abs = vim.fn.expand("%:p")
+	local dest_abs = notetaking.path_rel_to_abs(orig_abs, dest_rel)
+	local dest_abs_dir = get_dir_path(dest_abs)
+	local exists_dir = does_dir_exists(dest_abs_dir)
+	local exists_file = does_file_exists(dest_abs)
+
+	if is_abs then
+		print("Sorry, this command doesn't support absolute path.")
+		return
+	end
+
+	if exists_file then
+		print("Go to file: " .. dest_rel)
+		return
+	end
+
+	if not exists_dir then
+		print("Directory " .. dest_abs_dir .. " does NOT exists.")
+		return
+	elseif not is_dot_in_path(dest_rel) then
+		print("File " .. dest_rel .. " does NOT exists.")
+		return
+	end
+
+	vim.ui.input(
+		{ prompt = "File " .. dest_abs .. " does not exist.\n" .. "Create new file? (if so, press y and Enter): " },
+		function(input)
+			if input == "y" then
+				print("New file created: " .. dest_abs)
+			else
+				print("Cancelled.")
+			end
+		end
+	)
+end
+
+function notetaking.test()
+	local dest_rel = vim.fn.expand("<cfile>")
+	local is_abs = is_absolute_path(dest_rel)
+	local orig_abs = vim.fn.expand("%:p")
+	local dest_abs = notetaking.path_rel_to_abs(orig_abs, dest_rel)
+	local dest_abs_dir = get_dir_path(dest_abs)
+	local exists_dir = does_dir_exists(dest_abs_dir)
+	local exists_file = does_file_exists(dest_abs)
+	-- local is_dir = does_dir_exists(dir)
+	-- local is_file = does_file_exists(dest_rel)
+
+	local result = "<dest_rel>: "
+		.. dest_rel
+		.. ",\n"
+		.. "is_abs: "
+		.. tostring(is_abs)
+		.. ",\n"
+		.. "orig_abs: "
+		.. orig_abs
+		.. ",\n"
+		.. "dest_abs: "
+		.. dest_abs
+		.. ",\n"
+		.. "dest_abs_dir: "
+		.. dest_abs_dir
+		.. ",\n"
+		.. "exists_dir: "
+		.. tostring(exists_dir)
+		.. ",\n"
+		.. "exists_file: "
+		.. tostring(exists_file)
+		.. ",\n"
+	-- .. "is_dir: "
+	-- .. tostring(is_dir)
+	-- .. ",\n"
+	-- .. "is_file: "
+	-- .. tostring(is_file)
+	-- .. ",\n"
+
+	-- print(vim.inspect(result))
+	vim.notify(result)
+end
 
 vim.keymap.set("n", "gb", function()
-	-- notetaking.main()
+	notetaking.main()
 	-- notetaking.test()
 	-- notetaking.path_abs_to_rel_test()
 end)
-notetaking.path_rel_to_abs_test()
+-- notetaking.path_rel_to_abs_test()
+-- notetaking.test()
