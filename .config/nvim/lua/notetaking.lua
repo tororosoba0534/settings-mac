@@ -109,7 +109,7 @@ function notetaking.path_abs_to_rel(orig_abs, dest_abs)
 	local orig_abs_table = split_string_into_table(orig_abs, "/")
 	local dest_abs_table = split_string_into_table(dest_abs, "/")
 	local dest_rel_table = abs_table_to_rel_table(orig_abs_table, dest_abs_table)
-	local dest_rel = concat_table_to_string(dest_rel_table)
+	local dest_rel = concat_table_to_string(dest_rel_table, "/")
 	return dest_rel
 end
 
@@ -128,6 +128,7 @@ function notetaking.main()
 	end
 
 	if exists_file then
+		vim.cmd("find " .. dest_abs)
 		print("Go to file: " .. dest_rel)
 		return
 	end
@@ -144,6 +145,9 @@ function notetaking.main()
 		{ prompt = "File " .. dest_abs .. " does not exist.\n" .. "Create new file? (if so, press y and Enter): " },
 		function(input)
 			if input == "y" then
+				local orig_rel = notetaking.path_abs_to_rel(dest_abs, orig_abs)
+				vim.cmd('!echo "' .. orig_rel .. ' <- BACK" >> ' .. dest_abs)
+				vim.cmd("find " .. dest_abs)
 				print("New file created: " .. dest_abs)
 			else
 				print("Cancelled.")
@@ -195,10 +199,11 @@ function notetaking.test()
 	vim.notify(result)
 end
 
-vim.keymap.set("n", "gb", function()
-	notetaking.main()
-	-- notetaking.test()
-	-- notetaking.path_abs_to_rel_test()
-end)
--- notetaking.path_rel_to_abs_test()
--- notetaking.test()
+-- vim.keymap.set("n", "gb", function()
+-- 	notetaking.main()
+-- 	-- notetaking.test()
+-- 	-- notetaking.path_abs_to_rel_test()
+-- end)
+-- -- notetaking.path_rel_to_abs_test()
+-- -- notetaking.test()
+return notetaking
