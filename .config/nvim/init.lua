@@ -30,8 +30,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
+	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -235,6 +235,11 @@ telescope.setup({
 vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
 vim.keymap.set("n", "<C-w>s", "<cmd>Telescope find_files search_dirs={'~/settings-mac'}<CR>")
 vim.keymap.set("n", "<C-w>n", "<cmd>Telescope find_files search_dirs={'~/Notes'}<CR>")
+
+local notetaking = require("notetaking")
+vim.keymap.set("n", "gf", function()
+	notetaking.main()
+end)
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
 vim.keymap.set("n", "<C-w>u", "<cmd>UndotreeToggle<CR>")
