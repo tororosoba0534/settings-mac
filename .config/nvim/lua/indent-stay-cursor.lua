@@ -25,4 +25,15 @@ function stayinplace.shift_left_line()
 	end)
 end
 
+function stayinplace.toggle_comment()
+	preserve(function()
+		-- CAUTION!!!
+		-- command `gcc` is heavily dependent on Comment.nvim
+		-- TODO: implement custom comment toggler
+		vim.cmd("exec 'norm gcc'")
+	end)
+end
+
+-- vim.keymap.set({ "n", "i" }, "<C-_>", stayinplace.toggle_comment)
+
 return stayinplace
