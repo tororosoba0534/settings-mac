@@ -4,6 +4,11 @@ local function is_dot_in_path(path)
 	return path:match("(.*%.)") and true or false
 end
 
+local function is_md_file(path)
+	local suffix = path:sub(-3)
+	return suffix == ".md" and true or false
+end
+
 local function get_dir_path(path)
 	return path:match("(.*[/\\])") or ""
 end
@@ -97,6 +102,12 @@ local function concat_table_to_string(input_table, sep)
 	return result
 end
 
+function notetaking.get_file_tail(path)
+	local path_table = split_string_into_table(path, "/")
+	local tail = path_table[#path_table]
+	return tail
+end
+
 function notetaking.path_rel_to_abs(orig_abs, dest_rel)
 	local orig_abs_table = split_string_into_table(orig_abs, "/")
 	local dest_rel_table = split_string_into_table(dest_rel, "/")
@@ -115,30 +126,65 @@ end
 
 function notetaking.main()
 	local dest_rel = vim.fn.expand("<cfile>")
+	local is_md_dest = is_md_file(dest_rel)
 	local is_abs = is_absolute_path(dest_rel)
+	local has_double_dot = (dest_rel):sub(1, 2) == ".."
 	local orig_abs = vim.fn.expand("%:p")
+	local is_md_orig = is_md_file(orig_abs)
 	local dest_abs = notetaking.path_rel_to_abs(orig_abs, dest_rel)
 	local dest_abs_dir = get_dir_path(dest_abs)
 	local exists_dir = does_dir_exists(dest_abs_dir)
 	local exists_file = does_file_exists(dest_abs)
 
-	if is_abs then
-		print("Sorry, this command doesn't support absolute path.")
-		return
-	end
+	-- local test_msg = ""
+	-- test_msg = test_msg .. "dest_rel: " .. dest_rel .. ",\n"
+	-- test_msg = test_msg .. "is_abs: " .. tostring(is_abs) .. ",\n"
+	-- test_msg = test_msg .. "orig_abs: " .. orig_abs .. ",\n"
+	-- test_msg = test_msg .. "dest_abs: " .. dest_abs .. ",\n"
+	-- test_msg = test_msg .. "dest_abs_dir: " .. dest_abs_dir .. ",\n"
+	-- test_msg = test_msg .. "exists_dir: " .. tostring(exists_dir) .. ",\n"
+	-- test_msg = test_msg .. "exists_file: " .. tostring(exists_file) .. ",\n"
+	-- test_msg = test_msg .. "is_md_dest: " .. tostring(is_md_dest) .. ",\n"
+	-- test_msg = test_msg .. "is_md_orig: " .. tostring(is_md_orig) .. ",\n"
+	--
+	-- vim.notify(test_msg)
 
-	if exists_file then
-		vim.cmd("find " .. dest_abs)
-		print("Go to file: " .. dest_rel)
+	if (not (is_md_dest and is_md_orig)) or is_abs or exists_file then
+		if not pcall(function()
+			vim.cmd('exe "norm! gf"')
+		end) then
+			print("File " .. dest_rel .. " does NOT exist.")
+			return
+		end
+		-- print("normal gf executed")
+		print("Go to file: " .. dest_abs)
 		return
 	end
 
 	if not exists_dir then
-		print("Directory " .. dest_abs_dir .. " does NOT exists.")
-		return
-	elseif not is_dot_in_path(dest_rel) then
-		print("File " .. dest_rel .. " does NOT exists.")
-		return
+		if has_double_dot then
+			print("Directory " .. dest_abs_dir .. " does NOT exist.")
+			return
+		else
+			vim.ui.input({
+				prompt = "Directory "
+					.. dest_abs_dir
+					.. " and file "
+					.. notetaking.get_file_tail(orig_abs)
+					.. " does not exist.\n"
+					.. "Create new directory and file? (if so, press y and Enter): ",
+			}, function(input)
+				if input == "y" then
+					local orig_rel = notetaking.path_abs_to_rel(dest_abs, orig_abs)
+					vim.cmd("!mkdir -p " .. dest_abs_dir .. '; echo "' .. orig_rel .. ' <- BACK" >> ' .. dest_abs)
+					vim.cmd("find " .. dest_abs)
+					print("New directory and file created: " .. dest_abs)
+				else
+					print("Cancelled.")
+				end
+			end)
+			return
+		end
 	end
 
 	vim.ui.input(
