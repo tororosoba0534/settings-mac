@@ -190,10 +190,17 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+local indent_stay_cursor = require("indent-stay-cursor")
+vim.keymap.set({ "n", "i" }, "<TAB>", indent_stay_cursor.shift_right_line, { noremap = true })
+vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { noremap = true })
+
 -- <C-_> means ctrl + slash(/)
-require("Comment").setup()
-vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
+require("Comment").setup({
+	-- sticky = false,
+})
+-- vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
 vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
+vim.keymap.set({ "n", "i" }, "<C-_>", indent_stay_cursor.toggle_comment)
 
 require("nvim-web-devicons").setup({})
 
@@ -265,10 +272,6 @@ vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
-
-local indent_stay_cursor = require("indent-stay-cursor")
-vim.keymap.set({ "n", "i" }, "<TAB>", indent_stay_cursor.shift_right_line, { noremap = true })
-vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { noremap = true })
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
