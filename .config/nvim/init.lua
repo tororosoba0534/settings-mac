@@ -65,6 +65,7 @@ require("lazy").setup({
 		"chrisgrieser/nvim-recorder",
 		opts = {},
 	},
+	"unblevable/quick-scope",
 })
 
 -- LSP settings
@@ -268,6 +269,9 @@ vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
 -- sudo chmod 755 /usr/local/bin/im-select
 -- ```
 require("im-select").setup()
+
+-- -- The following line envokes error.
+-- vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
 
 vim.o.tabstop = 4
 vim.o.number = true
