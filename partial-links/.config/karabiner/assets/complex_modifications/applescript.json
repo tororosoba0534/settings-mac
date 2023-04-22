@@ -1,0 +1,27 @@
+{
+	"title": "AppleScript",
+	"rules": [
+		{
+			"description": "Launch new Chrome window",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "b",
+						"modifiers": {
+							"mandatory": [
+								"left_command",
+								"left_shift"
+							]
+						}
+					},
+					"to": [
+						{
+							"shell_command": "osascript ~/settings-mac/applescript/launch_chrome_new_window.applescript"
+						}
+					]
+				}
+			]
+		}
+	]
+}
