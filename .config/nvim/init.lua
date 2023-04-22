@@ -1,3 +1,6 @@
+-- GENERAL CAVIEATS
+-- * <F3> is mapped <C-i> to by karabiner so that <C-i> and <Tab> be mapped to the other functionality.
+
 -- Disable netrw at the very start of your init.lua
 -- Strongly recommended when you use nvim-tree.lua
 vim.g.loaded_netrw = 1
@@ -38,10 +41,12 @@ require("lazy").setup({
 		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
 	},
 	"williamboman/mason-lspconfig.nvim",
-	"L3MON4D3/LuaSnip",
+	-- "L3MON4D3/LuaSnip",
 	"hrsh7th/nvim-cmp",
 	"hrsh7th/cmp-nvim-lsp",
-	"saadparwaiz1/cmp_luasnip",
+	"SirVer/ultisnips",
+	"quangnguyen30192/cmp-nvim-ultisnips",
+	-- "saadparwaiz1/cmp_luasnip",
 	{ "jose-elias-alvarez/null-ls.nvim", dependencies = "nvim-lua/plenary.nvim" },
 	"MunifTanjim/prettier.nvim",
 	{
@@ -67,6 +72,7 @@ require("lazy").setup({
 	},
 	"unblevable/quick-scope",
 	"haya14busa/vim-edgemotion",
+	-- BLOCKEND
 })
 
 -- LSP settings
@@ -118,7 +124,8 @@ local cmp = require("cmp")
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
+			-- require("luasnip").lsp_expand(args.body)
+			vim.fn["UltiSnips#Anon"](args.body)
 		end,
 	},
 	mapping = cmp.mapping.preset.insert({
@@ -133,6 +140,7 @@ cmp.setup({
 	}),
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
+		{ name = "ultisnips" },
 	}),
 })
 
@@ -271,6 +279,9 @@ vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
 -- ```
 require("im-select").setup()
 
+vim.cmd("call UltiSnips#RefreshSnippets()")
+-- BLOCKEND
+
 -- -- The following line envokes error.
 -- vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
 vim.keymap.set("n", "<C-j>", "<Plug>(edgemotion-j)")
@@ -285,6 +296,8 @@ vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
+
+-- BLOCKEND
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
