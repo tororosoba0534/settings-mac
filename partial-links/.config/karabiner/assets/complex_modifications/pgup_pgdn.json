@@ -1,0 +1,43 @@
+{
+	"title": "PgUp and PgDn keys",
+	"rules": [
+		{
+			"description": "PgUp to option-h (move to left virtual desktop)",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "page_up"
+					},
+					"to": [
+						{
+							"key_code": "h",
+							"modifiers": [
+								"left_option"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"description": "PgDn to option-l (move to right virtual desktop)",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "page_down"
+					},
+					"to": [
+						{
+							"key_code": "l",
+							"modifiers": [
+								"left_option"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
