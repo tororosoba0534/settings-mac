@@ -66,6 +66,7 @@ require("lazy").setup({
 		opts = {},
 	},
 	"unblevable/quick-scope",
+	"haya14busa/vim-edgemotion",
 })
 
 -- LSP settings
@@ -272,6 +273,8 @@ require("im-select").setup()
 
 -- -- The following line envokes error.
 -- vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
+vim.keymap.set("n", "<C-j>", "<Plug>(edgemotion-j)")
+vim.keymap.set("n", "<C-k>", "<Plug>(edgemotion-k)")
 
 vim.o.tabstop = 4
 vim.o.number = true
