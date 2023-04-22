@@ -190,6 +190,9 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+vim.keymap.set({ "n" }, "<F3>", "<C-i>")
+vim.keymap.set({ "i", "l", "v", "o", "t" }, "<F3>", "<NOP>")
+
 local indent_stay_cursor = require("indent-stay-cursor")
 vim.keymap.set({ "n", "i" }, "<TAB>", indent_stay_cursor.shift_right_line, { noremap = true })
 vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { noremap = true })
@@ -266,6 +269,7 @@ vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
 -- ```
 require("im-select").setup()
 
+vim.o.tabstop = 4
 vim.o.number = true
 vim.o.scrolloff = 10
 vim.o.wrap = true

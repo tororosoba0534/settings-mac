@@ -1,0 +1,39 @@
+{
+	"title": "workaround for vim",
+	"rules": [
+		{
+			"description": "CTRL-i to f3",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "i",
+						"modifiers": {
+							"mandatory": [
+								"control"
+							],
+							"optional": [
+								"caps_lock",
+								"option"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "f3"
+						}
+					],
+					"conditions": [
+						{
+							"type": "frontmost_application_if",
+							"bundle_identifiers": [
+								"^com\\.apple\\.Terminal$",
+								"^com\\.googlecode\\.iterm2$"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
