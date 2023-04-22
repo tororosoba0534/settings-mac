@@ -283,6 +283,8 @@ vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
+vim.o.cursorline = true
+vim.o.cursorcolumn = true
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
