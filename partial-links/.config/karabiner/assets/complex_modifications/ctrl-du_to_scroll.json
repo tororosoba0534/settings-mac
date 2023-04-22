@@ -1,0 +1,73 @@
+{
+	"title": "CTRL-d, u to scroll",
+	"rules": [
+		{
+			"description": "CTRL-d to scroll down",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "d",
+						"modifiers": {
+							"mandatory": [
+								"control"
+							],
+							"optional": [
+								"caps_lock",
+								"option"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "page_down"
+						}
+					],
+					"conditions": [
+						{
+							"type": "frontmost_application_unless",
+							"bundle_identifiers": [
+								"^com\\.apple\\.Terminal$",
+								"^com\\.googlecode\\.iterm2$"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"description": "CTRL-u to scroll up",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "u",
+						"modifiers": {
+							"mandatory": [
+								"control"
+							],
+							"optional": [
+								"caps_lock",
+								"option"
+							]
+						}
+					},
+					"to": [
+						{
+							"key_code": "page_up"
+						}
+					],
+					"conditions": [
+						{
+							"type": "frontmost_application_unless",
+							"bundle_identifiers": [
+								"^com\\.apple\\.Terminal$",
+								"^com\\.googlecode\\.iterm2$"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
