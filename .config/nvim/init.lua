@@ -70,8 +70,10 @@ require("lazy").setup({
 		"chrisgrieser/nvim-recorder",
 		opts = {},
 	},
-	"unblevable/quick-scope",
-	"haya14busa/vim-edgemotion",
+	-- "unblevable/quick-scope",
+	-- "haya14busa/vim-edgemotion",
+	"phaazon/hop.nvim",
+	"karb94/neoscroll.nvim",
 	-- BLOCKEND
 })
 
@@ -280,6 +282,19 @@ vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
 require("im-select").setup()
 
 vim.cmd("call UltiSnips#RefreshSnippets()")
+
+local hop = require("hop")
+hop.setup({
+	multi_windows = true,
+})
+vim.keymap.set("", "f", "<cmd>HopWordCurrentLine<CR>")
+vim.keymap.set("", "F", "<cmd>HopWord<CR>")
+vim.cmd([[hi HopUnmatched ctermfg=15 guifg=White]])
+
+require("neoscroll").setup({
+	mappings = { "<C-u>", "<C-d>", "zt", "zz", "zb" },
+	hide_cursor = false,
+})
 -- BLOCKEND
 
 -- -- The following line envokes error.
@@ -289,7 +304,8 @@ vim.keymap.set("n", "<C-k>", "<Plug>(edgemotion-k)")
 
 vim.o.tabstop = 4
 vim.o.number = true
-vim.o.scrolloff = 10
+-- -- scrolloff disabled because of hop.nvim user experience
+-- vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
