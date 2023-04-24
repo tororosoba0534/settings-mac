@@ -33,8 +33,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -312,6 +312,7 @@ vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
+vim.cmd([[set clipboard+=unnamedplus]])
 
 -- BLOCKEND
 
