@@ -33,8 +33,8 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
+	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -72,7 +72,7 @@ require("lazy").setup({
 	},
 	-- "unblevable/quick-scope",
 	-- "haya14busa/vim-edgemotion",
-	"phaazon/hop.nvim",
+	-- "phaazon/hop.nvim",
 	"karb94/neoscroll.nvim",
 	-- BLOCKEND
 })
@@ -283,13 +283,13 @@ require("im-select").setup()
 
 vim.cmd("call UltiSnips#RefreshSnippets()")
 
-local hop = require("hop")
-hop.setup({
-	multi_windows = true,
-})
-vim.keymap.set("", "f", "<cmd>HopWordCurrentLine<CR>")
-vim.keymap.set("", "F", "<cmd>HopWord<CR>")
-vim.cmd([[hi HopUnmatched ctermfg=15 guifg=White]])
+-- local hop = require("hop")
+-- hop.setup({
+-- 	multi_windows = true,
+-- })
+-- vim.keymap.set("", "f", "<cmd>HopWordCurrentLine<CR>")
+-- vim.keymap.set("", "F", "<cmd>HopLineStart<CR>")
+-- vim.cmd([[hi HopUnmatched ctermfg=15 guifg=White]])
 
 require("neoscroll").setup({
 	mappings = { "<C-u>", "<C-d>", "zt", "zz", "zb" },
@@ -302,6 +302,7 @@ require("neoscroll").setup({
 vim.keymap.set("n", "<C-j>", "<Plug>(edgemotion-j)")
 vim.keymap.set("n", "<C-k>", "<Plug>(edgemotion-k)")
 
+vim.o.mouse = "a"
 vim.o.tabstop = 4
 vim.o.number = true
 -- -- scrolloff disabled because of hop.nvim user experience
@@ -313,6 +314,8 @@ vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
 vim.cmd([[set clipboard+=unnamedplus]])
+vim.o.splitbelow = true
+vim.o.splitright = true
 
 -- BLOCKEND
 
@@ -339,8 +342,8 @@ vim.keymap.set("n", "<C-w>c", ":close<CR>")
 vim.keymap.set("n", "<C-w>C", ":only<CR>")
 vim.keymap.set("n", "<C-w>d", ":bn | bd#<CR>")
 vim.keymap.set("n", "<C-w>D", ":%bd | e# | bd#<CR>")
--- vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
--- vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
+vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
+vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
 vim.keymap.set("n", "<C-w>h", ":bprev<CR>")
 vim.keymap.set("n", "<C-w>l", ":bnext<CR>")
 -- vim.keymap.set("n", "<C-w>w", ":vert res +25<CR>")
