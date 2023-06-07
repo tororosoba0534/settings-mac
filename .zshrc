@@ -53,3 +53,49 @@ function man() {
 #
 # Custom commands
 alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
+alias sz='source ~/.zshrc'
+alias k='kubectl'
+alias kg='kubectl get'
+alias g='git'
+alias gs='git status'
+alias gd='git diff'
+
+export PS1="%D %* %~ %# "
+
+export PATH="$HOME/.nodenv/bin:$PATH"
+eval "$(nodenv init -)"
+eval export PATH="/Users/w002728/.jenv/shims:${PATH}"
+export JENV_SHELL=zsh
+export JENV_LOADED=1
+unset JAVA_HOME
+unset JDK_HOME
+source '/opt/homebrew/Cellar/jenv/0.5.6/libexec/libexec/../completions/jenv.zsh'
+jenv rehash 2>/dev/null
+jenv refresh-plugins
+jenv() {
+  type typeset &> /dev/null && typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
+
+source "$HOME/.cargo/env"
+
+# completion
+fpath=(~/settings-mac/.zsh/completion $fpath)
+autoload -Uz compinit
+compinit -u
+source <(kubectl completion zsh)
+
+if [[ -f ~/settings-mac-secret/secret.env ]] then
+		source ~/settings-mac-secret/secret.env
+fi
+# source ~/settings-mac-secret/secret.env
