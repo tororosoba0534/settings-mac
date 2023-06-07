@@ -22,6 +22,59 @@
 					]
 				}
 			]
+		},
+		{
+				"description": "Toggle Alacritty",
+				"manipulators":[
+						{
+								"type":"basic",
+								"from":{
+										"key_code": "spacebar",
+										"modifiers":{
+												"mandatory": ["left_option"]
+										}
+								},
+								"to":[
+										{"shell_command" :"osascript ~/settings-mac/applescript/toggle_alacritty.applescript"}
+								]
+						}
+				]
+		},
+				{
+				"description": "Rotate Chrome Windows",
+				"manipulators":[
+						{
+								"type":"basic",
+								"from":{
+										"key_code": "b",
+										"modifiers":{
+												"mandatory": ["left_option"]
+										}
+								},
+								"to":[
+										{"shell_command" :"osascript ~/settings-mac/applescript/rotate_chrome_windows.applescript"}
+								]
+						}
+				]
+		},
+						{
+				"description": "Rotate Chrome Windows (Reverse)",
+				"manipulators":[
+						{
+								"type":"basic",
+								"from":{
+										"key_code": "b",
+										"modifiers":{
+												"mandatory": ["left_option", "left_shift"]
+										}
+								},
+								"to":[
+										{"shell_command" :"osascript ~/settings-mac/applescript/rotate_chrome_windows_reverse.applescript"}
+								]
+						}
+				]
 		}
+
+
 	]
 }
