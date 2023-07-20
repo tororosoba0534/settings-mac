@@ -1,0 +1,26 @@
+{
+	"title": "Execute Binary",
+	"rules": [
+		{
+			"description": "Toggle Mission Control with full space bar",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "j",
+						"modifiers": {
+							"mandatory": [
+								"left_option"
+							]
+						}
+					},
+					"to": [
+						{
+							"shell_command": "~/Dev/prod/desktopApp/clang/missionControl/a.out"
+						}
+					]
+				}
+			]
+		}
+	]
+}

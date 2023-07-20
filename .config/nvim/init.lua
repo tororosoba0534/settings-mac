@@ -33,8 +33,9 @@ require("lazy").setup({
 		tag = "0.1.1",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	"nvim-telescope/telescope-live-grep-args.nvim",
+	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -74,6 +75,13 @@ require("lazy").setup({
 	-- "haya14busa/vim-edgemotion",
 	-- "phaazon/hop.nvim",
 	"karb94/neoscroll.nvim",
+	"zbirenbaum/copilot.lua",
+	{
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end
+	},
 	-- BLOCKEND
 })
 
@@ -141,6 +149,7 @@ cmp.setup({
 		}),
 	}),
 	sources = cmp.config.sources({
+		{ name = "copilot",  group_index = 2 },
 		{ name = "nvim_lsp" },
 		{ name = "ultisnips" },
 	}),
@@ -172,6 +181,7 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettier.with({
 			prefer_local = "node_modules/.bin",
 		}),
+		null_ls.builtins.formatting.goimports
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
@@ -223,11 +233,13 @@ require("nvim-web-devicons").setup({})
 -- <TAB> -> preview
 -- q     -> close window
 require("nvim-tree").setup()
-vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
-vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
-vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
+-- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
+-- vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
+-- vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
+vim.api.nvim_create_user_command("F", "NvimTreeToggle", {})
 
 local telescope = require("telescope")
+require("telescope").load_extension("live_grep_args")
 local telescope_actions = require("telescope.actions")
 telescope.setup({
 	defaults = {
@@ -253,10 +265,16 @@ telescope.setup({
 			-- search_dirs = { "./", "~/settings-mac/" },
 		},
 	},
+	extensions = {
+		live_grep_args = {
+
+		},
+	},
 })
 vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
-vim.keymap.set("n", "<C-w>s", "<cmd>Telescope find_files search_dirs={'~/settings-mac'}<CR>")
-vim.keymap.set("n", "<C-w>n", "<cmd>Telescope find_files search_dirs={'~/Notes'}<CR>")
+vim.keymap.set("n", "<C-w>b", "<cmd>Telescope buffers<CR>")
+vim.keymap.set("n", "<C-w>F", "<cmd>lua require(\"telescope\").extensions.live_grep_args.live_grep_args()<CR>")
+-- vim.api.nvim_create_user_command("F", "lua require(\"telescope\").extensions.live_grep_args.live_grep_args()", {})
 
 local notetaking = require("notetaking")
 vim.keymap.set("n", "gf", function()
@@ -294,6 +312,11 @@ vim.cmd("call UltiSnips#RefreshSnippets()")
 require("neoscroll").setup({
 	mappings = { "<C-u>", "<C-d>", "zt", "zz", "zb" },
 	hide_cursor = false,
+})
+
+require("copilot").setup({
+	suggestion = { enabled = false },
+	panel = { enabled = false },
 })
 -- BLOCKEND
 

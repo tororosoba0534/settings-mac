@@ -45,6 +45,28 @@
 			]
 		},
 		{
+			"description": "Toggle Terminal",
+			"manipulators": [
+				{
+					"type": "basic",
+					"from": {
+						"key_code": "spacebar",
+						"modifiers": {
+							"mandatory": [
+								"left_option",
+								"left_shift"
+							]
+						}
+					},
+					"to": [
+						{
+							"shell_command": "osascript ~/settings-mac/applescript/toggle_terminal.applescript"
+						}
+					]
+				}
+			]
+		},
+		{
 			"description": "Rotate Chrome Windows (Reverse)",
 			"manipulators": [
 				{

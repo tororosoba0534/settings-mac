@@ -53,3 +53,7 @@ alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
 alias md='cd ~/Notes; nvim index.md'
 alias st='tmux source ~/.tmux.conf'
 
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+set --export --prepend PATH "/Users/w002728/.rd/bin"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
