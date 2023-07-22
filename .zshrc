@@ -96,8 +96,9 @@ autoload -Uz compinit
 compinit -u
 source <(kubectl completion zsh)
 
-if [[ -f ~/settings-mac-secret/secret.env ]] then
-		source ~/settings-mac-secret/secret.env
+SECRET_SETTING_FILE=~/settings-mac-secret/secret.zsh
+if [[ -f $SECRET_SETTING_FILE ]] then
+		source $SECRET_SETTING_FILE
 fi
 
 # Prevent `no matches found` error on curl 
