@@ -5,7 +5,10 @@
 -- Strongly recommended when you use nvim-tree.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.g.python3_host_prog = "/usr/local/bin/python3"
+-- -- DO NOT set below option.
+-- -- since the location of python3 executable differs between Intel Mac and M1 Mac.
+-- -- If you are in trouble of python3 provider, please make sure your pip version is latest.
+-- vim.g.python3_host_prog = "/usr/local/bin/python3"
 
 -- lazy.nvim -- plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
