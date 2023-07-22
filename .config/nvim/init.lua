@@ -5,6 +5,7 @@
 -- Strongly recommended when you use nvim-tree.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.python3_host_prog = "/usr/local/bin/python3"
 
 -- lazy.nvim -- plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -34,8 +35,8 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	"nvim-telescope/telescope-live-grep-args.nvim",
-	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
+	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -80,7 +81,7 @@ require("lazy").setup({
 		"zbirenbaum/copilot-cmp",
 		config = function()
 			require("copilot_cmp").setup()
-		end
+		end,
 	},
 	-- BLOCKEND
 })
@@ -149,7 +150,7 @@ cmp.setup({
 		}),
 	}),
 	sources = cmp.config.sources({
-		{ name = "copilot",  group_index = 2 },
+		{ name = "copilot", group_index = 2 },
 		{ name = "nvim_lsp" },
 		{ name = "ultisnips" },
 	}),
@@ -181,7 +182,7 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettier.with({
 			prefer_local = "node_modules/.bin",
 		}),
-		null_ls.builtins.formatting.goimports
+		null_ls.builtins.formatting.goimports,
 	},
 	on_attach = function(client, bufnr)
 		if client.supports_method("textDocument/formatting") then
@@ -266,14 +267,12 @@ telescope.setup({
 		},
 	},
 	extensions = {
-		live_grep_args = {
-
-		},
+		live_grep_args = {},
 	},
 })
 vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
 vim.keymap.set("n", "<C-w>b", "<cmd>Telescope buffers<CR>")
-vim.keymap.set("n", "<C-w>F", "<cmd>lua require(\"telescope\").extensions.live_grep_args.live_grep_args()<CR>")
+vim.keymap.set("n", "<C-w>F", '<cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>')
 -- vim.api.nvim_create_user_command("F", "lua require(\"telescope\").extensions.live_grep_args.live_grep_args()", {})
 
 local notetaking = require("notetaking")
