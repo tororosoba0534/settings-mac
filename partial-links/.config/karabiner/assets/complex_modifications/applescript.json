@@ -41,26 +41,20 @@
 							"shell_command": "osascript ~/settings-mac/applescript/toggle_alacritty.applescript"
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "Toggle Terminal",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
 						"key_code": "spacebar",
 						"modifiers": {
 							"mandatory": [
-								"left_option",
-								"left_shift"
+								"right_option"
 							]
 						}
 					},
 					"to": [
 						{
-							"shell_command": "osascript ~/settings-mac/applescript/toggle_terminal.applescript"
+							"shell_command": "osascript ~/settings-mac/applescript/toggle_alacritty.applescript"
 						}
 					]
 				}
