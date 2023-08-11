@@ -2,7 +2,7 @@
 	"title": "AppleScript",
 	"rules": [
 		{
-			"description": "Launch new Chrome window",
+			"description": "AppleScript",
 			"manipulators": [
 				{
 					"type": "basic",
@@ -20,12 +20,7 @@
 							"shell_command": "osascript ~/settings-mac/applescript/launch_chrome_new_window.applescript"
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "Toggle Alacritty",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -57,12 +52,7 @@
 							"shell_command": "osascript ~/settings-mac/applescript/toggle_alacritty.applescript"
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "Rotate Chrome Windows (Reverse)",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {

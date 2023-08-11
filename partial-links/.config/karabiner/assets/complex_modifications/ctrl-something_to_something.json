@@ -2,7 +2,7 @@
 	"title": "CTRL-something to something",
 	"rules": [
 		{
-			"description": "CTRL-g to ESC",
+			"description": "CTRL-something to something",
 			"manipulators": [
 				{
 					"type": "basic",
@@ -33,12 +33,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-f to RIGHT",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -67,12 +62,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-b to LEFT",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -101,12 +91,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-n to DOWN",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -135,12 +120,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-p to UP",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -169,12 +149,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-h to BACKSPACE",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -203,12 +178,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-a to HOME",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {
@@ -238,12 +208,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-a to END",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {

@@ -2,7 +2,7 @@
 	"title": "Disable harmful shortcuts",
 	"rules": [
 		{
-			"description": "Disable CMD-h (left & right)",
+			"description": "Disable harmful shortcuts",
 			"manipulators": [
 				{
 					"type": "basic",

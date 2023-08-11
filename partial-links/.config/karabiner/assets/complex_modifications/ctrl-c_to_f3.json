@@ -1,8 +1,8 @@
 {
-	"title": "workaround for vim",
+	"title": "Workarounds for vim",
 	"rules": [
 		{
-			"description": "CTRL-i to f3",
+			"description": "Workarounds for vim",
 			"manipulators": [
 				{
 					"type": "basic",

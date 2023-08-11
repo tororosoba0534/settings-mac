@@ -2,7 +2,7 @@
 	"title": "CTRL-d, u to scroll",
 	"rules": [
 		{
-			"description": "CTRL-d to scroll down",
+			"description": "CTRL-d, u to scroll",
 			"manipulators": [
 				{
 					"type": "basic",
@@ -33,12 +33,7 @@
 							]
 						}
 					]
-				}
-			]
-		},
-		{
-			"description": "CTRL-u to scroll up",
-			"manipulators": [
+				},
 				{
 					"type": "basic",
 					"from": {

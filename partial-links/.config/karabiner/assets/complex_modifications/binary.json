@@ -2,7 +2,7 @@
 	"title": "Execute Binary",
 	"rules": [
 		{
-			"description": "Toggle Mission Control with full space bar",
+			"description": "Execute Binary",
 			"manipulators": [
 				{
 					"type": "basic",
