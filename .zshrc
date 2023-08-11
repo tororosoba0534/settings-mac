@@ -26,9 +26,11 @@ if [ -n "$TMUX" ]; then
 		fi
 	fi
 else 
-	echo "Here is OUTSIDE of tmux session."
+	echo "Here is outside of tmux session."
 	tmux ls
-	echo "Please run 'tmux attach' command."
+	echo "Please attach tmux session using one of the following commands: "
+	echo "  ・tmux new -s <new-session-name>"
+	echo "  ・tmux a [ -t <session-name> ]"
 fi
 
 #
