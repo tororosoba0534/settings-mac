@@ -143,7 +143,7 @@
           "to": [
             {
               "mouse_key": {
-                "horizontal_wheel": -128
+                "horizontal_wheel": 64
               }
             }
           ]
@@ -159,7 +159,7 @@
           "to": [
             {
               "mouse_key": {
-                "horizontal_wheel": -64
+                "horizontal_wheel": 128
               }
             }
           ]
@@ -170,22 +170,6 @@
             "key_code": "down_arrow",
             "modifiers": {
               "mandatory": ["left_command", "left_control"]
-            }
-          },
-          "to": [
-            {
-              "mouse_key": {
-                "vertical_wheel": 128
-              }
-            }
-          ]
-        },
-        {
-          "type": "basic",
-          "from": {
-            "key_code": "down_arrow",
-            "modifiers": {
-              "mandatory": ["left_command", "left_control", "left_shift"]
             }
           },
           "to": [
@@ -199,15 +183,15 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "up_arrow",
+            "key_code": "down_arrow",
             "modifiers": {
-              "mandatory": ["left_command", "left_control"]
+              "mandatory": ["left_command", "left_control", "left_shift"]
             }
           },
           "to": [
             {
               "mouse_key": {
-                "vertical_wheel": -128
+                "vertical_wheel": 128
               }
             }
           ]
@@ -217,7 +201,7 @@
           "from": {
             "key_code": "up_arrow",
             "modifiers": {
-              "mandatory": ["left_command", "left_control", "left_shift"]
+              "mandatory": ["left_command", "left_control"]
             }
           },
           "to": [
@@ -231,6 +215,22 @@
         {
           "type": "basic",
           "from": {
+            "key_code": "up_arrow",
+            "modifiers": {
+              "mandatory": ["left_command", "left_control", "left_shift"]
+            }
+          },
+          "to": [
+            {
+              "mouse_key": {
+                "vertical_wheel": -128
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
             "key_code": "right_arrow",
             "modifiers": {
               "mandatory": ["left_command", "left_control"]
@@ -239,7 +239,7 @@
           "to": [
             {
               "mouse_key": {
-                "horizontal_wheel": 128
+                "horizontal_wheel": -64
               }
             }
           ]
@@ -255,7 +255,7 @@
           "to": [
             {
               "mouse_key": {
-                "horizontal_wheel": 64
+                "horizontal_wheel": -128
               }
             }
           ]
@@ -263,7 +263,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "page_up",
+            "key_code": "page_down",
             "modifiers": {
               "mandatory": ["left_control"],
               "optional": ["any"]
@@ -278,7 +278,7 @@
         {
           "type": "basic",
           "from": {
-            "key_code": "page_down",
+            "key_code": "page_up",
             "modifiers": {
               "mandatory": ["left_control"],
               "optional": ["any"]
