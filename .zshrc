@@ -38,7 +38,7 @@ fi
 export FZF_DEFAULT_COMMAND='rg --hidden -l "" -g "!.git/"'
 
 # 
-# Custom man command
+# Custom commands
 function man() {
 	if [ -z "$TMUX" ]; then
 		command man $@
@@ -51,9 +51,10 @@ function man() {
 		# echo "INSIDE"
 	fi
 }
-
-#
-# Custom commands
+function mkdircd() {
+		mkdir $@
+		cd $@
+}
 alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
 alias sz='source ~/.zshrc'
 alias k='kubectl'
