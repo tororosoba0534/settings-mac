@@ -38,8 +38,8 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	"nvim-telescope/telescope-live-grep-args.nvim",
-	{ "folke/trouble.nvim", dependencies = "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "folke/trouble.nvim",      dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/toggleterm.nvim", version = "*",                               config = true },
 	"neovim/nvim-lspconfig",
 	{
 		"williamboman/mason.nvim",
@@ -196,13 +196,13 @@ cmp.setup({
 		["<C-n>"] = cmp.mapping.select_next_item(),
 		["<C-l>"] = cmp.mapping.complete(),
 		["<C-e>"] = cmp.mapping.abort(),
-		["<CR>"] = cmp.mapping.confirm({
+		["<Tab>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
 		}),
 	}),
 	sources = cmp.config.sources({
-		{ name = "copilot", group_index = 2 },
+		{ name = "copilot",  group_index = 2 },
 		{ name = "nvim_lsp" },
 		{ name = "ultisnips" },
 	}),
@@ -351,6 +351,7 @@ vim.keymap.set("n", "<C-k>", "<Plug>(edgemotion-k)")
 
 vim.o.mouse = "a"
 vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 vim.o.number = true
 -- -- scrolloff disabled because of hop.nvim user experience
 -- vim.o.scrolloff = 10
