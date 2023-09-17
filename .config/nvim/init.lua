@@ -86,6 +86,14 @@ require("lazy").setup({
 			require("copilot_cmp").setup()
 		end,
 	},
+	{
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+	},
 	-- BLOCKEND
 })
 
@@ -98,7 +106,13 @@ require("lazy").setup({
 require("mason").setup()
 local mason_lspconfig = require("mason-lspconfig")
 mason_lspconfig.setup({
-	ensure_installed = { "lua_ls", "tsserver", "jsonls" },
+	ensure_installed = {
+		"lua_ls",
+		"tsserver",
+		"jsonls",
+		"rust_analyzer",
+		"gopls",
+	},
 	automatic_installation = true,
 })
 local lspconfig = require("lspconfig")
@@ -131,6 +145,41 @@ mason_lspconfig.setup_handlers({
 			filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
 			capabilities = capabilities,
 		})
+	end,
+})
+
+require("mason-null-ls").setup({
+	ensure_installed = {
+		"goimports",
+	},
+	automatic_installation = false,
+	handlers = {},
+})
+
+local augroup_null_ls_format_on_save = vim.api.nvim_create_augroup("LspFormatting", {})
+local null_ls = require("null-ls")
+null_ls.setup({
+	sources = {
+		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.diagnostics.eslint.with({
+			prefer_local = "node_modules/.bin",
+		}),
+		null_ls.builtins.formatting.prettier.with({
+			prefer_local = "node_modules/.bin",
+		}),
+		null_ls.builtins.formatting.goimports,
+	},
+	on_attach = function(client, bufnr)
+		if client.supports_method("textDocument/formatting") then
+			vim.api.nvim_clear_autocmds({ group = augroup_null_ls_format_on_save, buffer = bufnr })
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = augroup_null_ls_format_on_save,
+				buffer = bufnr,
+				callback = function()
+					vim.lsp.buf.format({ bufnr = bufnr })
+				end,
+			})
+		end
 	end,
 })
 
@@ -173,33 +222,6 @@ vim.keymap.set("n", "g]", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-
-local augroup_null_ls_format_on_save = vim.api.nvim_create_augroup("LspFormatting", {})
-local null_ls = require("null-ls")
-null_ls.setup({
-	sources = {
-		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.diagnostics.eslint.with({
-			prefer_local = "node_modules/.bin",
-		}),
-		null_ls.builtins.formatting.prettier.with({
-			prefer_local = "node_modules/.bin",
-		}),
-		null_ls.builtins.formatting.goimports,
-	},
-	on_attach = function(client, bufnr)
-		if client.supports_method("textDocument/formatting") then
-			vim.api.nvim_clear_autocmds({ group = augroup_null_ls_format_on_save, buffer = bufnr })
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				group = augroup_null_ls_format_on_save,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.format({ bufnr = bufnr })
-				end,
-			})
-		end
-	end,
-})
 
 require("nvim-treesitter.configs").setup({
 	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "typescript" },
