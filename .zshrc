@@ -39,6 +39,8 @@ export FZF_DEFAULT_COMMAND='rg --hidden -l "" -g "!.git/"'
 
 # 
 # Custom commands
+# export PATH="${PATH}:${HOME}/bin"
+# source <(cmdalias --init)
 function man() {
 	if [ -z "$TMUX" ]; then
 		command man $@
@@ -57,12 +59,10 @@ function mkdircd() {
 }
 alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
 alias sz='source ~/.zshrc'
-alias k='kubectl'
-alias kg='kubectl get'
-alias g='git'
-alias gs='git status'
-alias gd='git diff'
-alias gl='git log --oneline --decorate --graph'
+
+function jsonnetfmt-all() {
+	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
+}
 
 export PS1="%D %* %~ %# "
 
