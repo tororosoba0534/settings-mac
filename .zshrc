@@ -59,6 +59,7 @@ function mkdircd() {
 }
 alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
 alias sz='source ~/.zshrc'
+alias st='tmux source-file ~/.tmux.conf'
 
 function jsonnetfmt-all() {
 	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
@@ -106,3 +107,7 @@ fi
 
 # Prevent `no matches found` error on curl 
 setopt nonomatch
+
+function cdd {
+	cd ~/workspace/$1
+}

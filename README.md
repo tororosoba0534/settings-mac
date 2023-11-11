@@ -1,3 +1,17 @@
+# Terminal settings
+## iTerm2
+### mouse 
+- Profiles -> Terminal -> check "Enable mouse reporting" -> check "Report mouse wheel events" and "Report mouse clicks & drags"
+- Pointer -> General -> check "⌥-Click moves cursor"
+  - enables selecting text
+### transparency
+- Profiles -> Window -> Transparency -> 40 %
+### hotkey
+- Keys -> Hotkey -> check "Show/hide all windows wih a system-wide hotkey" -> Hotkey: ⌥Space
+
+## tmux
+
+
 # HOW TO LINK FILES
 
 ### in `~/settings-mac/partial-links/` dir:

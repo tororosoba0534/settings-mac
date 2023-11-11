@@ -24,38 +24,6 @@
 				{
 					"type": "basic",
 					"from": {
-						"key_code": "spacebar",
-						"modifiers": {
-							"mandatory": [
-								"left_option"
-							]
-						}
-					},
-					"to": [
-						{
-							"shell_command": "osascript ~/settings-mac/applescript/toggle_alacritty.applescript"
-						}
-					]
-				},
-				{
-					"type": "basic",
-					"from": {
-						"key_code": "spacebar",
-						"modifiers": {
-							"mandatory": [
-								"right_option"
-							]
-						}
-					},
-					"to": [
-						{
-							"shell_command": "osascript ~/settings-mac/applescript/toggle_alacritty.applescript"
-						}
-					]
-				},
-				{
-					"type": "basic",
-					"from": {
 						"key_code": "b",
 						"modifiers": {
 							"mandatory": [

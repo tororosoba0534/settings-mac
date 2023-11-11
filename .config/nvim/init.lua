@@ -372,6 +372,7 @@ vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 -- CHEAT SEAT
 -- :so % <- source current file (useful when you develop plugin in lua or vimscript)
 -- :noh <- turn off syntax hilight
+-- :only <- close all other windows
 
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
 vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
@@ -388,14 +389,17 @@ vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
 vim.keymap.set("n", "<C-w>-", ":below split<CR>")
 vim.keymap.set("n", "<C-w>c", ":close<CR>")
 vim.keymap.set("n", "<C-w>C", ":only<CR>")
-vim.keymap.set("n", "<C-w>d", ":bn | bd#<CR>")
+vim.keymap.set("n", "<C-w>d", ":BufferLineCycleNext | bd#<CR>")
 vim.keymap.set("n", "<C-w>D", ":%bd | e# | bd#<CR>")
 vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
 vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
-vim.keymap.set("n", "<C-w>h", ":bprev<CR>")
-vim.keymap.set("n", "<C-w>l", ":bnext<CR>")
+vim.keymap.set("n", "<C-w>h", ":BufferLineCyclePrev<CR>")
+vim.keymap.set("n", "<C-w>l", ":BufferLineCycleNext<CR>")
+vim.keymap.set("n", "<C-w>H", ":BufferLineMovePrev<CR>")
+vim.keymap.set("n", "<C-w>L", ":BufferLineMoveNext<CR>")
 -- vim.keymap.set("n", "<C-w>w", ":vert res +25<CR>")
 -- vim.keymap.set("n", "<C-w>W", ":vert res -25<CR>")
 -- vim.keymap.set("n", "<C-w>t", ":res +15<CR>")
 -- vim.keymap.set("n", "<C-w>T", ":res -15<CR>")
 -- vim.keymap.set("n", "<C-w>=", ":horizontal wincmd =<CR>")
+
