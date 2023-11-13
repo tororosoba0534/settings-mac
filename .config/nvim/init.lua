@@ -71,10 +71,6 @@ require("lazy").setup({
 	-- sudo chmod 755 /usr/local/bin/im-select
 	-- ```
 	-- "keaising/im-select.nvim",
-	{
-		"chrisgrieser/nvim-recorder",
-		opts = {},
-	},
 	-- "unblevable/quick-scope",
 	-- "haya14busa/vim-edgemotion",
 	-- "phaazon/hop.nvim",
@@ -402,4 +398,3 @@ vim.keymap.set("n", "<C-w>L", ":BufferLineMoveNext<CR>")
 -- vim.keymap.set("n", "<C-w>t", ":res +15<CR>")
 -- vim.keymap.set("n", "<C-w>T", ":res -15<CR>")
 -- vim.keymap.set("n", "<C-w>=", ":horizontal wincmd =<CR>")
-

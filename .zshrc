@@ -7,9 +7,9 @@ fi
 #
 # Autostart tmux
 tmux_count=$(ps aux | grep tmux | grep -v grep | wc -l)
-tmux_window_name_settings="settings"
+tmux_initial_window_name="initial-window"
 if test $tmux_count -eq 0; then
-	tmux new -s init-session -n $tmux_window_name_settings
+	tmux new -s init-session -n $tmux_initial_window_name
 # else
 #	# # If you attach existing tmux session here, dangerous infinite loop occures.
 #	# # DO NOT tmux attach automatically.
@@ -19,15 +19,11 @@ fi
 if [ -n "$TMUX" ]; then
 	tmux_current_window_name=$(tmux display-message -p '#{window_name}')
 	echo "HELLO WORLD! The name of this window is ${tmux_current_window_name}" 
-	if [ $tmux_current_window_name = $tmux_window_name_settings ]; then
-		echo "Settings!!!"
-		if [ $(tmux display-message -p '#{pane_id}') = "%0" ]; then
-			echo "Init pane"
-		fi
-	fi
 else 
 	echo "Here is outside of tmux session."
+	echo ""
 	tmux ls
+	echo ""
 	echo "Please attach tmux session using one of the following commands: "
 	echo "  ・tmux new -s <new-session-name>"
 	echo "  ・tmux a [ -t <session-name> ]"
