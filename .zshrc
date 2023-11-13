@@ -157,3 +157,27 @@ function _learn {
 	return 1
 }
 compdef _learn learn
+
+zshrc_var_drill_project_root=${HOME}/devspace/misc-drills
+function drill {
+	local subdir=$1
+	if [ -z "${subdir}" ]; then
+		cd ${project_root}
+		tmux rename-window misc-drills
+		nvim README.md -c 'NvimTreeOpen'
+	elif [ -d ${zshrc_var_drill_project_root}/${subdir} ]; then
+		cd ${project_root}
+		tmux rename-window misc-drills
+		nvim $dir/README.md -c 'NvimTreeOpen'
+	else
+		echo "${subdir} is not found in misc-drills"
+	fi
+}
+function _drill {
+	if [[ $CURRENT == 2 ]] then
+		local -a subdirs=( $(find ${zshrc_var_drill_project_root}/* -type d -maxdepth 0 -exec basename '{}' ';') )
+		_describe -t subdirectories "Subdirs" subdirs
+	fi
+	return 1
+}
+compdef _drill drill
