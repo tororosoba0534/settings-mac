@@ -1,10 +1,16 @@
+##################################################
+##################################################
+#
+# BASIC SETTINGS
+#
+##################################################
+##################################################
 # Disable CTRL-S lock
 if [[ -t 0 ]]; then
   stty stop undef
   stty start undef
 fi
 
-#
 # Autostart tmux
 tmux_count=$(ps aux | grep tmux | grep -v grep | wc -l)
 tmux_initial_window_name="initial-window"
@@ -29,37 +35,8 @@ else
 	echo "  ・tmux a [ -t <session-name> ]"
 fi
 
-#
-# fzf setting
+# fzf
 export FZF_DEFAULT_COMMAND='rg --hidden -l "" -g "!.git/"'
-
-# 
-# Custom commands
-# export PATH="${PATH}:${HOME}/bin"
-# source <(cmdalias --init)
-function man() {
-	if [ -z "$TMUX" ]; then
-		command man $@
-		# echo "OUTSIDE"
-	else 
-		tmux split-window -h "command man $@"
-		tmux select-layout even-horizontal
-		# command man $@
-		# echo "$@ is ${@}"
-		# echo "INSIDE"
-	fi
-}
-function mkdircd() {
-		mkdir $@
-		cd $@
-}
-alias ides='cd ~/settings-mac; nvim .config/nvim/init.lua'
-alias sz='source ~/.zshrc'
-alias st='tmux source-file ~/.tmux.conf'
-
-function jsonnetfmt-all() {
-	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
-}
 
 export PS1="%D %* %~ %# "
 
@@ -96,14 +73,66 @@ autoload -Uz compinit
 compinit -u
 source <(kubectl completion zsh)
 
+# Prevent `no matches found` error on curl 
+setopt nonomatch
+
 SECRET_SETTING_FILE=~/settings-mac-secret/secret.zsh
 if [[ -f $SECRET_SETTING_FILE ]] then
 		source $SECRET_SETTING_FILE
 fi
 
-# Prevent `no matches found` error on curl 
-setopt nonomatch
+##################################################
+##################################################
+#
+# ALIASES & FUNCTIONS
+#
+##################################################
+##################################################
 
-function cdd {
-	cd ~/workspace/$1
+function man() {
+	if [ -z "$TMUX" ]; then
+		command man $@
+		# echo "OUTSIDE"
+	else 
+		tmux split-window -h "command man $@"
+		tmux select-layout even-horizontal
+		# command man $@
+		# echo "$@ is ${@}"
+		# echo "INSIDE"
+	fi
 }
+
+function mkdircd() {
+		mkdir $@
+		cd $@
+}
+
+alias ides='cd ~/settings-mac && nvim .config/nvim/init.lua'
+alias sz='source ~/.zshrc'
+alias st='tmux source-file ~/.tmux.conf'
+
+function jsonnetfmt-all() {
+	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
+}
+
+zshrc_var_dev_params=('rust' 'java')
+function dev {
+	local language=$1
+	if (( $zshrc_var_dev_params[(I)${language}] )); then
+		cd ${HOME}/devspace/test/${language}/first-project/
+		clear
+		tmux rename-window code-${language}
+		tmux new-window -d -n exec-${language}
+		nvim README.md -c 'NvimTreeOpen'
+	else
+		echo "Invalid language: ${language}"
+		return 1
+	fi
+}
+function _dev {
+	if [[ $CURRENT == 2 ]] then
+		_describe -t language "Language" zshrc_var_dev_params
+	fi
+	return 1
+}
+compdef _dev dev
