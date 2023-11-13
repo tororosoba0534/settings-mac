@@ -84,7 +84,17 @@ fi
 ##################################################
 ##################################################
 #
-# ALIASES & FUNCTIONS
+# CHEAT SHEET
+#
+##################################################
+##################################################
+# # kill current tmux session
+# tmux kill-session
+
+##################################################
+##################################################
+#
+# aliases & functions
 #
 ##################################################
 ##################################################
@@ -107,19 +117,30 @@ function mkdircd() {
 		cd $@
 }
 
-alias ides='cd ~/settings-mac && nvim .config/nvim/init.lua'
-alias sz='source ~/.zshrc'
-alias st='tmux source-file ~/.tmux.conf'
-
-function jsonnetfmt-all() {
+function fmt-jsonnet-all() {
 	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
 }
 
-zshrc_var_dev_params=('rust' 'java')
-function dev {
+alias sz='source ~/.zshrc'
+alias st='tmux source-file ~/.tmux.conf'
+
+function stg {
+	cd ~/settings-mac
+	tmux rename-window settings-mac
+	nvim .config/nvim/init.lua -c "NvimTreeOpen"
+}
+
+function stg-secret {
+	cd ~/settings-mac-secret
+	tmux rename-window settings-mac-secret
+	nvim secret.zsh -c "NvimTreeOpen"
+}
+
+zshrc_var_learn_params=('rust' 'java' 'go')
+function learn {
 	local language=$1
-	if (( $zshrc_var_dev_params[(I)${language}] )); then
-		cd ${HOME}/devspace/test/${language}/first-project/
+	if (( $zshrc_var_learn_params[(I)${language}] )); then
+		cd ${HOME}/devspace/learn/${language}/learn-project/
 		clear
 		tmux rename-window code-${language}
 		tmux new-window -d -n exec-${language}
@@ -129,10 +150,10 @@ function dev {
 		return 1
 	fi
 }
-function _dev {
+function _learn {
 	if [[ $CURRENT == 2 ]] then
-		_describe -t language "Language" zshrc_var_dev_params
+		_describe -t language "Language" zshrc_var_learn_params
 	fi
 	return 1
 }
-compdef _dev dev
+compdef _learn learn

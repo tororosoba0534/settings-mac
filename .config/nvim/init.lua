@@ -1,3 +1,9 @@
+--------------------------------------------------
+--------------------------------------------------
+-- BASIC SETTINGS
+--------------------------------------------------
+--------------------------------------------------
+
 -- GENERAL CAVIEATS
 -- * <F3> is mapped <C-i> to by karabiner so that <C-i> and <Tab> be mapped to the other functionality.
 
@@ -10,7 +16,12 @@ vim.g.loaded_netrwPlugin = 1
 -- -- If you are in trouble of python3 provider, please make sure your pip version is latest.
 -- vim.g.python3_host_prog = "/usr/local/bin/python3"
 
--- lazy.nvim -- plugin manager
+
+--------------------------------------------------
+--------------------------------------------------
+-- LOAD PLUGINS
+--------------------------------------------------
+--------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -92,6 +103,12 @@ require("lazy").setup({
 	},
 	-- BLOCKEND
 })
+
+--------------------------------------------------
+--------------------------------------------------
+-- LSP
+--------------------------------------------------
+--------------------------------------------------
 
 -- LSP settings
 -- Setup order is important (see h: mason-lspconfig-quickstart):
@@ -234,6 +251,12 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+--------------------------------------------------
+--------------------------------------------------
+-- OTHER SETTINGS
+--------------------------------------------------
+--------------------------------------------------
+
 vim.keymap.set({ "n" }, "<F3>", "<C-i>")
 vim.keymap.set({ "i", "l", "v", "o", "t" }, "<F3>", "<NOP>")
 
@@ -254,11 +277,19 @@ require("nvim-web-devicons").setup({})
 -- Usage:
 -- <TAB> -> preview
 -- q     -> close window
-require("nvim-tree").setup()
+local nvim_tree = require("nvim-tree")
+nvim_tree.setup()
 -- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
 -- vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
 -- vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
 vim.api.nvim_create_user_command("F", "NvimTreeToggle", {})
+vim.api.nvim_create_user_command(
+	'NvimTreeOpenTreeWithoutFocus',
+	function()
+		require("nvim-tree.api").tree.toggle({ focus = false })
+	end,
+	{ nargs = 0 }
+)
 
 local telescope = require("telescope")
 require("telescope").load_extension("live_grep_args")
