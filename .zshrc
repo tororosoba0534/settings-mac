@@ -136,23 +136,28 @@ function stg-secret {
 	nvim secret.zsh -c "NvimTreeOpen"
 }
 
-zshrc_var_learn_params=('rust' 'java' 'go')
+zshrc_var_learn_root_dir=${HOME}/devspace/learn
 function learn {
 	local language=$1
-	if (( $zshrc_var_learn_params[(I)${language}] )); then
-		cd ${HOME}/devspace/learn/${language}/learn-project/
-		clear
-		tmux rename-window code-${language}
-		tmux new-window -d -n exec-${language}
-		nvim README.md -c 'NvimTreeOpen'
-	else
-		echo "Invalid language: ${language}"
+	if [ -z "${language}" ]; then
+		cd ${zshrc_var_learn_root_dir}
+		tmux rename-window learn
+		ls
+		return 0
+	fi
+	local project_dir=${zshrc_var_learn_root_dir}/${language}/learn-project
+	if [ ! -d ${project_dir} ]; then
+		echo "Command execution failed. ${project_dir} does not exist."
 		return 1
 	fi
+	cd $project_dir
+	tmux rename-window learn-${language}
+	nvim README.md -c 'NvimTreeOpen'
 }
 function _learn {
 	if [[ $CURRENT == 2 ]] then
-		_describe -t language "Language" zshrc_var_learn_params
+		local -a langs=( $(find ${zshrc_var_learn_root_dir}/* -type d -exec test -e '{}'/learn-project \; -print | awk -F '/' '{print $NF}') )
+		_describe -t language "Language" langs
 	fi
 	return 1
 }
@@ -163,12 +168,12 @@ function drill {
 	local subdir=$1
 	if [ -z "${subdir}" ]; then
 		cd ${project_root}
-		tmux rename-window misc-drills
+		tmux rename-window drills
 		nvim README.md -c 'NvimTreeOpen'
 	elif [ -d ${zshrc_var_drill_project_root}/${subdir} ]; then
 		cd ${project_root}
-		tmux rename-window misc-drills
-		nvim $dir/README.md -c 'NvimTreeOpen'
+		tmux rename-window drill-${subdir}
+		nvim ${subdir}/README.md -c 'NvimTreeOpen'
 	else
 		echo "${subdir} is not found in misc-drills"
 	fi
