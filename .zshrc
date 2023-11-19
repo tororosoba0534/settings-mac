@@ -139,38 +139,77 @@ function stg-secret {
 zshrc_var_learn_root_dir=${HOME}/devspace/learn
 function learn {
 	local language=$1
+	local project=$2
 	if [ -z "${language}" ]; then
 		cd ${zshrc_var_learn_root_dir}
 		tmux rename-window learn
 		ls
 		return 0
 	fi
-	local project_dir=${zshrc_var_learn_root_dir}/${language}/learn-project
-	if [ ! -d ${project_dir} ]; then
-		echo "Command execution failed. ${project_dir} does not exist."
+	local lang_dir=${zshrc_var_learn_root_dir}/${language}
+	if [ ! -d ${lang_dir} ]; then
+		echo "Command execution failed. ${lang_dir} does not exist."
 		return 1
 	fi
-	cd $project_dir
-	tmux rename-window learn-${language}
-	nvim README.md -c 'NvimTreeOpen'
+	cd $lang_dir
+	if [ -z "${project}"]; then
+		tmux rename-window learn-${language}
+		nvim README.md -c 'NvimTreeOpen'
+		return 0
+	fi
+	local proj_path=${lang_dir}/${project}
+	if [ -f "${proj_path}" ]; then
+		tmux rename-window learn-${language}
+		nvim ${proj_path} -c 'NvimTreeOpen' 
+		return 0
+	elif [ -d "${proj_path}" ]; then
+		cd ${proj_path}
+		tmux rename-window learn-${language}-${project}
+		nvim README.md -c 'NvimTreeOpen'
+		return 0
+	fi
+	echo "Command execution failed. ${proj_path} does not exist."
+	return 1
 }
 function _learn {
-	if [[ $CURRENT == 2 ]] then
-		local -a langs=( $(find ${zshrc_var_learn_root_dir}/* -type d -exec test -e '{}'/learn-project \; -print | awk -F '/' '{print $NF}') )
-		_describe -t language "Language" langs
-	fi
-	return 1
+	local line state
+	_arguments -C '1: :->cmds' '*::arg:->args'
+	local root_dir=${zshrc_var_learn_root_dir}
+	case "$state" in
+		cmds)
+			local -a langs=($(ls -d ${root_dir}/*/ | awk -F '/' '{print $(NF-1)}'))
+			_values "language" $langs
+			;;
+		args)
+			_learn_proj $line[1]
+			;;
+	esac
+}
+function _learn_proj {
+	local lang=$1
+	local line state
+	_arguments -C '1: :->cmds' '2::arg:->args'
+	case "$state" in
+		cmds)
+			local lang_dir=${zshrc_var_learn_root_dir}/${lang}
+			local -a projs=($(ls ${lang_dir} ))
+			_values "project" $projs
+			;;
+		args)
+			;;
+	esac
 }
 compdef _learn learn
 
 zshrc_var_drill_project_root=${HOME}/devspace/misc-drills
 function drill {
+	local project_root=${zshrc_var_drill_project_root}
 	local subdir=$1
 	if [ -z "${subdir}" ]; then
 		cd ${project_root}
 		tmux rename-window drills
-		nvim README.md -c 'NvimTreeOpen'
-	elif [ -d ${zshrc_var_drill_project_root}/${subdir} ]; then
+		# nvim README.md -c 'NvimTreeOpen'
+	elif [ -d ${project_root}/${subdir} ]; then
 		cd ${project_root}
 		tmux rename-window drill-${subdir}
 		nvim ${subdir}/README.md -c 'NvimTreeOpen'
