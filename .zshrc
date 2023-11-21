@@ -151,20 +151,22 @@ function learn {
 		echo "Command execution failed. ${lang_dir} does not exist."
 		return 1
 	fi
-	cd $lang_dir
 	if [ -z "${project}"]; then
 		tmux rename-window learn-${language}
+		cd $lang_dir
 		nvim README.md -c 'NvimTreeOpen'
 		return 0
 	fi
 	local proj_path=${lang_dir}/${project}
 	if [ -f "${proj_path}" ]; then
 		tmux rename-window learn-${language}
+		cd $lang_dir
 		nvim ${proj_path} -c 'NvimTreeOpen' 
 		return 0
-	elif [ -d "${proj_path}" ]; then
-		cd ${proj_path}
+	fi
+	if [ -d "${proj_path}" ]; then
 		tmux rename-window learn-${language}-${project}
+		cd ${proj_path}
 		nvim README.md -c 'NvimTreeOpen'
 		return 0
 	fi
@@ -201,27 +203,69 @@ function _learn_proj {
 }
 compdef _learn learn
 
-zshrc_var_drill_project_root=${HOME}/devspace/misc-drills
+zshrc_var_drill_root_dir=${HOME}/devspace/drill
 function drill {
-	local project_root=${zshrc_var_drill_project_root}
-	local subdir=$1
-	if [ -z "${subdir}" ]; then
-		cd ${project_root}
-		tmux rename-window drills
-		# nvim README.md -c 'NvimTreeOpen'
-	elif [ -d ${project_root}/${subdir} ]; then
-		cd ${project_root}
-		tmux rename-window drill-${subdir}
-		nvim ${subdir}/README.md -c 'NvimTreeOpen'
-	else
-		echo "${subdir} is not found in misc-drills"
+	local language=$1
+	local project=$2
+	if [ -z "${language}" ]; then
+		cd ${zshrc_var_drill_root_dir}
+		tmux rename-window drill
+		ls
+		return 0
 	fi
+	local lang_dir=${zshrc_var_drill_root_dir}/${language}
+	if [ ! -d ${lang_dir} ]; then
+		echo "Command execution failed. ${lang_dir} does not exist."
+		return 1
+	fi
+	if [ -z "${project}"]; then
+		tmux rename-window learn-${language}
+		cd $lang_dir
+		nvim README.md -c 'NvimTreeOpen'
+		return 0
+	fi
+	local proj_path=${lang_dir}/${project}
+	if [ -f "${proj_path}" ]; then
+		tmux rename-window learn-${language}
+		cd $lang_dir
+		nvim ${proj_path} -c 'NvimTreeOpen' 
+		return 0
+	fi
+	if [ -d "${proj_path}" ]; then
+		tmux rename-window learn-${language}-${project}
+		cd ${proj_path}
+		nvim README.md -c 'NvimTreeOpen'
+		return 0
+	fi
+	echo "Command execution failed. ${proj_path} does not exist."
+	return 1
 }
 function _drill {
-	if [[ $CURRENT == 2 ]] then
-		local -a subdirs=( $(find ${zshrc_var_drill_project_root}/* -type d -maxdepth 0 -exec basename '{}' ';') )
-		_describe -t subdirectories "Subdirs" subdirs
-	fi
-	return 1
+	local line state
+	_arguments -C '1: :->cmds' '*::arg:->args'
+	local root_dir=${zshrc_var_drill_root_dir}
+	case "$state" in
+		cmds)
+			local -a langs=($(ls -d ${root_dir}/*/ | awk -F '/' '{print $(NF-1)}'))
+			_values "language" $langs
+			;;
+		args)
+			_drill_proj $line[1]
+			;;
+	esac
+}
+function _drill_proj {
+	local lang=$1
+	local line state
+	_arguments -C '1: :->cmds' '2::arg:->args'
+	case "$state" in
+		cmds)
+			local lang_dir=${zshrc_var_drill_root_dir}/${lang}
+			local -a projs=($(ls ${lang_dir} ))
+			_values "project" $projs
+			;;
+		args)
+			;;
+	esac
 }
 compdef _drill drill
