@@ -139,53 +139,39 @@ function stg-secret {
 ####################
 # Auto-generated functions
 ####################
-function create_sub_subsub_pattern {
+function create_nested_pattern {
 	local func_name=$1
 	local root_dir=$2
 
 	local func_definition
 	read -r -d '' func_definition <<-HEREDOC
 	function ${func_name} {
-		local root_dir=${root_dir}
-		local sub=\$1
-		local subsub=\$2
-		if [ -z "\${sub}" ]; then
-			cd \${root_dir}
-			tmux rename-window ${func_name}
-			nvim README.md -c 'NvimTreeOpen'
-			return 0
-		fi
-		local sub_path=\${root_dir}/\${sub}
-		if [ -f "\${sub_path}" ]; then
-			tmux rename-window ${func_name}
-			cd \${root_dir}
-			nvim \${sub} -c 'NvimTreeOpen'
-			return 0
-		fi
-		if [ ! -d "\${sub_path}" ]; then
-			echo "Command execution failed. \${sub_path} does not exist."
-			return 1
-		fi
-		if [ -z "\${subsub}" ]; then
-			tmux rename-window ${func_name}-\${sub}
-			cd \${sub_path}
-			nvim README.md -c 'NvimTreeOpen'
-			return 0
-		fi
-		local subsub_path=\${sub_path}/\${subsub}
-		if [ -f "\${subsub_path}" ]; then
-			tmux rename-window ${func_name}-\${sub}
-			cd \${sub_path}
-			nvim \${subsub} -c 'NvimTreeOpen'
-			return 0
-		fi
-		if [ ! -d "\${subsub_path}" ]; then
-			echo "Command execution failed. \${subsub_path} does not exist."
-			return 1
-		fi
-		tmux rename-window ${func_name}-\${sub}-\${subsub}
-		cd \${subsub_path}
-		nvim \${subsub} -c 'NvimTreeOpen'
+		local current_path=${root_dir}
+		local window_name=${func_name}
+		for param in "\$@"; do
+			if [ -z "\${param}" ]; then
+				tmux rename-window \${window_name}
+				cd \${current_path}
+				nvim README.md -c 'NvimTreeOpen'
+				return 0
+			fi
+			current_path=\${current_path}/\${param}
+			echo "current_path: \${current_path}"
+			if [ -f "\${current_path}" ]; then
+				tmux rename-window \${window_name}
+				cd \${dir}
+				nvim \${param} -c 'NvimTreeOpen'
+				return 0
+			fi
+			if [ ! -d "\${current_path}" ]; then
+				echo "Command execution failed. \${current_path} does not exist."
+				return 1
+			fi
+			window_name=\${window_name}-\${param}
+		done
+		tmux rename-window \${window_name}
+		cd \${current_path}
+		nvim README.md -c 'NvimTreeOpen'
 	}
 	function _${func_name} {
 		local line state
@@ -221,7 +207,6 @@ function create_sub_subsub_pattern {
 
 	eval "${func_definition}"
 }
-
-create_sub_subsub_pattern drill ${HOME}/devspace/drill
-create_sub_subsub_pattern learn ${HOME}/devspace/learn
-unfunction create_sub_subsub_pattern
+create_nested_pattern drill ${HOME}/devspace/drill
+create_nested_pattern learn ${HOME}/devspace/learn
+unfunction create_nested_pattern
