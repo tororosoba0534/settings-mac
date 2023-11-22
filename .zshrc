@@ -136,136 +136,92 @@ function stg-secret {
 	nvim secret.zsh -c "NvimTreeOpen"
 }
 
-zshrc_var_learn_root_dir=${HOME}/devspace/learn
-function learn {
-	local language=$1
-	local project=$2
-	if [ -z "${language}" ]; then
-		cd ${zshrc_var_learn_root_dir}
-		tmux rename-window learn
-		ls
-		return 0
-	fi
-	local lang_dir=${zshrc_var_learn_root_dir}/${language}
-	if [ ! -d ${lang_dir} ]; then
-		echo "Command execution failed. ${lang_dir} does not exist."
-		return 1
-	fi
-	if [ -z "${project}"]; then
-		tmux rename-window learn-${language}
-		cd $lang_dir
-		nvim README.md -c 'NvimTreeOpen'
-		return 0
-	fi
-	local proj_path=${lang_dir}/${project}
-	if [ -f "${proj_path}" ]; then
-		tmux rename-window learn-${language}
-		cd $lang_dir
-		nvim ${proj_path} -c 'NvimTreeOpen' 
-		return 0
-	fi
-	if [ -d "${proj_path}" ]; then
-		tmux rename-window learn-${language}-${project}
-		cd ${proj_path}
-		nvim README.md -c 'NvimTreeOpen'
-		return 0
-	fi
-	echo "Command execution failed. ${proj_path} does not exist."
-	return 1
-}
-function _learn {
-	local line state
-	_arguments -C '1: :->cmds' '*::arg:->args'
-	local root_dir=${zshrc_var_learn_root_dir}
-	case "$state" in
-		cmds)
-			local -a langs=($(ls -d ${root_dir}/*/ | awk -F '/' '{print $(NF-1)}'))
-			_values "language" $langs
-			;;
-		args)
-			_learn_proj $line[1]
-			;;
-	esac
-}
-function _learn_proj {
-	local lang=$1
-	local line state
-	_arguments -C '1: :->cmds' '2::arg:->args'
-	case "$state" in
-		cmds)
-			local lang_dir=${zshrc_var_learn_root_dir}/${lang}
-			local -a projs=($(ls ${lang_dir} ))
-			_values "project" $projs
-			;;
-		args)
-			;;
-	esac
-}
-compdef _learn learn
+####################
+# Auto-generated functions
+####################
+function create_sub_subsub_pattern {
+	local func_name=$1
+	local root_dir=$2
 
-zshrc_var_drill_root_dir=${HOME}/devspace/drill
-function drill {
-	local language=$1
-	local project=$2
-	if [ -z "${language}" ]; then
-		cd ${zshrc_var_drill_root_dir}
-		tmux rename-window drill
-		ls
-		return 0
-	fi
-	local lang_dir=${zshrc_var_drill_root_dir}/${language}
-	if [ ! -d ${lang_dir} ]; then
-		echo "Command execution failed. ${lang_dir} does not exist."
-		return 1
-	fi
-	if [ -z "${project}"]; then
-		tmux rename-window learn-${language}
-		cd $lang_dir
-		nvim README.md -c 'NvimTreeOpen'
-		return 0
-	fi
-	local proj_path=${lang_dir}/${project}
-	if [ -f "${proj_path}" ]; then
-		tmux rename-window learn-${language}
-		cd $lang_dir
-		nvim ${proj_path} -c 'NvimTreeOpen' 
-		return 0
-	fi
-	if [ -d "${proj_path}" ]; then
-		tmux rename-window learn-${language}-${project}
-		cd ${proj_path}
-		nvim README.md -c 'NvimTreeOpen'
-		return 0
-	fi
-	echo "Command execution failed. ${proj_path} does not exist."
-	return 1
+	local func_definition
+	read -r -d '' func_definition <<-HEREDOC
+	function ${func_name} {
+		local root_dir=${root_dir}
+		local sub=\$1
+		local subsub=\$2
+		if [ -z "\${sub}" ]; then
+			cd \${root_dir}
+			tmux rename-window ${func_name}
+			nvim README.md -c 'NvimTreeOpen'
+			return 0
+		fi
+		local sub_path=\${root_dir}/\${sub}
+		if [ -f "\${sub_path}" ]; then
+			tmux rename-window ${func_name}
+			cd \${root_dir}
+			nvim \${sub} -c 'NvimTreeOpen'
+			return 0
+		fi
+		if [ ! -d "\${sub_path}" ]; then
+			echo "Command execution failed. \${sub_path} does not exist."
+			return 1
+		fi
+		if [ -z "\${subsub}" ]; then
+			tmux rename-window ${func_name}-\${sub}
+			cd \${sub_path}
+			nvim README.md -c 'NvimTreeOpen'
+			return 0
+		fi
+		local subsub_path=\${sub_path}/\${subsub}
+		if [ -f "\${subsub_path}" ]; then
+			tmux rename-window ${func_name}-\${sub}
+			cd \${sub_path}
+			nvim \${subsub} -c 'NvimTreeOpen'
+			return 0
+		fi
+		if [ ! -d "\${subsub_path}" ]; then
+			echo "Command execution failed. \${subsub_path} does not exist."
+			return 1
+		fi
+		tmux rename-window ${func_name}-\${sub}-\${subsub}
+		cd \${subsub_path}
+		nvim \${subsub} -c 'NvimTreeOpen'
+	}
+	function _${func_name} {
+		local line state
+		_arguments -C '1: :->cmds' '*::arg:->args'
+		local root_dir=${root_dir}
+		case "\$state" in
+			cmds)
+				local -a subs=(\$(ls \${root_dir}))
+				_values "sub" \$subs
+				;;
+			args)
+				_${func_name}_subsub \$line[1]
+				;;
+		esac
+	}
+	function _${func_name}_subsub {
+		local sub=\$1
+		local line state
+		_arguments -C '1: :->cmds' '2::arg:->args'
+		local root_dir=${root_dir}
+		case "\$state" in
+			cmds)
+				local sub_dir=\${root_dir}/\${sub}
+				local -a subsubs=(\$(ls \${sub_dir}))
+				_values "subsub" \$subsubs
+				;;
+			args)
+				;;
+		esac
+	}
+	compdef _${func_name} ${func_name}
+	HEREDOC
+
+	eval "${func_definition}"
 }
-function _drill {
-	local line state
-	_arguments -C '1: :->cmds' '*::arg:->args'
-	local root_dir=${zshrc_var_drill_root_dir}
-	case "$state" in
-		cmds)
-			local -a langs=($(ls -d ${root_dir}/*/ | awk -F '/' '{print $(NF-1)}'))
-			_values "language" $langs
-			;;
-		args)
-			_drill_proj $line[1]
-			;;
-	esac
-}
-function _drill_proj {
-	local lang=$1
-	local line state
-	_arguments -C '1: :->cmds' '2::arg:->args'
-	case "$state" in
-		cmds)
-			local lang_dir=${zshrc_var_drill_root_dir}/${lang}
-			local -a projs=($(ls ${lang_dir} ))
-			_values "project" $projs
-			;;
-		args)
-			;;
-	esac
-}
-compdef _drill drill
+
+create_sub_subsub_pattern drill ${HOME}/devspace/drill
+create_sub_subsub_pattern learn ${HOME}/devspace/learn
+unfunction create_sub_subsub_pattern
