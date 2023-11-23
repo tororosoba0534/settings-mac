@@ -176,7 +176,6 @@ function create_nested_pattern {
 				return 0
 			fi
 			current_dir=\${current_dir}/\${param}
-			echo current_dir=\${current_dir}
 			if [ ! -d "\${current_dir}" ]; then
 				echo "Command execution failed. \${current_dir} does not exist."
 				return 1
