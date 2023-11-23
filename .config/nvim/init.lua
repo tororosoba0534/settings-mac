@@ -261,7 +261,12 @@ vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
 local following_cursor = require("following-cursor")
 vim.keymap.set({ 'n', 'i' }, '<TAB>', following_cursor.shift_right, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-i>', following_cursor.shift_right, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i' }, '<S-TAB>', following_cursor.shift_left, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-o>', following_cursor.shift_left, { noremap = true, silent = true })
+
+vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
+vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
 
 require("nvim-web-devicons").setup({})
 
