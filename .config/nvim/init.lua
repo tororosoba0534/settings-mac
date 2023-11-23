@@ -4,9 +4,6 @@
 --------------------------------------------------
 --------------------------------------------------
 
--- GENERAL CAVIEATS
--- * <F3> is mapped <C-i> to by karabiner so that <C-i> and <Tab> be mapped to the other functionality.
-
 -- Disable netrw at the very start of your init.lua
 -- Strongly recommended when you use nvim-tree.lua
 vim.g.loaded_netrw = 1
@@ -15,7 +12,6 @@ vim.g.loaded_netrwPlugin = 1
 -- -- since the location of python3 executable differs between Intel Mac and M1 Mac.
 -- -- If you are in trouble of python3 provider, please make sure your pip version is latest.
 -- vim.g.python3_host_prog = "/usr/local/bin/python3"
-
 
 --------------------------------------------------
 --------------------------------------------------
@@ -275,10 +271,39 @@ local nvim_tree = require("nvim-tree")
 local nvim_tree_api = require("nvim-tree.api")
 nvim_tree.setup({
 	on_attach = function(bufnr)
-		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical,
-			{ desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true })
-		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal,
-			{ desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true })
+		vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, {
+			desc = 'Open', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, {
+			desc = 'Cut', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'c', nvim_tree_api.fs.copy.node, {
+			desc = 'Copy', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'y', nvim_tree_api.fs.copy.node, {
+			desc = 'Copy', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'p', nvim_tree_api.fs.paste, {
+			desc = 'Paste', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'v', nvim_tree_api.fs.paste, {
+			desc = 'Paste', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'd', nvim_tree_api.fs.remove, {
+			desc = 'Delete', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'r', nvim_tree_api.fs.rename, {
+			desc = 'Rename', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'a', nvim_tree_api.fs.create, {
+			desc = 'Create', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical, {
+			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal, {
+			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
 	end
 })
 -- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
@@ -396,7 +421,7 @@ vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
 vim.keymap.set("n", "<C-w>-", ":below split<CR>")
 vim.keymap.set("n", "<C-w>c", ":close<CR>")
 vim.keymap.set("n", "<C-w>C", ":only<CR>")
-vim.keymap.set("n", "<C-w>d", ":bd<CR>")
+vim.keymap.set("n", "<C-w>d", ":bn | bd# | BufferLineCycleNext<CR>")
 vim.keymap.set("n", "<C-w>D", ":BufferLineCloseRight<CR>")
 vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
 vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
