@@ -271,60 +271,33 @@ local nvim_tree = require("nvim-tree")
 local nvim_tree_api = require("nvim-tree.api")
 nvim_tree.setup({
 	on_attach = function(bufnr)
-		vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, {
-			desc = 'Open', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, {
-			desc = 'Open', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
+		local function opts(desc)
+			return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+		end
+		vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, opts('Open'))
+		vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, opts('Open'))
 		vim.keymap.set('n', 'o', function(node)
 			nvim_tree_api.node.open.edit(node)
 			nvim_tree_api.tree.focus()
-		end, {
-			desc = 'Open and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, {
-			desc = 'Cut', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'c', nvim_tree_api.fs.copy.node, {
-			desc = 'Copy', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'y', nvim_tree_api.fs.copy.node, {
-			desc = 'Copy', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'p', nvim_tree_api.fs.paste, {
-			desc = 'Paste', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'v', nvim_tree_api.fs.paste, {
-			desc = 'Paste', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'd', nvim_tree_api.fs.remove, {
-			desc = 'Delete', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'r', nvim_tree_api.fs.rename, {
-			desc = 'Rename', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', 'a', nvim_tree_api.fs.create, {
-			desc = 'Create', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical, {
-			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
+		end, opts('Open and focus tree'))
+		vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, opts('Cut'))
+		vim.keymap.set('n', 'c', nvim_tree_api.fs.copy.node, opts('Copy'))
+		vim.keymap.set('n', 'y', nvim_tree_api.fs.copy.node, opts('Copy'))
+		vim.keymap.set('n', 'p', nvim_tree_api.fs.paste, opts('Paste'))
+		vim.keymap.set('n', 'v', nvim_tree_api.fs.paste, opts('Paste'))
+		vim.keymap.set('n', 'd', nvim_tree_api.fs.remove, opts('Delete'))
+		vim.keymap.set('n', 'r', nvim_tree_api.fs.rename, opts('Rename'))
+		vim.keymap.set('n', 'a', nvim_tree_api.fs.create, opts('Create'))
+		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical, opts('Open vertically'))
 		vim.keymap.set('n', '?', function(node)
 			nvim_tree_api.node.open.vertical(node)
 			nvim_tree_api.tree.focus()
-		end, {
-			desc = 'Open vertically and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
-		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal, {
-			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
+		end, opts('Open vertically and keep focus'))
+		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal, opts('Open horizontally'))
 		vim.keymap.set('n', '_', function(node)
 			nvim_tree_api.node.open.horizontal(node)
 			nvim_tree_api.tree.focus()
-		end, {
-			desc = 'Open horizontally and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
-		})
+		end, opts('Open horizontally and keep focus'))
 	end
 })
 -- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
