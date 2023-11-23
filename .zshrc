@@ -200,7 +200,7 @@ function create_nested_pattern {
 			current_dir=\${current_dir}/\${line[\$i]}
 		done
 		if [ -d "\${current_dir}" ]; then
-			local -a comps=(\$(ls \${current_dir} 2>/dev/null))
+			local -a comps=(\$(ls -A \${current_dir} 2>/dev/null))
 			_values "comps" \$comps
 		fi
 	}
