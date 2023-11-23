@@ -151,21 +151,34 @@ function create_nested_pattern {
 	function ${func_name} {
 		local current_dir=${root_dir}
 		local window_name=${func_name}
+		local -A opthash
+		zparseopts -D -A opthash -- c
+		if [ -z \$1 ]; then
+			echo "No path specified. Nothing happened."
+			return 0
+		fi
 		for param in "\$@"; do
 			if [ -z "\${param}" ]; then
 				tmux rename-window \${window_name}
 				cd \${current_dir}
-				nvim README.md -c 'NvimTreeOpen'
+				if [ "\${opthash[(i)-c]}" ]; then
+					echo "Change directory to \${current_dir}"
+					return 0
+				fi
+				nvim README.md
 				return 0
 			fi
 			if [ -f "\${current_dir}/\${param}" ]; then
 				tmux rename-window \${window_name}
 				cd \${current_dir}
-				nvim \${param} -c 'NvimTreeOpen'
+				if [ "\${opthash[(i)-c]}" ]; then
+					echo "Change directory to \${current_dir}"
+					return 0
+				fi
+				nvim \${param}
 				return 0
 			fi
 			current_dir=\${current_dir}/\${param}
-			echo current_dir=\${current_dir}
 			if [ ! -d "\${current_dir}" ]; then
 				echo "Command execution failed. \${current_dir} does not exist."
 				return 1
@@ -174,18 +187,22 @@ function create_nested_pattern {
 		done
 		tmux rename-window \${window_name}
 		cd \${current_dir}
-		nvim README.md -c 'NvimTreeOpen'
+		if [ "\${opthash[(i)-c]}" ]; then
+			echo "Change directory to \${current_dir}"
+			return 0
+		fi
+		nvim README.md
 	}
 	function _${func_name} {
 		local context state state_descr line
-		_arguments '*::arg:->args'
+		_arguments '-c[Change directory only]' '*::arg:->args'
 		local root_dir=${root_dir}
 		local current_dir=\${root_dir}
 		for (( i=1; i<\${#line[@]}; i++ )); do
 			current_dir=\${current_dir}/\${line[\$i]}
 		done
 		if [ -d "\${current_dir}" ]; then
-			local -a comps=(\$(ls \${current_dir} 2>/dev/null))
+			local -a comps=(\$(ls -A \${current_dir} 2>/dev/null))
 			_values "comps" \$comps
 		fi
 	}
