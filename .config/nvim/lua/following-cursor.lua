@@ -13,7 +13,12 @@ end
 
 function main.shift_right()
 	core(function()
-		vim.cmd(string.format("silent keepjumps normal! %s>>", vim.v.count))
+		local str = vim.api.nvim_get_current_line()
+		if str:len() == 0 then
+			vim.api.nvim_set_current_line("	")
+		else
+			vim.cmd(string.format("silent keepjumps normal! %s>>", vim.v.count))
+		end
 	end)
 end
 
