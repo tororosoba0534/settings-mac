@@ -274,6 +274,15 @@ nvim_tree.setup({
 		vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, {
 			desc = 'Open', buffer = bufnr, noremap = true, silent = true, nowait = true
 		})
+		vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, {
+			desc = 'Open', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', 'o', function(node)
+			nvim_tree_api.node.open.edit(node)
+			nvim_tree_api.tree.focus()
+		end, {
+			desc = 'Open and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
 		vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, {
 			desc = 'Cut', buffer = bufnr, noremap = true, silent = true, nowait = true
 		})
@@ -301,8 +310,20 @@ nvim_tree.setup({
 		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical, {
 			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
 		})
+		vim.keymap.set('n', '?', function(node)
+			nvim_tree_api.node.open.vertical(node)
+			nvim_tree_api.tree.focus()
+		end, {
+			desc = 'Open vertically and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
 		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal, {
 			desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true
+		})
+		vim.keymap.set('n', '_', function(node)
+			nvim_tree_api.node.open.horizontal(node)
+			nvim_tree_api.tree.focus()
+		end, {
+			desc = 'Open horizontally and keep focus', buffer = bufnr, noremap = true, silent = true, nowait = true
 		})
 	end
 })
