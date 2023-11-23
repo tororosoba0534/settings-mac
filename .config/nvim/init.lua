@@ -272,7 +272,15 @@ require("nvim-web-devicons").setup({})
 -- <TAB> -> preview
 -- q     -> close window
 local nvim_tree = require("nvim-tree")
-nvim_tree.setup()
+local nvim_tree_api = require("nvim-tree.api")
+nvim_tree.setup({
+	on_attach = function(bufnr)
+		vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical,
+			{ desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true })
+		vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal,
+			{ desc = 'Open vertically', buffer = bufnr, noremap = true, silent = true, nowait = true })
+	end
+})
 -- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
 -- vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
 -- vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
