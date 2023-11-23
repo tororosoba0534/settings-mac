@@ -260,17 +260,11 @@ require("nvim-treesitter.configs").setup({
 vim.keymap.set({ "n" }, "<F3>", "<C-i>")
 vim.keymap.set({ "i", "l", "v", "o", "t" }, "<F3>", "<NOP>")
 
-local indent_stay_cursor = require("indent-stay-cursor")
-vim.keymap.set({ "n", "i" }, "<TAB>", indent_stay_cursor.shift_right_line, { noremap = true })
-vim.keymap.set({ "n", "i" }, "<S-TAB>", indent_stay_cursor.shift_left_line, { noremap = true })
-
--- <C-_> means ctrl + slash(/)
 require("Comment").setup({
 	-- sticky = false,
 })
--- vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
+vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
 vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
-vim.keymap.set({ "n", "i" }, "<C-_>", indent_stay_cursor.toggle_comment)
 
 require("nvim-web-devicons").setup({})
 
@@ -322,24 +316,19 @@ telescope.setup({
 		live_grep_args = {},
 	},
 })
-vim.keymap.set("n", "<C-w>f", "<cmd>Telescope find_files<CR>")
-vim.keymap.set("n", "<C-w>b", "<cmd>Telescope buffers<CR>")
-vim.keymap.set("n", "<C-w>F", '<cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>')
--- vim.api.nvim_create_user_command("F", "lua require(\"telescope\").extensions.live_grep_args.live_grep_args()", {})
-
-local notetaking = require("notetaking")
-vim.keymap.set("n", "gf", function()
-	notetaking.main()
-end)
+-- Find file
+vim.api.nvim_create_user_command("Ff", "Telescope find_files", {})
+-- Find text
+vim.api.nvim_create_user_command("Ft", 'lua require("telescope").extensions.live_grep_args.live_grep_args()', {})
 
 vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
-vim.keymap.set("n", "<C-w>u", "<cmd>UndotreeToggle<CR>")
+vim.api.nvim_create_user_command("U", "UndotreeToggle", {})
 
 vim.opt.termguicolors = true
 require("bufferline").setup({})
 
 require("trouble").setup({})
-vim.keymap.set("n", "<C-w>e", "<cmd>TroubleToggle<CR>")
+vim.api.nvim_create_user_command("E", "TroubleToggle", {})
 
 -- You need "im-select" executable on Mac
 -- https://github.com/daipeihust/im-select
@@ -352,14 +341,6 @@ require("im-select").setup()
 
 vim.cmd("call UltiSnips#RefreshSnippets()")
 
--- local hop = require("hop")
--- hop.setup({
--- 	multi_windows = true,
--- })
--- vim.keymap.set("", "f", "<cmd>HopWordCurrentLine<CR>")
--- vim.keymap.set("", "F", "<cmd>HopLineStart<CR>")
--- vim.cmd([[hi HopUnmatched ctermfg=15 guifg=White]])
-
 require("neoscroll").setup({
 	mappings = { "<C-u>", "<C-d>", "zt", "zz", "zb" },
 	hide_cursor = false,
@@ -369,19 +350,12 @@ require("copilot").setup({
 	suggestion = { enabled = false },
 	panel = { enabled = false },
 })
--- BLOCKEND
-
--- -- The following line envokes error.
--- vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
-vim.keymap.set("n", "<C-j>", "<Plug>(edgemotion-j)")
-vim.keymap.set("n", "<C-k>", "<Plug>(edgemotion-k)")
 
 vim.o.mouse = "a"
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.number = true
--- -- scrolloff disabled because of hop.nvim user experience
--- vim.o.scrolloff = 10
+vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
@@ -391,8 +365,6 @@ vim.o.cursorcolumn = true
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
 vim.o.splitright = true
-
--- BLOCKEND
 
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
@@ -416,8 +388,8 @@ vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
 vim.keymap.set("n", "<C-w>-", ":below split<CR>")
 vim.keymap.set("n", "<C-w>c", ":close<CR>")
 vim.keymap.set("n", "<C-w>C", ":only<CR>")
-vim.keymap.set("n", "<C-w>d", ":BufferLineCycleNext | bd#<CR>")
-vim.keymap.set("n", "<C-w>D", ":%bd | e# | bd#<CR>")
+vim.keymap.set("n", "<C-w>d", ":bd<CR>")
+vim.keymap.set("n", "<C-w>D", ":BufferLineCloseRight<CR>")
 vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
 vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
 vim.keymap.set("n", "<C-w>h", ":BufferLineCyclePrev<CR>")
