@@ -162,7 +162,7 @@ function create_nested_pattern {
 					echo "Change directory to \${current_dir}"
 					return 0
 				fi
-				nvim README.md -c 'NvimTreeOpen'
+				nvim README.md
 				return 0
 			fi
 			if [ -f "\${current_dir}/\${param}" ]; then
@@ -172,7 +172,7 @@ function create_nested_pattern {
 					echo "Change directory to \${current_dir}"
 					return 0
 				fi
-				nvim \${param} -c 'NvimTreeOpen'
+				nvim \${param}
 				return 0
 			fi
 			current_dir=\${current_dir}/\${param}
@@ -189,7 +189,7 @@ function create_nested_pattern {
 			echo "Change directory to \${current_dir}"
 			return 0
 		fi
-		nvim README.md -c 'NvimTreeOpen'
+		nvim README.md
 	}
 	function _${func_name} {
 		local context state state_descr line
