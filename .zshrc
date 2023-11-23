@@ -117,6 +117,9 @@ function mkdircd() {
 		cd $@
 }
 
+alias g='git'
+alias gs='git status'
+
 function fmt-jsonnet-all() {
 	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
 }
