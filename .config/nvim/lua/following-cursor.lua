@@ -64,12 +64,23 @@ local function check_line(line)
 	local escaped_spaceless_comment = escape_string(remove_whitespace(get_raw_comment()))
 	local indent_area = string.gmatch(line, "(%s*)%S+")()
 	print("indent_area=" .. tostring(indent_area))
-	local before_comment_area = string.gmatch(line, "^(%s*)" .. escaped_spaceless_comment)()
-	print("before_comment_area=" .. tostring(before_comment_area))
+	local non_space_before_comment = string.gmatch(line, "(%S*)" .. escaped_spaceless_comment)()
+	print("non_space_before_comment=" .. tostring(non_space_before_comment))
 	local i = indent_area == nil and 0 or indent_area:len() + 1
-	local b = before_comment_area ~= nil
-	print("i=" .. tostring(i) .. ", b=" .. tostring(b))
-	return i, b
+	local commented
+	if non_space_before_comment == nil then
+		-- There is no comment string
+		commented = false
+	elseif non_space_before_comment == "" then
+		-- Comment string exists at the beginning of the line
+		commented = true
+	else
+		-- There is uncommented keyword before the comment string
+		commented = false
+	end
+
+	print("i=" .. tostring(i) .. ", commented=" .. tostring(commented))
+	return i, commented
 end
 
 local function toggle_comment_line()
