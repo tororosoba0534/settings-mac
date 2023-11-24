@@ -83,6 +83,25 @@ local function check_line(line)
 	return i, commented
 end
 
+local function insert_string(base, part, pos)
+	return base:sub(1, pos - 1) .. part .. base:sub(pos)
+end
+
+local function apply_comment(line, raw_comment, pos)
+	local result = insert_string(line, raw_comment, pos)
+	print("result=" .. result)
+	return result
+end
+
+local function remove_comment(line, escaped_spaceless_comment)
+	local left, right = string.gmatch(line, "(.*)" .. escaped_spaceless_comment .. "%s*(.*)")()
+	print("left=" .. tostring(left))
+	print("right=" .. tostring(right))
+	return left .. right
+end
+
+
+
 local function toggle_comment_line()
 	local line = vim.api.nvim_get_current_line()
 	local raw_comment = get_raw_comment()
@@ -133,7 +152,13 @@ end
 function main.test_n()
 	-- toggle_comment_line()
 	local line = vim.api.nvim_get_current_line()
-	check_line(line)
+	local pos, commented = check_line(line)
+	if commented then
+		line = remove_comment(line, escape_string(remove_whitespace(get_raw_comment())))
+	else
+		line = apply_comment(line, get_raw_comment(), pos)
+	end
+	vim.api.nvim_set_current_line(line)
 	-- print("i=" .. tostring(i) .. ", b=" .. tostring(b))
 end
 
