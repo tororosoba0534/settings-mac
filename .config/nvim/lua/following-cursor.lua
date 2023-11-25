@@ -1,4 +1,4 @@
-local main = {}
+local M = {}
 
 local function core(func)
 	local y, old_x = unpack(vim.api.nvim_win_get_cursor(0))
@@ -11,7 +11,7 @@ local function core(func)
 	vim.api.nvim_win_set_cursor(0, { y, new_x })
 end
 
-function main.shift_right()
+local function shift_right_normal()
 	core(function()
 		local str = vim.api.nvim_get_current_line()
 		if str:len() == 0 then
@@ -22,7 +22,7 @@ function main.shift_right()
 	end)
 end
 
-function main.shift_left()
+local function shift_left_normal()
 	core(function()
 		vim.cmd(string.format("silent keepjumps normal! %s<<", vim.v.count))
 	end)
@@ -107,7 +107,7 @@ local function remove_comment(line, escaped_comment)
 	return left .. right
 end
 
-local function toggle_comment_normal()
+local function toggle_comment_normal_internal()
 	local line = vim.api.nvim_get_current_line()
 	local pos, commented = check_line(line)
 	-- print("pos=" .. tostring(pos) .. ", commented=" .. tostring(commented))
@@ -119,7 +119,7 @@ local function toggle_comment_normal()
 	vim.api.nvim_set_current_line(line)
 end
 
-local function toggle_comment_visual()
+local function toggle_comment_visual_internal()
 	local vstart = vim.fn.getpos("'<")
 	local vend = vim.fn.getpos("'>")
 	local row_start = vstart[2] - 1
@@ -162,35 +162,31 @@ local function toggle_comment_visual()
 	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
 end
 
-function main.toggle_comment_normal()
-	core(toggle_comment_normal)
+local function toggle_comment_normal()
+	core(toggle_comment_normal_internal)
 end
 
-function main.toggle_comment_visual()
-	core(toggle_comment_visual)
+local function toggle_comment_visual()
+	core(toggle_comment_visual_internal)
 end
 
 ----------------------------------------
 -- TEST
 ----------------------------------------
-function main.test_n()
-	toggle_comment_normal()
-end
-
-function main.test_v()
-	toggle_comment_visual()
-end
 
 -- FOR TESTING
 -- vim.keymap.set({ 'n' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
 -- vim.keymap.set({ 'v' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
-vim.api.nvim_create_user_command("TestN", main.test_n, {})
-vim.api.nvim_create_user_command("TestV", main.test_v, {})
-vim.keymap.set({ 'x' }, '<Plug>(following_cursor_toggle_comment_visual)', '<ESC><CMD>lockmarks TestV<CR>',
-	{ noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<C-w>t', '<Plug>(following_cursor_toggle_comment_visual)', { noremap = true, silent = true })
--- vim.keymap.set({ 'n' }, '<C-w>t', '<cmd>TestN<cr>', { noremap = true, silent = true })
--- vim.keymap.set({ 'x' }, '<C-w>t', '<cmd>TestV<cr>', { noremap = true, silent = true })
+function M.test_n()
+	toggle_comment_normal()
+end
+
+function M.test_v()
+	toggle_comment_visual()
+end
+
+vim.api.nvim_create_user_command("TestN", M.test_n, {})
+vim.api.nvim_create_user_command("TestV", M.test_v, {})
 vim.api.nvim_create_user_command("TestPV", function()
 	local vstart = vim.fn.getpos("'<")
 	local vend = vim.fn.getpos("'>")
@@ -227,4 +223,20 @@ vim.api.nvim_create_user_command("Test1", function()
 	-- return left .. right
 end, {})
 
-return main
+function M.setup()
+	-- indent
+	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_right_normal)', shift_right_normal,
+		{ noremap = true, silent = true })
+	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
+		{ noremap = true, silent = true })
+
+	-- comment
+	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,
+		{ noremap = true, silent = true })
+	vim.api.nvim_create_user_command("FollowingCursorToggleCommentVisualINTERNAL", toggle_comment_visual, {})
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_toggle_comment_visual)',
+		'<ESC><CMD>lockmarks FollowingCursorToggleCommentVisualINTERNAL<CR>',
+		{ noremap = true, silent = true })
+end
+
+return M
