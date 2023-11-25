@@ -268,11 +268,6 @@ vim.keymap.set({ 'n', 'i' }, '<C-o>', following_cursor.shift_left, { noremap = t
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
 vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
 
--- FOR TESTING
--- vim.keymap.set({ 'n', 'i', 'x' }, '<C-w>t', following_cursor.test_n, { noremap = true, silent = true })
-vim.api.nvim_create_user_command("TestFuncN", following_cursor.test_n, {})
-vim.api.nvim_create_user_command("TestFuncV", following_cursor.test_v, {})
-
 require("nvim-web-devicons").setup({})
 
 -- Usage:
