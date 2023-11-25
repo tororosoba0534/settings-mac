@@ -28,6 +28,55 @@ local function shift_left_normal()
 	end)
 end
 
+local function shift_right_visual_internal()
+	local vstart = vim.fn.getpos("'<")
+	local vend = vim.fn.getpos("'>")
+	local row_start = vstart[2] - 1
+	local row_end = vend[2]
+	local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, true)
+	-- print("lines=" .. vim.inspect(lines))
+
+	local new_lines = {}
+	for _, line in pairs(lines) do
+		if line ~= "" then
+			table.insert(new_lines, "\t" .. line)
+		else
+			table.insert(new_lines, "")
+		end
+	end
+
+	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	vim.cmd("silent keepjumps normal! gv")
+end
+local function shift_left_visual_internal()
+	local vstart = vim.fn.getpos("'<")
+	local vend = vim.fn.getpos("'>")
+	local row_start = vstart[2] - 1
+	local row_end = vend[2]
+	local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, true)
+	-- print("lines=" .. vim.inspect(lines))
+
+	local new_lines = {}
+	for _, line in pairs(lines) do
+		if line == "" then
+			table.insert(new_lines, "")
+		elseif line:sub(1, 1) == "\t" or line:sub(1, 1) == " " then
+			table.insert(new_lines, line:sub(2))
+		else
+			table.insert(new_lines, line)
+		end
+	end
+
+	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	vim.cmd("silent keepjumps normal! gv")
+end
+local function shift_right_visual()
+	core(shift_right_visual_internal)
+end
+local function shift_left_visual()
+	core(shift_left_visual_internal)
+end
+
 ----------------------------------------
 -- COMMENT
 ----------------------------------------
@@ -230,8 +279,16 @@ function M.setup()
 		{ noremap = true, silent = true })
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
 		{ noremap = true, silent = true })
-	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)', '<ESC><CMD>normal! gv ><CR>gv')
-	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)', '<ESC><CMD>normal! gv <<CR>gv')
+	-- vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)', '<ESC><CMD>normal! gv ><CR>gv')
+	-- vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)', '<ESC><CMD>normal! gv <<CR>gv')
+	vim.api.nvim_create_user_command("FollowingCursorShiftRightVisualINTERNAL", shift_right_visual, {})
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)',
+		'<ESC><CMD>lockmarks FollowingCursorShiftRightVisualINTERNAL<CR>',
+		{ noremap = true, silent = true })
+	vim.api.nvim_create_user_command("FollowingCursorShiftLeftVisualINTERNAL", shift_left_visual, {})
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)',
+		'<ESC><CMD>lockmarks FollowingCursorShiftLeftVisualINTERNAL<CR>',
+		{ noremap = true, silent = true })
 
 	-- comment
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,
