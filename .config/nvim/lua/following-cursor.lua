@@ -160,6 +160,7 @@ local function toggle_comment_visual_internal()
 		end
 	end
 	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	vim.cmd("silent keepjumps normal! gv")
 end
 
 local function toggle_comment_normal()
@@ -229,8 +230,8 @@ function M.setup()
 		{ noremap = true, silent = true })
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
 		{ noremap = true, silent = true })
-	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)', '<ESC><CMD>normal! gv ><CR>')
-	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)', '<ESC><CMD>normal! gv <<CR>')
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)', '<ESC><CMD>normal! gv ><CR>gv')
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)', '<ESC><CMD>normal! gv <<CR>gv')
 
 	-- comment
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,
