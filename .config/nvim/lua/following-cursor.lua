@@ -129,29 +129,30 @@ local function toggle_comment_visual()
 		if i ~= 0 and (pos == nil or pos >= i) then
 			pos = i
 		end
-		if cmtd == false then
+		if i ~= 0 and cmtd == false then
 			commented = false
 		end
 	end
 	print("pos=" .. tostring(pos) .. ", commented=" .. tostring(commented))
-	-- --
-	-- if pos == nil then
-	-- 	return
-	-- end
-	--
-	-- local new_lines = {}
-	-- if commented then
-	-- 	for _, line in pairs(lines) do
-	-- 		local new_line = remove_comment(line, escape_string(remove_whitespace(get_raw_comment())))
-	-- 		table.insert(new_lines, new_line)
-	-- 	end
-	-- else
-	-- 	for _, line in pairs(lines) do
-	-- 		local new_line = apply_comment(line, get_raw_comment(), pos)
-	-- 		table.insert(new_lines, new_line)
-	-- 	end
-	-- end
-	-- vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+
+	if pos == nil then
+		return
+	end
+
+	local new_lines = {}
+	if commented then
+		for _, line in pairs(lines) do
+			local new_line = line == "" and "" or
+			remove_comment(line, escape_string(remove_whitespace(get_raw_comment())))
+			table.insert(new_lines, new_line)
+		end
+	else
+		for _, line in pairs(lines) do
+			local new_line = line == "" and "" or apply_comment(line, get_raw_comment(), pos)
+			table.insert(new_lines, new_line)
+		end
+	end
+	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
 end
 
 function main.toggle_comment_normal()
