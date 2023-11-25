@@ -93,8 +93,8 @@ local function apply_comment(line, raw_comment, pos)
 	return result
 end
 
-local function remove_comment(line, escaped_spaceless_comment)
-	local left, right = string.gmatch(line, "(.*)" .. escaped_spaceless_comment .. "%s*(.*)")()
+local function remove_comment(line, escaped_comment)
+	local left, right = string.gmatch(line, "(.*)" .. escaped_comment .. "(.*)")()
 	-- print("left=" .. tostring(left))
 	-- print("right=" .. tostring(right))
 	return left .. right
@@ -105,7 +105,7 @@ local function toggle_comment_normal()
 	local pos, commented = check_line(line)
 	-- print("pos=" .. tostring(pos) .. ", commented=" .. tostring(commented))
 	if commented then
-		line = remove_comment(line, escape_string(remove_whitespace(get_raw_comment())))
+		line = remove_comment(line, escape_string(get_raw_comment()))
 	else
 		line = apply_comment(line, get_raw_comment(), pos)
 	end
@@ -143,7 +143,7 @@ local function toggle_comment_visual()
 	if commented then
 		for _, line in pairs(lines) do
 			local new_line = line == "" and "" or
-			remove_comment(line, escape_string(remove_whitespace(get_raw_comment())))
+				remove_comment(line, escape_string(get_raw_comment()))
 			table.insert(new_lines, new_line)
 		end
 	else
@@ -179,7 +179,30 @@ end
 -- vim.keymap.set({ 'v' }, '<C-w>t', main.test_v, { noremap = true, silent = true })
 vim.keymap.set({ 'n' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
 vim.keymap.set({ 'v' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
-vim.api.nvim_create_user_command("TestFuncN", main.test_n, {})
-vim.api.nvim_create_user_command("TestFuncV", main.test_v, {})
+vim.api.nvim_create_user_command("TestN", main.test_n, {})
+vim.api.nvim_create_user_command("TestV", main.test_v, {})
+vim.api.nvim_create_user_command("TestPV", function()
+	local vstart = vim.fn.getpos("'<")
+	local vend = vim.fn.getpos("'>")
+	local row_start = vstart[2] - 1
+	local row_end = vend[2]
+	local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, true)
+	print("lines=" .. vim.inspect(lines))
+
+	local pos = nil
+	local commented = true
+	for _, line in pairs(lines) do
+		local i, cmtd = check_line(line)
+
+		-- `i == 0` means the line is empty.
+		if i ~= 0 and (pos == nil or pos >= i) then
+			pos = i
+		end
+		if i ~= 0 and cmtd == false then
+			commented = false
+		end
+	end
+	print("pos=" .. tostring(pos) .. ", commented=" .. tostring(commented))
+end, {})
 
 return main
