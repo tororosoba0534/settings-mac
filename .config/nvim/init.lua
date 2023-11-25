@@ -253,17 +253,24 @@ require("nvim-treesitter.configs").setup({
 --------------------------------------------------
 --------------------------------------------------
 
-require("Comment").setup({
-	-- sticky = false,
-})
-vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
-vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
+-- require("Comment").setup({
+-- 	-- sticky = false,
+-- })
+-- vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
+-- vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
-local following_cursor = require("following-cursor")
-vim.keymap.set({ 'n', 'i' }, '<TAB>', following_cursor.shift_right, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<C-i>', following_cursor.shift_right, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<S-TAB>', following_cursor.shift_left, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<C-o>', following_cursor.shift_left, { noremap = true, silent = true })
+require("following-cursor").setup()
+vim.keymap.set({ 'x' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'n' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)', { noremap = true, silent = true })
+-- local following_cursor = require("following-cursor")
+vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-o>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<TAB>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<C-i>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
 
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
 vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
@@ -278,7 +285,13 @@ local nvim_tree_api = require("nvim-tree.api")
 nvim_tree.setup({
 	on_attach = function(bufnr)
 		local function opts(desc)
-			return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+			return {
+				desc = 'nvim-tree: ' .. desc,
+				buffer = bufnr,
+				noremap = true,
+				silent = true,
+				nowait = true
+			}
 		end
 		vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, opts('Open'))
 		vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, opts('Open'))
