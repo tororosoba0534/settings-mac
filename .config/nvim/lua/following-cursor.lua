@@ -182,12 +182,15 @@ function main.test_v()
 end
 
 -- FOR TESTING
--- vim.keymap.set({ 'n' }, '<C-w>t', main.test_n, { noremap = true, silent = true })
--- vim.keymap.set({ 'v' }, '<C-w>t', main.test_v, { noremap = true, silent = true })
-vim.keymap.set({ 'n' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
-vim.keymap.set({ 'v' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
+-- vim.keymap.set({ 'n' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
+-- vim.keymap.set({ 'v' }, '<C-w>t', function() print("hogehoge") end, { noremap = true, silent = true })
 vim.api.nvim_create_user_command("TestN", main.test_n, {})
 vim.api.nvim_create_user_command("TestV", main.test_v, {})
+vim.keymap.set({ 'x' }, '<Plug>(following_cursor_toggle_comment_visual)', '<ESC><CMD>lockmarks TestV<CR>',
+	{ noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<C-w>t', '<Plug>(following_cursor_toggle_comment_visual)', { noremap = true, silent = true })
+-- vim.keymap.set({ 'n' }, '<C-w>t', '<cmd>TestN<cr>', { noremap = true, silent = true })
+-- vim.keymap.set({ 'x' }, '<C-w>t', '<cmd>TestV<cr>', { noremap = true, silent = true })
 vim.api.nvim_create_user_command("TestPV", function()
 	local vstart = vim.fn.getpos("'<")
 	local vend = vim.fn.getpos("'>")
