@@ -94,9 +94,16 @@ local function apply_comment(line, raw_comment, pos)
 end
 
 local function remove_comment(line, escaped_comment)
-	local left, right = string.gmatch(line, "(.*)" .. escaped_comment .. "(.*)")()
+	if line == "" then return "" end
+	local left, right = string.gmatch(line, "(%s*)" .. escaped_comment .. "(.*)")()
 	-- print("left=" .. tostring(left))
 	-- print("right=" .. tostring(right))
+	if left == nil or right == nil then
+		left, right = string.gmatch(line, "(%s*)" .. remove_whitespace(escaped_comment) .. "(.*)")()
+		if left == nil or right == nil then
+			return line
+		end
+	end
 	return left .. right
 end
 
@@ -203,6 +210,18 @@ vim.api.nvim_create_user_command("TestPV", function()
 		end
 	end
 	print("pos=" .. tostring(pos) .. ", commented=" .. tostring(commented))
+end, {})
+vim.api.nvim_create_user_command("Test1", function()
+	local line = vim.api.nvim_get_current_line()
+	local escaped_comment = escape_string(get_raw_comment())
+	if line == "" then return "" end
+	local left, right = string.gmatch(line, "(%s*)" .. escaped_comment .. "(.*)")()
+	print("left=" .. tostring(left))
+	print("right=" .. tostring(right))
+	-- if left == nil or right == nil then
+	-- 	left, right = string.gmatch(line, "(.*)" .. remove_whitespace(escaped_comment) .. "(.*)")()
+	-- end
+	-- return left .. right
 end, {})
 
 return main
