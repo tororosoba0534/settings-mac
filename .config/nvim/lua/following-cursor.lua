@@ -229,6 +229,8 @@ function M.setup()
 		{ noremap = true, silent = true })
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
 		{ noremap = true, silent = true })
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)', '<ESC><CMD>normal! gv ><CR>')
+	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_left_visual)', '<ESC><CMD>normal! gv <<CR>')
 
 	-- comment
 	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,

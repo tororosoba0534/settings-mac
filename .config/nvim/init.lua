@@ -267,6 +267,10 @@ vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_norma
 vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i' }, '<C-o>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<TAB>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<C-i>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
+vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
 
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
 vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
