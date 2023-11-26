@@ -98,8 +98,9 @@ require("lazy").setup({
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
 		},
-		-- lazy = true,
-		lazy = false,
+		lazy = true,
+		-- lazy = false,
+		event = {"InsertEnter"},
 		config = function()
 			local cmp = require("cmp")
 			cmp.setup.global({
