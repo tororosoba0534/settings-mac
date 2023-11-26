@@ -260,9 +260,8 @@ require("nvim-treesitter.configs").setup({
 -- vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
 require("following-cursor").setup()
+vim.keymap.set({ 'n', 'i' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)', { noremap = true, silent = true })
 vim.keymap.set({ 'x' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_visual)', { noremap = true, silent = true })
-vim.keymap.set({ 'n' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)', { noremap = true, silent = true })
--- local following_cursor = require("following-cursor")
 vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
