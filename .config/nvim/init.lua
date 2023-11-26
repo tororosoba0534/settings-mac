@@ -394,11 +394,63 @@ require("lazy").setup({
 			require("copilot_cmp").setup()
 		end,
 	},
+	{
+		dir = "~/settings-mac/.config/nvim/lua/im-select.lua",
+		-- You need "im-select" executable on Mac
+		-- https://github.com/daipeihust/im-select
+		-- ```
+		-- # If you use Intel chip on your Mac, change 'apple' to 'intel' in the following code:
+		-- sudo curl -L -o /usr/local/bin/im-select https://github.com/daipeihust/im-select/raw/master/im-select-mac/out/apple/im-select
+		-- sudo chmod 755 /usr/local/bin/im-select
+		-- ```
+		lazy = true,
+		event = "InsertEnter",
+		config = function()
+			require("im-select").setup()
+		end
+	},
+	{
+		dir = "~/settings-mac/.config/nvim/lua/following-cursor.lua",
+		lazy = true,
+		keys = {
+			{ "<C-_>",   mode = { "n", "i", "x" } },
+			{ "<TAB>",   mode = { "n", "i", "x" } },
+			{ "<S-TAB>", mode = { "n", "i", "x" } },
+			{ "<C-i>",   mode = { "n", "i", "x" } },
+			{ "<C-o>",   mode = { "n", "i", "x" } },
+		},
+		config = function()
+			require("following-cursor").setup()
+			vim.keymap.set({ 'n', 'i' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'x' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_visual)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'n', 'i' }, '<C-o>', '<Plug>(following_cursor_shift_left_normal)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'x' }, '<TAB>', '<Plug>(following_cursor_shift_right_visual)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'x' }, '<C-i>', '<Plug>(following_cursor_shift_right_visual)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'x' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_visual)',
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)',
+				{ noremap = true, silent = true })
+		end,
+	},
 }, {
 	defaults = {
 		-- lazy = true,
 		lazy = false,
-	}
+	},
+	dev = {
+		path = "~/settings-mac/.config/nvim/lua",
+	},
 })
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
@@ -430,20 +482,6 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 -- vim.keymap.set("n", "<C-_>", "<Plug>(comment_toggle_linewise_current)")
 -- vim.keymap.set("x", "<C-_>", "<Plug>(comment_toggle_linewise_visual)")
 
-require("following-cursor").setup()
-vim.keymap.set({ 'n', 'i' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)', { noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_visual)', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<C-o>', '<Plug>(following_cursor_shift_left_normal)', { noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<TAB>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<C-i>', '<Plug>(following_cursor_shift_right_visual)', { noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
-vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)', { noremap = true, silent = true })
-
-vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
-vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
 
 
 -- Usage:
@@ -454,15 +492,6 @@ vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
 
 vim.opt.termguicolors = true
 
-
--- You need "im-select" executable on Mac
--- https://github.com/daipeihust/im-select
--- ```
--- # If you use Intel chip on your Mac, change 'apple' to 'intel' in the following code:
--- sudo curl -L -o /usr/local/bin/im-select https://github.com/daipeihust/im-select/raw/master/im-select-mac/out/apple/im-select
--- sudo chmod 755 /usr/local/bin/im-select
--- ```
-require("im-select").setup()
 
 
 
@@ -488,6 +517,9 @@ vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 -- :so % <- source current file (useful when you develop plugin in lua or vimscript)
 -- :noh <- turn off syntax hilight
 -- :only <- close all other windows
+
+vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
+vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
 
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
 vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
