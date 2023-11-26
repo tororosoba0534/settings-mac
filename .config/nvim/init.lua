@@ -97,6 +97,23 @@ require("lazy").setup({
 			'hrsh7th/cmp-buffer',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
+			{
+				"zbirenbaum/copilot-cmp",
+				config = function()
+					require("copilot_cmp").setup()
+				end,
+				dependencies = {
+					{
+						"zbirenbaum/copilot.lua",
+						config = function()
+							require("copilot").setup({
+								suggestion = { enabled = false },
+								panel = { enabled = false },
+							})
+						end
+					},
+				}
+			},
 		},
 		lazy = true,
 		-- lazy = false,
@@ -134,6 +151,7 @@ require("lazy").setup({
 						},
 					},
 					{ name = "path", },
+					{ name = "copilot", group_index = 2 },
 				},
 			})
 			cmp.setup.cmdline("/", {
@@ -387,7 +405,6 @@ require("lazy").setup({
 			})
 		end
 	},
-	"nvim-telescope/telescope-live-grep-args.nvim",
 	{
 		"folke/trouble.nvim",
 		dependencies = "nvim-tree/nvim-web-devicons",
@@ -411,21 +428,6 @@ require("lazy").setup({
 			})
 		end
 	},
-	{
-		"zbirenbaum/copilot.lua",
-		config = function()
-			require("copilot").setup({
-				suggestion = { enabled = false },
-				panel = { enabled = false },
-			})
-		end
-	},
-	-- {
-	-- 	"zbirenbaum/copilot-cmp",
-	-- 	config = function()
-	-- 		require("copilot_cmp").setup()
-	-- 	end,
-	-- },
 	{
 		dir = "~/settings-mac/.config/nvim/lua/im-select.lua",
 		-- 	Originai: keaising/im-select.nvim
