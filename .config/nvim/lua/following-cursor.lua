@@ -24,67 +24,69 @@ end
 ----------------------------------------
 -- INDENT
 ----------------------------------------
+local function increase_indent_of_line(line)
+	if line == "" then
+		return ""
+	else
+		return "\t" .. line
+	end
+end
+
+local function decrease_indent_of_line(line)
+	if line == "" then
+		return ""
+	end
+	local head = line:sub(1, 1)
+	if head == "\t" or head == " " then
+		return line:sub(2)
+	else
+		return line
+	end
+end
 
 local function shift_right_normal()
 	core(function()
-		local str = vim.api.nvim_get_current_line()
-		if str:len() == 0 then
-			vim.api.nvim_set_current_line("	")
-		else
-			vim.cmd(string.format("silent keepjumps normal! %s>>", vim.v.count))
-		end
+		local line = vim.api.nvim_get_current_line()
+		local new_line = increase_indent_of_line(line)
+		vim.api.nvim_set_current_line(new_line)
 	end)
 end
 
 local function shift_left_normal()
 	core(function()
-		vim.cmd(string.format("silent keepjumps normal! %s<<", vim.v.count))
+		local line = vim.api.nvim_get_current_line()
+		local new_line = decrease_indent_of_line(line)
+		vim.api.nvim_set_current_line(new_line)
 	end)
 end
 
-local function shift_right_visual_internal()
-	local row_start, row_end, lines = get_selected_lines()
-
-	local new_lines = {}
-	for _, line in pairs(lines) do
-		if line ~= "" then
-			table.insert(new_lines, "\t" .. line)
-		else
-			table.insert(new_lines, "")
-		end
-	end
-
-	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
-	-- vim.cmd("silent keepjumps normal! gv")
-end
-local function shift_left_visual_internal()
-	local row_start, row_end, lines = get_selected_lines()
-
-	local new_lines = {}
-	for _, line in pairs(lines) do
-		if line == "" then
-			table.insert(new_lines, "")
-		elseif line:sub(1, 1) == "\t" or line:sub(1, 1) == " " then
-			table.insert(new_lines, line:sub(2))
-		else
-			table.insert(new_lines, line)
-		end
-	end
-
-	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
-	-- vim.cmd("silent keepjumps normal! gv")
-end
 local function shift_right_visual()
-	core(shift_right_visual_internal)
+	core(function()
+		local row_start, row_end, lines = get_selected_lines()
+		local new_lines = {}
+		for _, line in pairs(lines) do
+			local new_line = increase_indent_of_line(line)
+			table.insert(new_lines, new_line)
+		end
+		vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	end)
 end
+
 local function shift_left_visual()
-	core(shift_left_visual_internal)
+	core(function()
+		local row_start, row_end, lines = get_selected_lines()
+		local new_lines = {}
+		for _, line in pairs(lines) do
+			local new_line = decrease_indent_of_line(line)
+			table.insert(new_lines, new_line)
+		end
+		vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	end)
 end
 
 ----------------------------------------
 -- COMMENT
 ----------------------------------------
-
 local function escape_string(str)
 	return (str:gsub('%%', '%%%%')
 		:gsub('%^', '%%%^')
@@ -212,7 +214,6 @@ end
 ----------------------------------------
 -- EXPORT
 ----------------------------------------
-
 local M = {}
 
 function M.setup()

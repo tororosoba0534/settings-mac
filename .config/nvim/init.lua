@@ -357,14 +357,6 @@ require("lazy").setup({
 	-- },
 	-- { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	-- "numToStr/Comment.nvim",
-	-- You need "im-select" executable on Mac
-	-- https://github.com/daipeihust/im-select
-	-- ```
-	-- # If you use Intel chip on your Mac, change 'apple' to 'intel' in the following code:
-	-- sudo curl -L -o /usr/local/bin/im-select https://github.com/daipeihust/im-select/raw/master/im-select-mac/out/apple/im-select
-	-- sudo chmod 755 /usr/local/bin/im-select
-	-- ```
-	-- "keaising/im-select.nvim",
 	-- "unblevable/quick-scope",
 	-- "haya14busa/vim-edgemotion",
 	-- "phaazon/hop.nvim",
@@ -396,6 +388,7 @@ require("lazy").setup({
 	},
 	{
 		dir = "~/settings-mac/.config/nvim/lua/im-select.lua",
+		-- 	Originai: keaising/im-select.nvim
 		-- You need "im-select" executable on Mac
 		-- https://github.com/daipeihust/im-select
 		-- ```
@@ -411,8 +404,16 @@ require("lazy").setup({
 	},
 	{
 		dir = "~/settings-mac/.config/nvim/lua/following-cursor.lua",
+		-- TODO: load when TAB is pressed in the insert mode
+
+		-- init = function()
+		-- 	vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)',
+		-- 		{ noremap = true, silent = true })
+		-- end,
 		lazy = true,
+		event = "InsertEnter",
 		keys = {
+			-- { '<Plug>(following_cursor_shift_right_normal)', mode = "i" },
 			{ "<C-_>",   mode = { "n", "i", "x" } },
 			{ "<TAB>",   mode = { "n", "i", "x" } },
 			{ "<S-TAB>", mode = { "n", "i", "x" } },
