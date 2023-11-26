@@ -68,7 +68,7 @@ require("lazy").setup({
 			vim.fn["mkdp#util#install"]()
 		end,
 	},
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	-- { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	"numToStr/Comment.nvim",
 	-- You need "im-select" executable on Mac
 	-- https://github.com/daipeihust/im-select
@@ -232,20 +232,20 @@ vim.keymap.set("n", "g[", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
-require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "typescript" },
-	auto_install = false,
-	highlight = {
-		enable = true,
-		disable = function(_, buf)
-			local max_filesize = 100 * 1024 -- 100 KB
-			local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-			if ok and stats and stats.size > max_filesize then
-				return true
-			end
-		end,
-	},
-})
+-- require("nvim-treesitter.configs").setup({
+-- 	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "typescript" },
+-- 	auto_install = false,
+-- 	highlight = {
+-- 		enable = true,
+-- 		disable = function(_, buf)
+-- 			local max_filesize = 100 * 1024 -- 100 KB
+-- 			local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+-- 			if ok and stats and stats.size > max_filesize then
+-- 				return true
+-- 			end
+-- 		end,
+-- 	},
+-- })
 
 --------------------------------------------------
 --------------------------------------------------

@@ -55,7 +55,7 @@ local function shift_right_visual_internal()
 	end
 
 	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
-	vim.cmd("silent keepjumps normal! gv")
+	-- vim.cmd("silent keepjumps normal! gv")
 end
 local function shift_left_visual_internal()
 	local row_start, row_end, lines = get_selected_lines()
@@ -72,7 +72,7 @@ local function shift_left_visual_internal()
 	end
 
 	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
-	vim.cmd("silent keepjumps normal! gv")
+	-- vim.cmd("silent keepjumps normal! gv")
 end
 local function shift_right_visual()
 	core(shift_right_visual_internal)
@@ -198,7 +198,7 @@ local function toggle_comment_visual_internal()
 		end
 	end
 	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
-	vim.cmd("silent keepjumps normal! gv")
+	-- vim.cmd("silent keepjumps normal! gv")
 end
 
 local function toggle_comment_normal()
@@ -217,9 +217,9 @@ local M = {}
 
 function M.setup()
 	-- indent
-	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_right_normal)', shift_right_normal,
+	vim.keymap.set({ 'n', 'i' }, '<Plug>(following_cursor_shift_right_normal)', shift_right_normal,
 		{ noremap = true, silent = true })
-	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
+	vim.keymap.set({ 'n', 'i' }, '<Plug>(following_cursor_shift_left_normal)', shift_left_normal,
 		{ noremap = true, silent = true })
 	vim.api.nvim_create_user_command("FollowingCursorShiftRightVisualINTERNAL", shift_right_visual, {})
 	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_shift_right_visual)',
@@ -231,7 +231,7 @@ function M.setup()
 		{ noremap = true, silent = true })
 
 	-- comment
-	vim.keymap.set({ 'n' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,
+	vim.keymap.set({ 'n', 'i' }, '<Plug>(following_cursor_toggle_comment_normal)', toggle_comment_normal,
 		{ noremap = true, silent = true })
 	vim.api.nvim_create_user_command("FollowingCursorToggleCommentVisualINTERNAL", toggle_comment_visual, {})
 	vim.keymap.set({ 'x' }, '<Plug>(following_cursor_toggle_comment_visual)',
