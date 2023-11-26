@@ -37,7 +37,6 @@ vim.o.splitbelow = true
 vim.o.splitright = true
 
 -- Commands and key mappings
-
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
@@ -88,6 +87,174 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	{ "folke/lazy.nvim" },
+
+	--------------------
+	-- LSP settings
+	--------------------
+	{
+		'hrsh7th/nvim-cmp',
+		dependencies = {
+			'hrsh7th/cmp-buffer',
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-cmdline',
+		},
+		-- lazy = true,
+		lazy = false,
+		config = function()
+			local cmp = require("cmp")
+			cmp.setup.global({
+				window = {
+				  completion = cmp.config.window.bordered(),
+				  documentation = cmp.config.window.bordered(),
+				},
+				mapping = {
+					['<TAB>'] = cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Replace,
+						selec = true,
+					}),
+					['<C-p>'] = cmp.mapping.select_prev_item(),
+					['<C-n>'] = cmp.mapping.select_next_item(),
+					['<Up>'] = cmp.mapping.select_prev_item(),
+					['<Down>'] = cmp.mapping.select_next_item(),
+				},
+				sources = {
+					{
+						name = "buffer",
+						option = {
+							-- Avoid dealing with huge buffers
+							get_bufnrs = function()
+								local buf = vim.api.nvim_get_current_buf()
+								local byte_size = vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
+								if byte_size > 1024 * 1024 then -- 1 Megabyte max
+									return {}
+								end
+								return { buf }
+							end
+						},
+					},
+					{ name = "path", },
+				},
+			})
+			cmp.setup.cmdline("/", {
+				mapping = {
+					['<C-n>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_next_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<C-p>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_prev_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<Up>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_next_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<Down>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_prev_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<TAB>'] = {
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.close()
+							else
+								cmp.complete()
+							end
+						end,
+					},
+				},
+				sources = {
+					{ name = "buffer" },
+				},
+			})
+			cmp.setup.cmdline(":", {
+				mapping = {
+					['<C-n>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_next_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<C-p>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_prev_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<Up>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_next_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<Down>'] = {
+					  c = function(fallback)
+						if cmp.visible() then
+						  cmp.select_prev_item()
+						else
+						  fallback()
+						end
+					  end,
+					},
+					['<TAB>'] = {
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.close()
+							else
+								cmp.complete()
+							end
+						end,
+					},
+				},
+				sources = cmp.config.sources({
+					{ name = "path" },
+				}, {
+					{
+							name = "cmdline",
+						option = {
+							ignoer_cmds = { "Man", "!" }
+						},
+					}
+				}),
+				completion = {
+					autocomplete = false
+				},
+			})
+		end,
+	},
+
+	--------------------
+	-- others
+	--------------------
 	{
 		"nvim-tree/nvim-web-devicons",
 		config = function()
@@ -252,12 +419,12 @@ require("lazy").setup({
 			})
 		end
 	},
-	{
-		"zbirenbaum/copilot-cmp",
-		config = function()
-			require("copilot_cmp").setup()
-		end,
-	},
+	-- {
+	-- 	"zbirenbaum/copilot-cmp",
+	-- 	config = function()
+	-- 		require("copilot_cmp").setup()
+	-- 	end,
+	-- },
 	{
 		dir = "~/settings-mac/.config/nvim/lua/im-select.lua",
 		-- 	Originai: keaising/im-select.nvim
@@ -318,8 +485,8 @@ require("lazy").setup({
 	},
 }, {
 	defaults = {
-		-- lazy = true,
-		lazy = false,
+		lazy = true,
+		-- lazy = false,
 	},
 	dev = {
 		path = "~/settings-mac/.config/nvim/lua",
