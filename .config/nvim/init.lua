@@ -38,6 +38,7 @@ vim.o.splitright = true
 
 -- Commands and key mappings
 vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
+vim.g.mapleader = " "
 
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
 vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
@@ -97,6 +98,7 @@ require("lazy").setup({
 			'hrsh7th/cmp-buffer',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
+			"hrsh7th/cmp-nvim-lsp",
 			{
 				"zbirenbaum/copilot-cmp",
 				config = function()
@@ -152,6 +154,7 @@ require("lazy").setup({
 					},
 					{ name = "path", },
 					{ name = "copilot", group_index = 2 },
+					{ name = 'nvim_lsp', group_index = 1},
 				},
 			})
 			cmp.setup.cmdline("/", {
@@ -273,8 +276,10 @@ require("lazy").setup({
 	{
 		'williamboman/mason.nvim',
 		dependencies = {
-			'williamboman/mason-lspconfig.nvim'
+			'williamboman/mason-lspconfig.nvim',
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
 		},
+		cmd = "Mason",
 		config = function()
 			require("mason").setup()
 			require("mason-lspconfig").setup({
@@ -284,19 +289,112 @@ require("lazy").setup({
 					"gopls",
 					"jsonls",
 					"tsserver",
+					"html",
+					"cssls",
+					"pyright",
+					"graphql",
 				},
 				automatic_installation = true,
 			})
+			-- require("mason-tool-installer").setup({
+			-- 	ensure_installed = {
+			-- 		"stylua",
+			-- 		"prettier",
+			-- 	}
+			-- })
 		end
 	},
-	-- {
-	-- 	"neovim/nvim-lspconfig",
-	-- 	event = {"BufReadPre", "BufNewFile"}
-	-- 	dependencies = {
-	-- 		"hrsh7th/cmp-nvim-lsp",
-
-	-- 	},
-	-- },
+	{
+		"neovim/nvim-lspconfig",
+		event = {"BufReadPre", "BufNewFile"},
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			{'antosha417/nvim-lsp-file-operations'},
+			-- 'williamboman/mason-lspconfig.nvim',
+		},
+		init = function()
+			-- Set PATH for language servers installed by mason.nvim.
+			-- This settings is executed in setup function of mason.nvim,
+			-- but mason.nvim is so heavy that it is loaded lazily, 
+			-- then we need set PATH explicitly here.
+			-- Path separator ":" might not work on Windows.
+			vim.env.PATH = vim.fn.expand("$HOME") .. "/.local/share/nvim/mason/bin" .. ":" .. vim.env.PATH
+			local opts = {noremap = true, silent = true}
+			opts.desc = "Show LSP references"
+			vim.keymap.set("n", "gR", "<CMD>Telescope lsp_references<CR>", opts)
+			opts.desc = "Go to declaration"
+			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+			opts.desc = "Show LSP definitions"
+			vim.keymap.set("n", "gd", "<CMD>Telescope lsp_definitions<CR>", opts)
+			opts.desc = "Show LSP implementation"
+			vim.keymap.set("n", "gd", "<CMD>Telescope lsp_implementations<CR>", opts)
+			opts.desc = "Show LSP type definitions"
+			vim.keymap.set("n", "gt", "<CMD>Telescope lsp_type_definitions<CR>", opts)
+			opts.desc = "See available LSP actions"
+			vim.keymap.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, opts)
+			opts.desc = "Smart rename"
+			vim.keymap.set({"n"}, "<leader>rn", vim.lsp.buf.rename, opts)
+			opts.desc = "Show buffer diagnostics"
+			vim.keymap.set("n", "<leader>D", "<CMD>Telescope diagnostics bufnr=0<CR>", opts)
+			opts.desc = "Show line diagnostics"
+			vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+			opts.desc = "Go to previous diagnostic"
+			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+			opts.desc = "Go to next diagnostic"
+			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+			opts.desc = "Show documentation for what is under cursor"
+			vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+			opts.desc = "Restart LSP"
+			vim.keymap.set("n", "<leader>rs", "<CMD>LspRestart<CR>", opts)
+		end,
+		config = function()
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local lspconfig = require("lspconfig")
+			lspconfig["html"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["jsonls"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["cssls"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["graphql"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["pyright"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["rust_analyzer"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["gopls"].setup({
+				capabilities = capabilities,
+			})
+			lspconfig["tsserver"].setup({
+				capabilities = capabilities,
+				filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+			})
+			lspconfig["lua_ls"].setup({
+			  capabilities = capabilities,
+			  settings = { -- custom settings for lua
+				Lua = {
+				  -- make the language server recognize "vim" global
+				  diagnostics = {
+					globals = { "vim" },
+				  },
+				  workspace = {
+					-- make language server aware of runtime files
+					library = {
+					  [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+					  [vim.fn.stdpath("config") .. "/lua"] = true,
+					},
+				  },
+				},
+			  },
+			})
+		end
+	},
 
 	--------------------
 	-- others
