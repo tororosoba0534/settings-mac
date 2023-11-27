@@ -551,10 +551,9 @@ require("lazy").setup({
 		lazy = true,
 		init = function()
 			-- Find file
-			vim.api.nvim_create_user_command("Ff", "Telescope find_files", {})
+			vim.keymap.set('n', '<Leader>f', "<CMD>Telescope find_files<CR>", {})
 			-- Find text
-			vim.api.nvim_create_user_command("Ft", 'lua require("telescope").extensions.live_grep_args.live_grep_args()',
-				{})
+			vim.keymap.set('n', '<Leader>t', require("telescope").extensions.live_grep_args.live_grep_args, {})
 		end,
 		cmd = { "Telescope" },
 		config = function()
