@@ -702,7 +702,8 @@ require("lazy").setup({
 	-- },
 	{
 		dir = "~/settings-mac/.config/nvim/lua/nvim-window.lua",
-		lazy = false,
+		lazy = true,
+		keys = { '<Leader><Leader>' },
 		config = function()
 			require('nvim-window').setup({
 			})
