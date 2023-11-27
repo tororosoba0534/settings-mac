@@ -337,7 +337,10 @@ require("lazy").setup({
 			local opts = { noremap = true, silent = true }
 
 			opts.desc = "Show documentation for what is under cursor"
-			vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+			vim.keymap.set("n", "gh", function()
+				vim.lsp.buf.hover()
+				vim.lsp.buf.document_highlight()
+			end, opts)
 
 			opts.desc = "Show buffer diagnostics"
 			vim.keymap.set("n", "gH", "<CMD>Telescope diagnostics bufnr=0<CR>", opts)
@@ -670,6 +673,43 @@ require("lazy").setup({
 			vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)',
 				{ noremap = true, silent = true })
 		end,
+	},
+	-- {
+	-- 	'smoka7/hop.nvim',
+	-- 	lazy = false,
+	-- 	config = function()
+	-- 		require("hop").setup()
+	-- 	end
+	-- },
+	-- {
+	-- 	's1n7ax/nvim-window-picker',
+	-- 	lazy = false,
+	-- 	config = function()
+	-- 		require("window-picker").setup({
+	-- 			hint = 'floating-big-letter',
+	-- 			selection_chars = 'FJDKSLA;CMRUEIWOQP',
+	-- 			filter_rules = {
+	-- 				include_current_win = true,
+	-- 			},
+	-- 		})
+	-- 		local function select_and_jump()
+	-- 			local id = require("window-picker").pick_window()
+	-- 			pcall(vim.api.nvim_set_current_win, id)
+	-- 		end
+	-- 		vim.keymap.set({ 'n' }, '<Leader><Leader>', select_and_jump,
+	-- 			{ noremap = true, silent = true })
+	-- 	end
+	-- },
+	{
+		dir = "~/settings-mac/.config/nvim/lua/nvim-window.lua",
+		lazy = false,
+		config = function()
+			require('nvim-window').setup({
+			})
+			vim.keymap.set({ 'n' }, '<Leader><Leader>', require('nvim-window').pick,
+				{ noremap = true, silent = true })
+		end,
+
 	},
 }, {
 	defaults = {
