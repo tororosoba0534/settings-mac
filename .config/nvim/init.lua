@@ -270,6 +270,33 @@ require("lazy").setup({
 			})
 		end,
 	},
+	{
+		'williamboman/mason.nvim',
+		dependencies = {
+			'williamboman/mason-lspconfig.nvim'
+		},
+		config = function()
+			require("mason").setup()
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"lua_ls",
+					"rust_analyzer",
+					"gopls",
+					"jsonls",
+					"tsserver",
+				},
+				automatic_installation = true,
+			})
+		end
+	},
+	-- {
+	-- 	"neovim/nvim-lspconfig",
+	-- 	event = {"BufReadPre", "BufNewFile"}
+	-- 	dependencies = {
+	-- 		"hrsh7th/cmp-nvim-lsp",
+
+	-- 	},
+	-- },
 
 	--------------------
 	-- others
