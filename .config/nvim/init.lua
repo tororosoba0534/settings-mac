@@ -119,13 +119,13 @@ require("lazy").setup({
 		},
 		lazy = true,
 		-- lazy = false,
-		event = {"InsertEnter"},
+		event = { "InsertEnter" },
 		config = function()
 			local cmp = require("cmp")
 			cmp.setup.global({
 				window = {
-				  completion = cmp.config.window.bordered(),
-				  documentation = cmp.config.window.bordered(),
+					completion = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
 				},
 				mapping = {
 					['<TAB>'] = cmp.mapping.confirm({
@@ -153,47 +153,47 @@ require("lazy").setup({
 						},
 					},
 					{ name = "path", },
-					{ name = "copilot", group_index = 2 },
-					{ name = 'nvim_lsp', group_index = 1},
+					{ name = "copilot",  group_index = 2 },
+					{ name = 'nvim_lsp', group_index = 1 },
 				},
 			})
 			cmp.setup.cmdline("/", {
 				mapping = {
 					['<C-n>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_next_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<C-p>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_prev_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<Up>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_next_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<Down>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_prev_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<TAB>'] = {
 						c = function(fallback)
@@ -212,40 +212,40 @@ require("lazy").setup({
 			cmp.setup.cmdline(":", {
 				mapping = {
 					['<C-n>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_next_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<C-p>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_prev_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<Up>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_next_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_next_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<Down>'] = {
-					  c = function(fallback)
-						if cmp.visible() then
-						  cmp.select_prev_item()
-						else
-						  fallback()
-						end
-					  end,
+						c = function(fallback)
+							if cmp.visible() then
+								cmp.select_prev_item()
+							else
+								fallback()
+							end
+						end,
 					},
 					['<TAB>'] = {
 						c = function(fallback)
@@ -261,7 +261,7 @@ require("lazy").setup({
 					{ name = "path" },
 				}, {
 					{
-							name = "cmdline",
+						name = "cmdline",
 						option = {
 							ignoer_cmds = { "Man", "!" }
 						},
@@ -296,15 +296,24 @@ require("lazy").setup({
 					"cssls",
 					"pyright",
 					"graphql",
+					"kotlin_language_server",
+					"prettier",
+					"prettierd",
 				},
 				automatic_installation = true,
 			})
-			-- require("mason-tool-installer").setup({
-			-- 	ensure_installed = {
-			-- 		"stylua",
-			-- 		"prettier",
-			-- 	}
-			-- })
+			require("mason-tool-installer").setup({
+				ensure_installed = {
+					"stylua",
+					"prettier",
+					"ktlint",
+					"goimports",
+					"isort",
+					"black",
+					-- -- rustfmt must be installed via rustup
+					-- "rustfmt",
+				}
+			})
 		end
 	},
 	--------------------
@@ -312,20 +321,20 @@ require("lazy").setup({
 	--------------------
 	{
 		"neovim/nvim-lspconfig",
-		event = {"BufReadPre", "BufNewFile"},
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
-			{'antosha417/nvim-lsp-file-operations'},
+			{ 'antosha417/nvim-lsp-file-operations' },
 			-- 'williamboman/mason-lspconfig.nvim',
 		},
 		init = function()
 			-- Set PATH for language servers installed by mason.nvim.
 			-- This settings is executed in setup function of mason.nvim,
-			-- but mason.nvim is so heavy that it is loaded lazily, 
+			-- but mason.nvim is so heavy that it is loaded lazily,
 			-- then we need set PATH explicitly here.
 			-- Path separator ":" might not work on Windows.
-			vim.env.PATH = vim.fn.expand("$HOME") .. "/.local/share/nvim/mason/bin" .. ":" .. vim.env.PATH
-			local opts = {noremap = true, silent = true}
+			vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.expand("$HOME") .. "/.local/share/nvim/mason/bin"
+			local opts = { noremap = true, silent = true }
 
 			opts.desc = "Show documentation for what is under cursor"
 			vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
@@ -349,10 +358,10 @@ require("lazy").setup({
 			vim.keymap.set("n", "gr", "<CMD>Telescope lsp_references<CR>", opts)
 
 			opts.desc = "Smart rename"
-			vim.keymap.set({"n"}, "gR", vim.lsp.buf.rename, opts)
+			vim.keymap.set({ "n" }, "gR", vim.lsp.buf.rename, opts)
 
 			opts.desc = "See available LSP actions"
-			vim.keymap.set({"n", "v"}, "ga", vim.lsp.buf.code_action, opts)
+			vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
 			-- opts.desc = "Show line diagnostics"
 			-- vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 			-- opts.desc = "Go to previous diagnostic"
@@ -386,33 +395,70 @@ require("lazy").setup({
 			lspconfig["gopls"].setup({
 				capabilities = capabilities,
 			})
+			lspconfig["kotlin_language_server"].setup({
+				capabilities = capabilities,
+			})
 			lspconfig["tsserver"].setup({
 				capabilities = capabilities,
 				filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
 			})
 			lspconfig["lua_ls"].setup({
-			  capabilities = capabilities,
-			  settings = { -- custom settings for lua
-				Lua = {
-				  -- make the language server recognize "vim" global
-				  diagnostics = {
-					globals = { "vim" },
-				  },
-				  workspace = {
-					-- make language server aware of runtime files
-					library = {
-					  [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-					  [vim.fn.stdpath("config") .. "/lua"] = true,
+				capabilities = capabilities,
+				settings = { -- custom settings for lua
+					Lua = {
+						-- make the language server recognize "vim" global
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							-- make language server aware of runtime files
+							library = {
+								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+								[vim.fn.stdpath("config") .. "/lua"] = true,
+							},
+						},
 					},
-				  },
 				},
-			  },
 			})
 		end
 	},
+	--------------------
+	-- Formatters
+	--------------------
+	{
+		'stevearc/conform.nvim',
+		lazy = true,
+		event = { "TextChanged" },
+		config = function()
+			require("conform").setup({
+				formatters_by_ft = {
+					lua = { "stylua" },
+					go = { "goimports", "gofmt" },
+					rust = { "rustfmt" },
+					kotlin = { "ktlint" },
+					python = { "isort", "black" },
+					html = { { "prettierd", "prettier" } },
+					css = { { "prettierd", "prettier" } },
+					json = { { "prettierd", "prettier" } },
+					yaml = { { "prettierd", "prettier" } },
+					markdown = { { "prettierd", "prettier" } },
+					graphql = { { "prettierd", "prettier" } },
+					javascript = { { "prettierd", "prettier" } },
+					typescript = { { "prettierd", "prettier" } },
+					javascriptreact = { { "prettierd", "prettier" } },
+					typescriptreact = { { "prettierd", "prettier" } },
+				},
+				format_on_save = {
+					timeout_ms = 1000,
+					lsp_fallback = true,
+					async = false,
+				},
+			})
+		end,
+	},
 
 	--------------------
-	-- others
+	-- Others
 	--------------------
 	{
 		"nvim-tree/nvim-web-devicons",
