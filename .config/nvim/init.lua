@@ -30,14 +30,13 @@ vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
-vim.o.cursorline = true
-vim.o.cursorcolumn = true
+-- vim.o.cursorline = true
+-- vim.o.cursorcolumn = true
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
 vim.o.splitright = true
 
 -- Commands and key mappings
-vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
 vim.g.mapleader = " "
 
 vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
@@ -68,6 +67,16 @@ vim.keymap.set("n", "<C-w>l", ":BufferLineCycleNext<CR>")
 vim.keymap.set("n", "<C-w>H", ":BufferLineMovePrev<CR>")
 vim.keymap.set("n", "<C-w>L", ":BufferLineMoveNext<CR>")
 
+vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
+vim.api.nvim_create_user_command("Hl", function()
+	if vim.o.cursorline then
+		vim.o.cursorline = false
+		vim.o.cursorcolumn = false
+	else
+		vim.o.cursorline = true
+		vim.o.cursorcolumn = true
+	end
+end, {})
 --------------------------------------------------
 --------------------------------------------------
 -- LOAD PLUGINS
