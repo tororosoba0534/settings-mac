@@ -591,7 +591,6 @@ require("lazy").setup({
 							-- ["q"] = telescope_actions.close,
 						},
 						n = {
-							["<TAB>"] = actions.toggle_selection,
 							-- ["<S-TAB>"] = actions.cycle_history_next,
 							-- ["<C-w>f"] = actions.close,
 							["<esc>"] = actions.close,
@@ -609,6 +608,14 @@ require("lazy").setup({
 						hidden = true,
 						-- search_dirs = { "./", "~/settings-mac/" },
 					},
+					-- buffers = {
+					-- 	mappings = {
+					-- 		n = {
+					-- 			["d"] = "delete_buffer",
+					-- 			["<TAB>"] = "toggle_selection",
+					-- 		},
+					-- 	},
+					-- },
 				},
 				extensions = {
 					live_grep_args = {},
@@ -663,30 +670,50 @@ require("lazy").setup({
 			vim.api.nvim_create_user_command("TelescopeMyBuffers", function()
 				require("telescope.builtin").buffers {
 					attach_mappings = function(_, map)
-						map("i", "asdf", function(_prompt_bufnr)
-							print "You typed asdf"
-						end)
-
-						map({ "i", "n" }, "<C-r>", function(_prompt_bufnr)
-							print "You typed <C-r>"
-						end)
+						map({ "n" }, "<TAB>", actions.toggle_selection)
 
 						map({ "n" }, "d", function(_prompt_bufnr)
-							print "HELLO from custom picker"
-							print "hogehoge"
+							-- print "HELLO from custom picker"
+							-- print "hogehoge"
 
+							local base_bufnr = vim.fn.bufnr('#')
+							local deleting_base_buffer = false
+							-- print("base_bufnr=" .. tostring(base_bufnr))
 							local current_picker = action_state.get_current_picker(_prompt_bufnr)
-							local selections = current_picker:get_multi_selection()
-							if #selections == 0 then
-								local selection = action_state.get_selected_entry()
-								vim.api.nvim_buf_delete(selection.bufnr, { force = false })
-							else
-								for _, selection in ipairs(selections) do
+							current_picker:delete_selection(function(selection)
+								if selection.bufnr == base_bufnr then
+									deleting_base_buffer = true
+								else
 									vim.api.nvim_buf_delete(selection.bufnr, { force = false })
-									print("selection.bufnr=" .. selection.bufnr)
 								end
+							end)
+							-- -- local selections = current_picker:get_multi_selection()
+							-- -- if #selections == 0 then
+							-- -- 	local selection = action_state.get_selected_entry()
+							-- -- 	-- print("selection.bufnr=" .. selection.bufnr)
+							-- -- 	if selection.bufnr == base_bufnr then
+							-- -- 		deleting_base_buffer = true
+							-- -- 	else
+							-- -- 		vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+							-- -- 	end
+							-- -- 	-- vim.cmd('bd ' .. selection.bufnr)
+							-- -- else
+							-- 	for _, selection in ipairs(selections) do
+							-- 		if selection.bufnr == base_bufnr then
+							-- 			deleting_base_buffer = true
+							-- 		else
+							-- 			vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+							-- 		end
+							-- 	end
+							-- -- end
+							if deleting_base_buffer then
+								actions.close(_prompt_bufnr)
+								vim.api.nvim_buf_delete(base_bufnr, { force = false })
+								vim.cmd("TelescopeMyBuffers")
 							end
-							actions.close(_prompt_bufnr)
+
+							-- current_picker:refresh()
+							-- actions.close(_prompt_bufnr)
 						end)
 
 						-- needs to return true if you want to map default_mappings and
