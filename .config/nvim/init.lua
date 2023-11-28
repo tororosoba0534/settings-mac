@@ -550,35 +550,58 @@ require("lazy").setup({
 	},
 	{
 		"nvim-telescope/telescope.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-live-grep-args.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope-live-grep-args.nvim",
+			-- {
+			-- 	"nvim-telescope/telescope-smart-history.nvim",
+			-- 	dependencies = {
+			-- 		-- You neen sqlite3 executable on your machine.
+			-- 		"kkharji/sqlite.lua"
+			-- 	},
+			-- },
+		},
 		lazy = true,
 		init = function()
 			-- Find file
 			vim.keymap.set('n', '<Leader>f', "<CMD>Telescope find_files<CR>", {})
 			-- Find text
-			vim.keymap.set('n', '<Leader>t', require("telescope").extensions.live_grep_args.live_grep_args, {})
+			vim.keymap.set('n', '<Leader>t', "<CMD>TelescopeLiveGrepArgs<CR>", {})
+			-- Find help page
+			vim.keymap.set('n', '<Leader>h', '<CMD>Telescope help_tags<CR>', {})
+			-- Find buffer
+			-- vim.keymap.set('n', '<Leader>b', '<CMD>Telescope buffers<CR>', {})
+			vim.keymap.set('n', '<Leader>b', '<CMD>TelescopeMyBuffers<CR>', {})
 		end,
-		cmd = { "Telescope" },
+		cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers" },
 		config = function()
 			local telescope = require("telescope")
 			require("telescope").load_extension("live_grep_args")
-			local telescope_actions = require("telescope.actions")
+			local actions = require("telescope.actions")
+			local action_state = require("telescope.actions.state")
 			telescope.setup({
 				defaults = {
 					file_ignore_patterns = { "node_modules", ".git" },
 					mappings = {
 						i = {
-							["<C-w>f"] = telescope_actions.close,
-							["<esc>"] = telescope_actions.close,
-							["<C-g>"] = telescope_actions.close,
-							["q"] = telescope_actions.close,
+							-- ["<TAB>"] = actions.cycle_history_prev,
+							-- ["<S-TAB>"] = actions.cycle_history_next,
+							-- ["<esc>"] = telescope_actions.close,
+							-- ["<C-g>"] = telescope_actions.close,
+							-- ["q"] = telescope_actions.close,
 						},
 						n = {
-							["<C-w>f"] = telescope_actions.close,
-							["<esc>"] = telescope_actions.close,
-							["<C-g>"] = telescope_actions.close,
-							["q"] = telescope_actions.close,
+							["<TAB>"] = actions.toggle_selection,
+							-- ["<S-TAB>"] = actions.cycle_history_next,
+							-- ["<C-w>f"] = actions.close,
+							["<esc>"] = actions.close,
+							["<C-g>"] = actions.close,
+							["q"] = actions.close,
 						},
+					},
+					history = {
+						-- path = vim.fn.expand("$HOME") .. '/.local/share/nvim/databases/telescope_history.sqlite3',
+						limit = 100,
 					},
 				},
 				pickers = {
@@ -591,6 +614,89 @@ require("lazy").setup({
 					live_grep_args = {},
 				},
 			})
+			-- telescope.load_extension('smart_history')
+			-- require("telescope.builtin").buffers {
+			-- 	attach_mappings = function(prompt_bufnr, map)
+			-- 		local delete_buf = function(_)
+			-- 			-- local selection = telescope_actions_state.get_current_selection()
+			-- 			-- telescope_actions.close(prompt_bufnr)
+			-- 			-- vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+			-- 			print("HELLO WORLD")
+			-- 		end
+			-- 		map('n', 'd', delete_buf)
+			-- 		return true
+			-- 	end
+			-- }
+
+			-- vim.api.nvim_create_user_command("TelescopeMyBuffers", function()
+			-- 	require("telescope.builtin").buffers {
+			-- 		attach_mappings = function(prompt_bufnr, map)
+			-- 			local delete_selected_buf = function()
+			-- 				local current_picker = action_state.get_current_picker(prompt_bufnr)
+			-- 				for _, selection in ipairs(current_picker:get_multi_selection()) do
+			-- 					-- vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+			-- 					print("selection.bufnr=" .. selection.bufnr)
+			-- 				end
+
+			-- 				-- local selection = telescope_actions_state.get_selected_entry()
+			-- 				-- telescope_actions.close(prompt_bufnr)
+			-- 				-- vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+			-- 			end
+			-- 			map('n', 'd', delete_selected_buf)
+			-- 			return true
+			-- 		end,
+			-- 	}
+			-- end, {})
+			-- local function dump(o)
+			-- 	if type(o) == 'table' then
+			-- 		local s = '{ '
+			-- 		for k, v in pairs(o) do
+			-- 			if type(k) ~= 'number' then k = '"' .. k .. '"' end
+			-- 			s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+			-- 		end
+			-- 		return s .. '} '
+			-- 	else
+			-- 		return tostring(o)
+			-- 	end
+			-- end
+
+			vim.api.nvim_create_user_command("TelescopeMyBuffers", function()
+				require("telescope.builtin").buffers {
+					attach_mappings = function(_, map)
+						map("i", "asdf", function(_prompt_bufnr)
+							print "You typed asdf"
+						end)
+
+						map({ "i", "n" }, "<C-r>", function(_prompt_bufnr)
+							print "You typed <C-r>"
+						end)
+
+						map({ "n" }, "d", function(_prompt_bufnr)
+							print "HELLO from custom picker"
+							print "hogehoge"
+
+							local current_picker = action_state.get_current_picker(_prompt_bufnr)
+							local selections = current_picker:get_multi_selection()
+							if #selections == 0 then
+								local selection = action_state.get_selected_entry()
+								vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+							else
+								for _, selection in ipairs(selections) do
+									vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+									print("selection.bufnr=" .. selection.bufnr)
+								end
+							end
+							actions.close(_prompt_bufnr)
+						end)
+
+						-- needs to return true if you want to map default_mappings and
+						-- false if not
+						return true
+					end,
+				}
+			end, {})
+			vim.api.nvim_create_user_command("TelescopeLiveGrepArgs",
+				require("telescope").extensions.live_grep_args.live_grep_args, {})
 		end
 	},
 	{
