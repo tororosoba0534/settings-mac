@@ -58,6 +58,7 @@ vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
 vim.keymap.set("n", "<C-w>-", ":below split<CR>")
 vim.keymap.set("n", "<C-w>c", ":close<CR>")
 vim.keymap.set("n", "<C-w>C", ":only<CR>")
+vim.keymap.set("n", "<Leader>C", ":only<CR>")
 vim.keymap.set("n", "<C-w>d", ":bn | bd# | bn<CR>")
 vim.keymap.set("n", "<C-w>D", ":BufferLineCloseRight<CR>")
 vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
@@ -743,40 +744,16 @@ require("lazy").setup({
 				{ noremap = true, silent = true })
 		end,
 	},
-	-- {
-	-- 	'smoka7/hop.nvim',
-	-- 	lazy = false,
-	-- 	config = function()
-	-- 		require("hop").setup()
-	-- 	end
-	-- },
-	-- {
-	-- 	's1n7ax/nvim-window-picker',
-	-- 	lazy = false,
-	-- 	config = function()
-	-- 		require("window-picker").setup({
-	-- 			hint = 'floating-big-letter',
-	-- 			selection_chars = 'FJDKSLA;CMRUEIWOQP',
-	-- 			filter_rules = {
-	-- 				include_current_win = true,
-	-- 			},
-	-- 		})
-	-- 		local function select_and_jump()
-	-- 			local id = require("window-picker").pick_window()
-	-- 			pcall(vim.api.nvim_set_current_win, id)
-	-- 		end
-	-- 		vim.keymap.set({ 'n' }, '<Leader><Leader>', select_and_jump,
-	-- 			{ noremap = true, silent = true })
-	-- 	end
-	-- },
 	{
 		dir = "~/settings-mac/.config/nvim/lua/nvim-window.lua",
 		lazy = true,
-		keys = { '<Leader><Leader>' },
+		keys = { '<Leader><Leader>', '<Leader>c' },
 		config = function()
 			require('nvim-window').setup({
 			})
 			vim.keymap.set({ 'n' }, '<Leader><Leader>', require('nvim-window').pick,
+				{ noremap = true, silent = true })
+			vim.keymap.set({ 'n' }, '<Leader>c', require('nvim-window').close,
 				{ noremap = true, silent = true })
 		end,
 
@@ -784,7 +761,6 @@ require("lazy").setup({
 }, {
 	defaults = {
 		lazy = true,
-		-- lazy = false,
 	},
 	dev = {
 		path = "~/settings-mac/.config/nvim/lua",

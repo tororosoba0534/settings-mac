@@ -173,8 +173,7 @@ function M.setup(user_config)
 	config = vim.tbl_extend('force', config, user_config)
 end
 
--- Picks a window to jump to, and makes it the active window.
-function M.pick()
+local function core()
 	local windows = vim.tbl_filter(function(id)
 		return api.nvim_win_get_config(id).relative == ''
 	end, api.nvim_tabpage_list_wins(0))
@@ -218,8 +217,21 @@ function M.pick()
 
 	close_floats(floats)
 
+	return window
+end
+
+-- Picks a window to jump to, and makes it the active window.
+function M.pick()
+	local window = core()
 	if window then
 		api.nvim_set_current_win(window)
+	end
+end
+
+function M.close()
+	local window = core()
+	if window then
+		api.nvim_win_close(window, false)
 	end
 end
 
