@@ -580,7 +580,7 @@ require("lazy").setup({
 			-- Find help page
 			vim.keymap.set('n', '<Leader>h', '<CMD>Telescope help_tags<CR>', {})
 			-- Find buffer
-			vim.keymap.set('n', '<Leader>b', '<CMD>TelescopeMyBuffers<CR>', {})
+			vim.keymap.set('n', '<Leader>b', '<CMD>TelescopeMyBuffers!<CR>', {})
 		end,
 		cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers" },
 		config = function()

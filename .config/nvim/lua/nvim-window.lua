@@ -56,7 +56,7 @@ local function window_keys(windows)
 	local chars = config.chars
 	local nrs = {}
 	local ids = {}
-	local current = api.nvim_win_get_number(api.nvim_get_current_win())
+	-- local current = api.nvim_win_get_number(api.nvim_get_current_win())
 
 	-- We use the window number (not the ID) as these are more consistent. This in
 	-- turn should result in a more consistent choice of window keys.
@@ -72,10 +72,6 @@ local function window_keys(windows)
 	local index = 1
 
 	for _, nr in ipairs(nrs) do
-		-- -- We skip the current window here so that we still "reserve" it the
-		-- -- character, but don't include it in the output. This ensures that window X
-		-- -- always gets hint Y, regardless of what the current active window is.
-		-- if nr ~= current then
 		local key = chars[index]
 
 		if mapping[key] then
@@ -83,7 +79,6 @@ local function window_keys(windows)
 		end
 
 		mapping[key] = ids[nr]
-		-- end
 
 		index = index == #chars and 1 or index + 1
 	end
@@ -121,7 +116,7 @@ local function open_floats(mapping)
 				0,
 				-1,
 				true,
-				{ '', '  ' .. key .. '  ', '' }
+				{ '', '  ' .. string.upper(key) .. '  ', '' }
 			)
 			api.nvim_buf_add_highlight(bufnr, 0, config.hint_hl, 1, 0, -1)
 
@@ -138,12 +133,22 @@ local function open_floats(mapping)
 				noautocmd = true,
 			})
 
-			api.nvim_win_set_option(
-				float_window,
+			-- api.nvim_win_set_option(
+			-- 	float_window,
+			-- 	'winhl',
+			-- 	'Normal:' .. config.normal_hl
+			-- )
+			api.nvim_set_option_value(
 				'winhl',
-				'Normal:' .. config.normal_hl
+				'Normal:' .. config.normal_hl,
+				{ win = float_window }
 			)
-			api.nvim_win_set_option(float_window, 'diff', false)
+			-- api.nvim_win_set_option(float_window, 'diff', false)
+			api.nvim_set_option_value(
+				'diff',
+				false,
+				{ win = float_window }
+			)
 
 			floats[float_window] = bufnr
 		end
