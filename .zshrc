@@ -151,30 +151,17 @@ function create_nested_pattern {
 	function ${func_name} {
 		local current_dir=${root_dir}
 		local window_name=${func_name}
-		local -A opthash
-		zparseopts -D -A opthash -- c
-		if [ -z \$1 ]; then
-			echo "No path specified. Nothing happened."
-			return 0
-		fi
 		for param in "\$@"; do
 			if [ -z "\${param}" ]; then
-				tmux rename-window \${window_name}
 				cd \${current_dir}
-				if [ "\${opthash[(i)-c]}" ]; then
-					echo "Change directory to \${current_dir}"
-					return 0
-				fi
-				nvim README.md
+				echo "Change directory to \${current_dir}"
+				tmux rename-window \${window_name}
 				return 0
 			fi
 			if [ -f "\${current_dir}/\${param}" ]; then
-				tmux rename-window \${window_name}
 				cd \${current_dir}
-				if [ "\${opthash[(i)-c]}" ]; then
-					echo "Change directory to \${current_dir}"
-					return 0
-				fi
+				echo "Change directory to \${current_dir}"
+				tmux rename-window \${window_name}
 				nvim \${param}
 				return 0
 			fi
@@ -185,13 +172,9 @@ function create_nested_pattern {
 			fi
 			window_name=\${window_name}-\${param}
 		done
-		tmux rename-window \${window_name}
 		cd \${current_dir}
-		if [ "\${opthash[(i)-c]}" ]; then
-			echo "Change directory to \${current_dir}"
-			return 0
-		fi
-		nvim README.md
+		echo "Change directory to \${current_dir}"
+		tmux rename-window \${window_name}
 	}
 	function _${func_name} {
 		local context state state_descr line
