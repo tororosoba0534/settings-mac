@@ -68,7 +68,7 @@ jenv() {
 source "$HOME/.cargo/env"
 
 # completion
-fpath=(~/settings-mac/.zsh/completion $fpath)
+fpath=(~/settings-mac/shell/completion $fpath)
 autoload -Uz compinit
 compinit -u
 source <(kubectl completion zsh)
