@@ -126,6 +126,11 @@ require("lazy").setup({
 					},
 				}
 			},
+			{
+				"L3MON4D3/LuaSnip",
+				build = "make install_jsregexp",
+			},
+			'saadparwaiz1/cmp_luasnip',
 		},
 		lazy = true,
 		-- lazy = false,
@@ -133,12 +138,17 @@ require("lazy").setup({
 		config = function()
 			local cmp = require("cmp")
 			cmp.setup.global({
+				snippet = {
+					expand = function(args)
+						require('luasnip').lsp_expand(args.body)
+					end,
+				},
 				window = {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
 				},
 				mapping = {
-					['<TAB>'] = cmp.mapping.confirm({
+					['<CR>'] = cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Replace,
 						selec = true,
 					}),
@@ -163,8 +173,9 @@ require("lazy").setup({
 						},
 					},
 					{ name = "path", },
-					{ name = "copilot",  group_index = 2 },
-					{ name = 'nvim_lsp', group_index = 1 },
+					-- { name = "copilot", group_index = 2 },
+					{ name = 'nvim_lsp' },
+					{ name = 'luasnip' },
 				},
 			})
 			cmp.setup.cmdline("/", {
@@ -307,8 +318,6 @@ require("lazy").setup({
 					"pyright",
 					"graphql",
 					"kotlin_language_server",
-					"prettier",
-					"prettierd",
 				},
 				automatic_installation = true,
 			})
@@ -316,6 +325,7 @@ require("lazy").setup({
 				ensure_installed = {
 					"stylua",
 					"prettier",
+					"prettierd",
 					"ktlint",
 					"goimports",
 					"isort",

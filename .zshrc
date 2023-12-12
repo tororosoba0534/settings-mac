@@ -81,7 +81,7 @@ if [[ -f $SECRET_SETTING_FILE ]] then
 		source $SECRET_SETTING_FILE
 fi
 
-export DOCKER_DEFAULT_PLATFORM=linux/arm64
+# export DOCKER_DEFAULT_PLATFORM=linux/arm64
 
 ##################################################
 ##################################################

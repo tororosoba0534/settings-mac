@@ -24,11 +24,18 @@ end
 ----------------------------------------
 -- INDENT
 ----------------------------------------
-local function increase_indent_of_line(line)
-	if line == "" then
+local function get_indent_chars()
+	if vim.o.expandtab then
+		return string.rep(" ", vim.o.shiftwidth)
+	end
+	return "\t"
+end
+
+local function increase_indent_of_line(line, ignore_empty)
+	if line == "" and ignore_empty then
 		return ""
 	else
-		return "\t" .. line
+		return get_indent_chars() .. line
 	end
 end
 
@@ -37,17 +44,21 @@ local function decrease_indent_of_line(line)
 		return ""
 	end
 	local head = line:sub(1, 1)
-	if head == "\t" or head == " " then
+	if head == "\t" then
 		return line:sub(2)
-	else
-		return line
 	end
+	head = line:sub(1, vim.o.shiftwidth)
+	local indent_spaces = string.rep(" ", vim.o.shiftwidth)
+	if vim.o.expandtab and head == indent_spaces then
+		return line:sub(vim.o.shiftwidth + 1)
+	end
+	return line
 end
 
 local function shift_right_normal()
 	core(function()
 		local line = vim.api.nvim_get_current_line()
-		local new_line = increase_indent_of_line(line)
+		local new_line = increase_indent_of_line(line, false)
 		vim.api.nvim_set_current_line(new_line)
 	end)
 end
@@ -65,7 +76,7 @@ local function shift_right_visual()
 		local row_start, row_end, lines = get_selected_lines()
 		local new_lines = {}
 		for _, line in pairs(lines) do
-			local new_line = increase_indent_of_line(line)
+			local new_line = increase_indent_of_line(line, true)
 			table.insert(new_lines, new_line)
 		end
 		vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
@@ -100,7 +111,7 @@ local function escape_string(str)
 		:gsub('%+', '%%%+')
 		:gsub('%-', '%%%-')
 		:gsub('%?', '%%%?')
-		)
+	)
 end
 
 local function get_raw_comment()
