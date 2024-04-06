@@ -78,6 +78,14 @@ vim.api.nvim_create_user_command("Hl", function()
 		vim.o.cursorcolumn = true
 	end
 end, {})
+vim.api.nvim_create_user_command("Tex", function()
+	if (vim.bo.filetype == "tex") then
+		-- vim.system({ 'latexmk', '-cd', '%:h/ %' })
+		vim.system({ 'echo', 'HELLO WORLD' })
+	else
+		print('No tex!')
+	end
+end, {})
 --------------------------------------------------
 --------------------------------------------------
 -- LOAD PLUGINS
@@ -318,6 +326,7 @@ require("lazy").setup({
 					"pyright",
 					"graphql",
 					"kotlin_language_server",
+					"texlab",
 				},
 				automatic_installation = true,
 			})
@@ -421,9 +430,12 @@ require("lazy").setup({
 			lspconfig["kotlin_language_server"].setup({
 				capabilities = capabilities,
 			})
+			lspconfig["texlab"].setup({
+				capabilities = capabilities,
+			})
 			lspconfig["tsserver"].setup({
 				capabilities = capabilities,
-				filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+				filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.tsx" },
 			})
 			lspconfig["lua_ls"].setup({
 				capabilities = capabilities,
@@ -768,6 +780,11 @@ require("lazy").setup({
 		end,
 
 	},
+	-- {
+	-- 	dir = "~/settings-mac/.config/nvim/lua/tex.lua",
+	-- 	lazy = true,
+	-- 	ft = "tex",
+	-- },
 }, {
 	defaults = {
 		lazy = true,
