@@ -202,11 +202,11 @@ unfunction create_nested_pattern
 
 function note {
 	local year=$(date "+%Y")
-	local day=$(date "+%m%d")
-	local directory="${HOME}/notes/${year}"
+	local today=$(date "+%m%d")
+	local root_dir="${HOME}/notes/${year}/${today}"
 
-	mkdir -p $directory
-	cd $directory
-	tmux rename-window $day
-	nvim "${day}.md" -c "NvimTreeOpen"
+	mkdir -p $root_dir
+	cd $root_dir
+	tmux rename-window $today
+	nvim "${today}.md" -c "NvimTreeOpen"
 }
