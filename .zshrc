@@ -198,5 +198,15 @@ function create_nested_pattern {
 }
 create_nested_pattern drill ${HOME}/devspace/drill
 create_nested_pattern learn ${HOME}/devspace/learn
-create_nested_pattern note ${HOME}/notes
 unfunction create_nested_pattern
+
+function note {
+	local year=$(date "+%Y")
+	local day=$(date "+%m%d")
+	local directory="${HOME}/notes/${year}"
+
+
+	mkdir -p $directory
+	cd $directory
+	nvim "${day}.md" -c "NvimTreeOpen"
+}
