@@ -205,8 +205,8 @@ function note {
 	local day=$(date "+%m%d")
 	local directory="${HOME}/notes/${year}"
 
-
 	mkdir -p $directory
 	cd $directory
+	tmux rename-window $day
 	nvim "${day}.md" -c "NvimTreeOpen"
 }
