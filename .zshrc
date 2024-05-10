@@ -67,6 +67,10 @@ jenv() {
 
 source "$HOME/.cargo/env"
 
+export DENO_INSTALL="${HOME}/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+
 # completion
 fpath=(~/settings-mac/shell/completion $fpath)
 autoload -Uz compinit
