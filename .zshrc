@@ -136,7 +136,6 @@ alias st='tmux source-file ~/.tmux.conf'
 function stg {
 	cd ~/settings-mac
 	tmux rename-window settings-mac
-	nvim .config/nvim/init.lua -c "NvimTreeOpen"
 }
 
 function stg-secret {
@@ -212,5 +211,6 @@ function note {
 	mkdir -p $root_dir
 	cd $root_dir
 	tmux rename-window $today
-	nvim "${today}.md" -c "NvimTreeOpen"
+	pwd
+	ls -a
 }
