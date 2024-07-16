@@ -327,6 +327,7 @@ require("lazy").setup({
 					"graphql",
 					"kotlin_language_server",
 					"texlab",
+					"hls",
 				},
 				automatic_installation = true,
 			})
@@ -454,6 +455,9 @@ require("lazy").setup({
 						},
 					},
 				},
+			})
+			lspconfig["hls"].setup({
+				capabilities = capabilities,
 			})
 		end
 	},
