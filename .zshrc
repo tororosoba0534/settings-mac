@@ -105,24 +105,6 @@ fi
 ##################################################
 ##################################################
 
-function man() {
-	if [ -z "$TMUX" ]; then
-		command man $@
-		# echo "OUTSIDE"
-	else 
-		tmux split-window -h "command man $@"
-		tmux select-layout even-horizontal
-		# command man $@
-		# echo "$@ is ${@}"
-		# echo "INSIDE"
-	fi
-}
-
-function mkdircd() {
-		mkdir $@
-		cd $@
-}
-
 alias g='git'
 alias gs='git status'
 
