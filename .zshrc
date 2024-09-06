@@ -74,6 +74,9 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 export PATH="${HOME}/.ghcup/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 
+# Go
+export PATH="$(go env GOPATH)/bin:$PATH"
+
 
 # completion
 fpath=(~/settings-mac/shell/completion $fpath)
@@ -185,8 +188,7 @@ function create_nested_pattern {
 
 	eval "${func_definition}"
 }
-create_nested_pattern drill ${HOME}/devspace/drill
-create_nested_pattern learn ${HOME}/devspace/learn
+create_nested_pattern dev ${HOME}/devspace/dev
 unfunction create_nested_pattern
 
 function note {
@@ -199,4 +201,24 @@ function note {
 	tmux rename-window $today
 	pwd
 	ls -a
+}
+
+function cheat {
+	local root_dir="${HOME}/cheat/"
+	if [ ! -d $root_dir ]; then
+		echo "Directory ${root_dir} does'nt exist."
+		echo "Please clone it from GitHub."
+		return 1
+	fi
+	cd $root_dir
+	tmux rename-window cheat
+	nvim cheat.txt
+}
+
+function cheat-secret {
+	local root_dir="${HOME}/cheat-secret/"
+	mkdir -p $root_dir
+	cd $root_dir
+	tmux rename-window cheat-secret
+	nvim cheat-secret.txt
 }
