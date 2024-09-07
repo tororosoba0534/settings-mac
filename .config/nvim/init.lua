@@ -32,6 +32,7 @@
 -- -- Buffer
 -- :e #         Edit previously edited buffer
 -- :ls          Show a buffer list
+-- :ls +        Show the list of the modified buffers
 -- :b <number>  Select the buffer
 -- :bd          Delete the buffer
 -- :bw          Wipe out buffer (delete completely)
@@ -76,7 +77,7 @@ vim.o.number = true
 vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
-vim.o.statusline = "%F %m%=%l/%L lines (%p%%)"
+vim.o.statusline = "%F %m (modified %{len(filter(getbufinfo(), 'v:val.changed == 1'))})%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
