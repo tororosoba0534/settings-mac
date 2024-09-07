@@ -76,7 +76,7 @@ vim.o.number = true
 vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
-vim.o.statusline = "%F%=%l/%L lines (%p%%)"
+vim.o.statusline = "%F %m%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
