@@ -212,7 +212,7 @@ function cheat {
 	fi
 	cd $root_dir
 	tmux rename-window cheat
-	nvim cheat.txt
+	ls -a
 }
 
 function cheat-secret {
@@ -220,5 +220,5 @@ function cheat-secret {
 	mkdir -p $root_dir
 	cd $root_dir
 	tmux rename-window cheat-secret
-	nvim cheat-secret.txt
+	ls -a
 }
