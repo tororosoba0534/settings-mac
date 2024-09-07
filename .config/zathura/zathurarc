@@ -1,4 +1,37 @@
 set sandbox none
 set selection-clipboard clipboard
+set font "inconsolata 30"
+
+########################################
+########################################
+## Cheat sheet
+##
+## a  Adjust window height
+## s  Adjust window width
+## f  Follow links
+## F  Display link target
+## d  Toggle dual page view
+## +  Zoom in
+## -  Zoom out
+## =  Zoom to the original size
+##
+## ## Index mode
+## <Tab>  Switch to Index mode
+## k, j   Move
+## l      Expand entry
+## L      Expand all entries
+## h      Collapse entry
+## H      Collapse all entries
+##
+########################################
+########################################
+
+# Keybindings
 map j navigate next
 map k navigate previous
+map H scroll left
+map J scroll down
+map K scroll up
+map L scroll right
+
+unmap q
