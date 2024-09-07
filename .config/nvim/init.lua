@@ -1,17 +1,50 @@
---------------------------------------------------
---------------------------------------------------
--- BASIC SETTINGS
---------------------------------------------------
---------------------------------------------------
--- CHEAT SEAT
--- :so % <- source current file (useful when you develop plugin in lua or vimscript)
--- :noh <- turn off syntax hilight
--- :only <- close all other windows
+-- Cheat sheet (default mappings)
+--
+-- -- Jump
+-- <C-o>      Jump to older cursor position
+-- <C-i>      Jump to newer cursor position
+-- <C-]>      Jump to the definition of the keyword under the cursor.
+-- <number>G  Jump to the line
+--
+-- -- LSP
+-- K  Hover
+--
+-- -- netrw
+-- :Ex                 Open netrw from current buffer's directory
+-- :Vex                 Open netrw vertically from current buffer's directory
+-- :e <directory-path> Open netrw from current working directory
+--
+-- -- Buffer
+-- :e #         Edit previously edited buffer
+-- :ls          Show a buffer list
+-- :b <number>  Select the buffer
+-- :bd          Delete the buffer
+-- :bw          Wipe out buffer (delete completely)
+-- :%bw         Wipe out all the buffers
+--
+-- -- Window
+-- <C-w>s (:sp)          Split horizontally
+-- <C-w>v (:vs)          Split vertically
+-- <C-w>q (:q)           Quit the current window
+-- <C-w>c (:clo :close)  Close the current window
+-- <C-w>o (:on :only)    Close the all windows other than the current window
+-- <C-w>h j k l          Move to the window in the specified direction
+-- <C-w>w (:winc w)      Choose the next window
+-- <C-w>H J K L          Move current window to be at the far left, very bottom, very top, and the far right
+-- :res <number>         Resize window's height
+-- :vert res <number>    Resize window's width
+--
+-- -- Others
+-- :so %           Source current file (useful when you develop plugin in lua or vimscript)
+-- :noh            Turn off syntax hilight
+-- :e ++enc=sjis   Reopen current file with encoding Shift_JIS
+-- :e ++enc=utf-8  Reopen current file with encoding UTF-8
 
--- Disable netrw at the very start of your init.lua
--- Strongly recommended when you use nvim-tree.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+---------------------------------------
+---------------------------------------
+-- BASIC SETTINGS
+---------------------------------------
+---------------------------------------
 
 -- -- DO NOT set below option.
 -- -- since the location of python3 executable differs between Intel Mac and M1 Mac.
@@ -30,8 +63,6 @@ vim.o.wrap = true
 vim.o.showbreak = ">>>"
 vim.o.statusline = "%F%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
--- vim.o.cursorline = true
--- vim.o.cursorcolumn = true
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
 vim.o.splitright = true
@@ -39,53 +70,17 @@ vim.o.splitright = true
 -- Commands and key mappings
 vim.g.mapleader = " "
 
-vim.keymap.set({ "n" }, "<C-w>i", "<C-i>")
-vim.keymap.set({ "n" }, "<C-w>o", "<C-o>")
-
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
 vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
 vim.keymap.set({ "", "!" }, "<C-b>", "<LEFT>")
 vim.keymap.set({ "", "!" }, "<C-n>", "<Down>")
 vim.keymap.set({ "", "!" }, "<C-p>", "<Up>")
-vim.keymap.set("n", "J", "j<C-e>")
-vim.keymap.set("n", "K", "k<C-y>")
 vim.keymap.set({ "", "!" }, "<C-a>", "<HOME>")
 vim.keymap.set({ "", "!" }, "<C-e>", "<END>")
 vim.keymap.set("i", "<C-k>", "<ESC>lDa")
 
--- Window management
-vim.keymap.set("n", "<C-w>/", ":below vsplit<CR>")
-vim.keymap.set("n", "<C-w>-", ":below split<CR>")
-vim.keymap.set("n", "<C-w>c", ":close<CR>")
-vim.keymap.set("n", "<C-w>C", ":only<CR>")
-vim.keymap.set("n", "<Leader>C", ":only<CR>")
-vim.keymap.set("n", "<C-w>d", ":bn | bd# | bn<CR>")
-vim.keymap.set("n", "<C-w>D", ":BufferLineCloseRight<CR>")
-vim.keymap.set("n", "<C-w>j", ":wincmd w<CR>")
-vim.keymap.set("n", "<C-w>k", ":wincmd W<CR>")
-vim.keymap.set("n", "<C-w>h", ":BufferLineCyclePrev<CR>")
-vim.keymap.set("n", "<C-w>l", ":BufferLineCycleNext<CR>")
-vim.keymap.set("n", "<C-w>H", ":BufferLineMovePrev<CR>")
-vim.keymap.set("n", "<C-w>L", ":BufferLineMoveNext<CR>")
 
-vim.api.nvim_create_user_command("Stg", "edit $MYVIMRC", {})
-vim.api.nvim_create_user_command("Hl", function()
-	if vim.o.cursorline then
-		vim.o.cursorline = false
-		vim.o.cursorcolumn = false
-	else
-		vim.o.cursorline = true
-		vim.o.cursorcolumn = true
-	end
-end, {})
-vim.api.nvim_create_user_command("Tex", function()
-	if (vim.bo.filetype == "tex") then
-		-- vim.system({ 'latexmk', '-cd', '%:h/ %' })
-		vim.system({ 'echo', 'HELLO WORLD' })
-	else
-		print('No tex!')
-	end
-end, {})
+
 --------------------------------------------------
 --------------------------------------------------
 -- LOAD PLUGINS
@@ -500,12 +495,6 @@ require("lazy").setup({
 	-- Others
 	--------------------
 	{
-		"nvim-tree/nvim-web-devicons",
-		config = function()
-			require("nvim-web-devicons").setup({})
-		end
-	},
-	{
 		"mbbill/undotree",
 		lazy = true,
 		init = function()
@@ -514,74 +503,6 @@ require("lazy").setup({
 		cmd = { "UndotreeToggle" },
 		config = function()
 			vim.api.nvim_set_var("undotree_SetFocusWhenToggle", 1)
-		end
-	},
-	{
-		"nvim-tree/nvim-tree.lua",
-		lazy = true,
-		init = function()
-			-- vim.keymap.set("n", "<C-w>F", "<cmd>NvimTreeToggle<CR>")
-			-- vim.keymap.set("n", "<C-w>S", "<cmd>NvimTreeToggle ~/settings-mac<CR>")
-			-- vim.keymap.set("n", "<C-w>N", "<cmd>NvimTreeToggle ~/Notes<CR>")
-			vim.api.nvim_create_user_command("F", "NvimTreeToggle", {})
-			vim.api.nvim_create_user_command(
-				'NvimTreeOpenTreeWithoutFocus',
-				function()
-					require("nvim-tree.api").tree.toggle({ focus = false })
-				end,
-				{ nargs = 0 }
-			)
-		end,
-		cmd = { "NvimTreeToggle", "NvimTreeOpenTreeWithoutFocus" },
-		config = function()
-			local nvim_tree = require("nvim-tree")
-			local nvim_tree_api = require("nvim-tree.api")
-			nvim_tree.setup({
-				on_attach = function(bufnr)
-					local function opts(desc)
-						return {
-							desc = 'nvim-tree: ' .. desc,
-							buffer = bufnr,
-							noremap = true,
-							silent = true,
-							nowait = true
-						}
-					end
-					vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, opts('Open'))
-					vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, opts('Open'))
-					vim.keymap.set('n', 'o', function(node)
-						nvim_tree_api.node.open.edit(node)
-						nvim_tree_api.tree.focus()
-					end, opts('Open and focus tree'))
-					vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, opts('Cut'))
-					vim.keymap.set('n', 'c', nvim_tree_api.fs.copy.node, opts('Copy'))
-					vim.keymap.set('n', 'y', nvim_tree_api.fs.copy.node, opts('Copy'))
-					vim.keymap.set('n', 'p', nvim_tree_api.fs.paste, opts('Paste'))
-					vim.keymap.set('n', 'v', nvim_tree_api.fs.paste, opts('Paste'))
-					vim.keymap.set('n', 'd', nvim_tree_api.fs.remove, opts('Delete'))
-					vim.keymap.set('n', 'r', nvim_tree_api.fs.rename, opts('Rename'))
-					vim.keymap.set('n', 'a', nvim_tree_api.fs.create, opts('Create'))
-					vim.keymap.set('n', '/', nvim_tree_api.node.open.vertical, opts('Open vertically'))
-					vim.keymap.set('n', '?', function(node)
-						nvim_tree_api.node.open.vertical(node)
-						nvim_tree_api.tree.focus()
-					end, opts('Open vertically and keep focus'))
-					vim.keymap.set('n', '-', nvim_tree_api.node.open.horizontal, opts('Open horizontally'))
-					vim.keymap.set('n', '_', function(node)
-						nvim_tree_api.node.open.horizontal(node)
-						nvim_tree_api.tree.focus()
-					end, opts('Open horizontally and keep focus'))
-				end
-			})
-		end
-	},
-	{
-		"akinsho/bufferline.nvim",
-		lazy = false,
-		version = "v3.*",
-		dependencies = "nvim-tree/nvim-web-devicons",
-		config = function()
-			require("bufferline").setup({})
 		end
 	},
 	{
@@ -729,48 +650,6 @@ require("lazy").setup({
 		end
 	},
 	{
-		dir = "~/settings-mac/.config/nvim/lua/following-cursor.lua",
-		-- TODO: load when TAB is pressed in the insert mode
-
-		-- init = function()
-		-- 	vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)',
-		-- 		{ noremap = true, silent = true })
-		-- end,
-		lazy = true,
-		event = "InsertEnter",
-		keys = {
-			-- { '<Plug>(following_cursor_shift_right_normal)', mode = "i" },
-			{ "<C-_>",   mode = { "n", "i", "x" } },
-			{ "<TAB>",   mode = { "n", "i", "x" } },
-			{ "<S-TAB>", mode = { "n", "i", "x" } },
-			{ "<C-i>",   mode = { "n", "i", "x" } },
-			{ "<C-o>",   mode = { "n", "i", "x" } },
-		},
-		config = function()
-			require("following-cursor").setup()
-			vim.keymap.set({ 'n', 'i' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_normal)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'x' }, '<C-_>', '<Plug>(following_cursor_toggle_comment_visual)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'n', 'i' }, '<TAB>', '<Plug>(following_cursor_shift_right_normal)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'n', 'i' }, '<C-i>', '<Plug>(following_cursor_shift_right_normal)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'n', 'i' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_normal)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'n', 'i' }, '<C-o>', '<Plug>(following_cursor_shift_left_normal)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'x' }, '<TAB>', '<Plug>(following_cursor_shift_right_visual)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'x' }, '<C-i>', '<Plug>(following_cursor_shift_right_visual)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'x' }, '<S-TAB>', '<Plug>(following_cursor_shift_left_visual)',
-				{ noremap = true, silent = true })
-			vim.keymap.set({ 'x' }, '<C-o>', '<Plug>(following_cursor_shift_left_visual)',
-				{ noremap = true, silent = true })
-		end,
-	},
-	{
 		dir = "~/settings-mac/.config/nvim/lua/nvim-window.lua",
 		lazy = true,
 		keys = { '<Leader><Leader>', '<Leader>c' },
@@ -784,11 +663,6 @@ require("lazy").setup({
 		end,
 
 	},
-	-- {
-	-- 	dir = "~/settings-mac/.config/nvim/lua/tex.lua",
-	-- 	lazy = true,
-	-- 	ft = "tex",
-	-- },
 }, {
 	defaults = {
 		lazy = true,
