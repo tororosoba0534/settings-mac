@@ -1,4 +1,4 @@
-# Terminal settings
+# My portable settings
 
 ## iTerm2
 
@@ -16,11 +16,11 @@
 
 - Keys -> Hotkey -> check "Show/hide all windows wih a system-wide hotkey" -> Hotkey: ⌥Space
 
-# Chrome extensions
+## Chrome extensions
 
-## Vimium
+### Vimium
 
-### Custom key mappings
+#### Custom key mappings
 
 ```
 map F LinkHints.activateModeToOpenInNewForegroundTab
@@ -35,7 +35,24 @@ map K moveTabRight
 map T duplicateTab
 ```
 
-# HOW TO LINK FILES
+## zathura (pdf viewer)
+
+- https://github.com/zegervdv/homebrew-zathura
+- Using HEAD of zathura & girara
+- plugin: zathura-pdf-poppler
+
+## Rectangle (window resizer)
+
+- https://github.com/rxhanson/Rectangle
+
+### keybinds
+
+- cmd-shift-h (left half)
+- cmd-shift-l (right half)
+- cmd-shift-j (almost maximize)
+- cmd-shift-k (maximize)
+
+## HOW TO LINK FILES
 
 ### in `~/settings-mac/partial-links/` dir:
 
