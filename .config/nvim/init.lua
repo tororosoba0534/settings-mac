@@ -10,9 +10,9 @@
 -- K  Hover
 --
 -- -- netrw
--- :Ex                 Open netrw from current buffer's directory
+-- :Ex                  Open netrw from current buffer's directory
 -- :Vex                 Open netrw vertically from current buffer's directory
--- :e <directory-path> Open netrw from current working directory
+-- :e <directory-path>  Open netrw from current working directory
 -- -- -- inside netrw
 -- d  Create new directory
 -- %  Create new file
@@ -42,7 +42,7 @@
 -- <C-w>v (:vs)          Split vertically
 -- <C-w>q (:q)           Quit the current window
 -- <C-w>c (:clo :close)  Close the current window
--- <C-w>o (:on :only)    Close the all windows other than the current window
+-- (<C-w>o) (:on :only)  Close the all windows other than the current window
 -- <C-w>h j k l          Move to the window in the specified direction
 -- <C-w>w (:winc w)      Choose the next window
 -- <C-w>H J K L          Move current window to be at the far left, very bottom, very top, and the far right
@@ -94,7 +94,9 @@ vim.keymap.set({ "", "!" }, "<C-a>", "<HOME>")
 vim.keymap.set({ "", "!" }, "<C-e>", "<END>")
 vim.keymap.set("i", "<C-k>", "<ESC>lDa")
 
-
+vim.keymap.set("n", "<C-w>o", function()
+	print('<C-w>o is disabled. Please use `:on` if you wanna close other windows.')
+end)
 
 --------------------------------------------------
 --------------------------------------------------
