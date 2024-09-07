@@ -1,2 +1,4 @@
 set sandbox none
 set selection-clipboard clipboard
+map j navigate next
+map k navigate previous
