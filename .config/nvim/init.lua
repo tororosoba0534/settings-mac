@@ -13,6 +13,21 @@
 -- :Ex                 Open netrw from current buffer's directory
 -- :Vex                 Open netrw vertically from current buffer's directory
 -- :e <directory-path> Open netrw from current working directory
+-- -- -- inside netrw
+-- d  Create new directory
+-- %  Create new file
+-- D  Delete
+-- R  Rename (can move)
+-- -- -- -- mark
+-- mf  Mark files
+-- mt  Set target (if file, then its parent directory)
+-- mm  Move marked files to target
+-- mc  Copy marked files to target
+--
+-- -- Directory
+-- !<shell-command>  Execute shell command
+-- :pwd              Print working directory
+-- :cd %:h           Change current directory to the current file's directory
 --
 -- -- Buffer
 -- :e #         Edit previously edited buffer
