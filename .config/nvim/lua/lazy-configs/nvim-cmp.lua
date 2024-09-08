@@ -75,10 +75,10 @@ local mapping = function(cmp)
 		['<Tab>'] = {
 			i = cmp.mapping.select_next_item(),
 			c = function()
-				if require('cmp').visible() then
-					require('cmp').select_next_item()
+				if cmp.visible() then
+					cmp.select_next_item()
 				else
-					require('cmp').complete()
+					cmp.complete()
 				end
 			end,
 		},
@@ -91,23 +91,63 @@ local mapping = function(cmp)
 		['<S-Tab>'] = {
 			i = cmp.mapping.select_prev_item(),
 			c = function()
-				if require('cmp').visible() then
-					require('cmp').select_next_item()
+				if cmp.visible() then
+					cmp.select_next_item()
 				else
-					require('cmp').complete()
+					cmp.complete()
 				end
 			end,
 		},
 		['<ESC>'] = {
-			c = function(fallback)
-				if require('cmp').visible() then
-					require('cmp').abort()
+			i = function(fallback)
+				if cmp.visible() then
+					if (cmp.get_active_entry() == nil) then
+						fallback()
+					else
+						cmp.confirm({
+							behavior = cmp.ConfirmBehavior.Replace,
+							select = false,
+						})
+					end
 				else
 					fallback()
 				end
 			end,
+			c = function()
+				if cmp.visible() then
+					cmp.abort()
+				else
+					-- Send <C-c>
+					local key = vim.api.nvim_replace_termcodes('<C-c>', true, false, true)
+					vim.api.nvim_feedkeys(key, 'm', false)
+				end
+			end,
 		},
 	}
+end
+
+local mapping_cmd_search = function(cmp, cmp_utils_misc)
+	return cmp_utils_misc.merge(
+		{
+			['<CR>'] = {
+				c = function(fallback)
+					if cmp.visible() then
+						if (cmp.get_active_entry() == nil) then
+							fallback()
+						else
+							cmp.confirm({
+								behavior = cmp.ConfirmBehavior.Replace,
+								select = false,
+							})
+						end
+					else
+						fallback()
+					end
+				end,
+			},
+		},
+		mapping(cmp)
+	)
 end
 
 
@@ -152,6 +192,7 @@ export.config = function()
 		sources = {
 			{ name = "buffer" },
 		},
+		mapping = mapping_cmd_search(cmp, require('cmp.utils.misc')),
 	})
 
 	cmp.setup.cmdline(":", {
