@@ -32,15 +32,6 @@
             {
               "key_code": "right_arrow"
             }
-          ],
-          "conditions": [
-            {
-              "type": "frontmost_application_unless",
-              "bundle_identifiers": [
-                "^com\\.apple\\.Terminal$",
-                "^com\\.googlecode\\.iterm2$"
-              ]
-            }
           ]
         },
         {
@@ -55,15 +46,6 @@
           "to": [
             {
               "key_code": "left_arrow"
-            }
-          ],
-          "conditions": [
-            {
-              "type": "frontmost_application_unless",
-              "bundle_identifiers": [
-                "^com\\.apple\\.Terminal$",
-                "^com\\.googlecode\\.iterm2$"
-              ]
             }
           ]
         },
@@ -80,15 +62,6 @@
             {
               "key_code": "down_arrow"
             }
-          ],
-          "conditions": [
-            {
-              "type": "frontmost_application_unless",
-              "bundle_identifiers": [
-                "^com\\.apple\\.Terminal$",
-                "^com\\.googlecode\\.iterm2$"
-              ]
-            }
           ]
         },
         {
@@ -103,15 +76,6 @@
           "to": [
             {
               "key_code": "up_arrow"
-            }
-          ],
-          "conditions": [
-            {
-              "type": "frontmost_application_unless",
-              "bundle_identifiers": [
-                "^com\\.apple\\.Terminal$",
-                "^com\\.googlecode\\.iterm2$"
-              ]
             }
           ]
         },
