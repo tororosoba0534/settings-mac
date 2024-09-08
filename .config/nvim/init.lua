@@ -1,5 +1,7 @@
 -- Cheat sheet (default mappings)
 --
+-- <C-[>      Esc
+--
 -- -- Jump
 -- <C-o>      Jump to older cursor position
 -- <C-i>      Jump to newer cursor position
@@ -82,11 +84,12 @@ vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
 vim.o.splitright = true
+vim.o.timeoutlen = 1000
+-- For eliminating delays on ESC
+vim.o.ttimeoutlen = 0
 
 -- Commands and key mappings
 vim.g.mapleader = " "
-
-vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
 
 vim.keymap.set("n", "<C-w>o", function()
 	print('<C-w>o is disabled. Please use `:on` if you wanna close other windows.')

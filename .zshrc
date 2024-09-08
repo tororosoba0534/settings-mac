@@ -11,6 +11,10 @@ if [[ -t 0 ]]; then
   stty start undef
 fi
 
+# For eliminationg delays on ESC
+# default: 40 (400ms)
+KEYTIMEOUT=1
+
 # Autostart tmux
 tmux_count=$(ps aux | grep tmux | grep -v grep | wc -l)
 tmux_initial_window_name="initial-window"
