@@ -1,7 +1,5 @@
 local export = { 'hrsh7th/nvim-cmp' }
 
-local cmp = require("cmp")
-
 export.lazy = true
 
 export.event = { "InsertEnter" }
@@ -44,28 +42,28 @@ local has_words_before = function()
 end
 
 export.config = function()
-	cmp.setup.global({
+	require("cmp").setup.global({
 		snippet = {
 			expand = function(args)
 				require('luasnip').lsp_expand(args.body)
 			end,
 		},
 		window = {
-			completion = cmp.config.window.bordered(),
-			documentation = cmp.config.window.bordered(),
+			completion = require("cmp").config.window.bordered(),
+			documentation = require("cmp").config.window.bordered(),
 		},
 		mapping = {
-			['<CR>'] = cmp.mapping.confirm({
-				behavior = cmp.ConfirmBehavior.Replace,
+			['<CR>'] = require("cmp").mapping.confirm({
+				behavior = require("cmp").ConfirmBehavior.Replace,
 				selec = true,
 			}),
-			['<C-p>'] = cmp.mapping.select_prev_item(),
-			['<C-n>'] = cmp.mapping.select_next_item(),
-			['<Up>'] = cmp.mapping.select_prev_item(),
-			['<Down>'] = cmp.mapping.select_next_item(),
+			['<C-p>'] = require("cmp").mapping.select_prev_item(),
+			['<C-n>'] = require("cmp").mapping.select_next_item(),
+			['<Up>'] = require("cmp").mapping.select_prev_item(),
+			['<Down>'] = require("cmp").mapping.select_next_item(),
 			['<Tab>'] = vim.schedule_wrap(function(fallback)
-				if cmp.visible() and has_words_before() then
-					cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+				if require("cmp").visible() and has_words_before() then
+					require("cmp").select_next_item({ behavior = require("cmp").SelectBehavior.Select })
 				else
 					fallback()
 				end
@@ -93,12 +91,12 @@ export.config = function()
 		},
 	})
 
-	cmp.setup.cmdline("/", {
+	require("cmp").setup.cmdline("/", {
 		mapping = {
 			['<C-n>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
+					if require("cmp").visible() then
+						require("cmp").select_next_item()
 					else
 						fallback()
 					end
@@ -106,8 +104,8 @@ export.config = function()
 			},
 			['<C-p>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
+					if require("cmp").visible() then
+						require("cmp").select_prev_item()
 					else
 						fallback()
 					end
@@ -115,8 +113,8 @@ export.config = function()
 			},
 			['<Up>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
+					if require("cmp").visible() then
+						require("cmp").select_next_item()
 					else
 						fallback()
 					end
@@ -124,8 +122,8 @@ export.config = function()
 			},
 			['<Down>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
+					if require("cmp").visible() then
+						require("cmp").select_prev_item()
 					else
 						fallback()
 					end
@@ -133,10 +131,10 @@ export.config = function()
 			},
 			['<TAB>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.close()
+					if require("cmp").visible() then
+						require("cmp").close()
 					else
-						cmp.complete()
+						require("cmp").complete()
 					end
 				end,
 			},
@@ -146,12 +144,12 @@ export.config = function()
 		},
 	})
 
-	cmp.setup.cmdline(":", {
+	require("cmp").setup.cmdline(":", {
 		mapping = {
 			['<C-n>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
+					if require("cmp").visible() then
+						require("cmp").select_next_item()
 					else
 						fallback()
 					end
@@ -159,8 +157,8 @@ export.config = function()
 			},
 			['<C-p>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
+					if require("cmp").visible() then
+						require("cmp").select_prev_item()
 					else
 						fallback()
 					end
@@ -168,8 +166,8 @@ export.config = function()
 			},
 			['<Up>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
+					if require("cmp").visible() then
+						require("cmp").select_next_item()
 					else
 						fallback()
 					end
@@ -177,8 +175,8 @@ export.config = function()
 			},
 			['<Down>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
+					if require("cmp").visible() then
+						require("cmp").select_prev_item()
 					else
 						fallback()
 					end
@@ -186,15 +184,15 @@ export.config = function()
 			},
 			['<TAB>'] = {
 				c = function(fallback)
-					if cmp.visible() then
-						cmp.close()
+					if require("cmp").visible() then
+						require("cmp").close()
 					else
-						cmp.complete()
+						require("cmp").complete()
 					end
 				end,
 			},
 		},
-		sources = cmp.config.sources({
+		sources = require("cmp").config.sources({
 			{ name = "path" },
 		}, {
 			{
