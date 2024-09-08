@@ -87,13 +87,6 @@ vim.o.splitright = true
 vim.g.mapleader = " "
 
 vim.keymap.set({ "", "!" }, "<C-g>", "<ESC>")
-vim.keymap.set({ "", "!" }, "<C-f>", "<RIGHT>")
-vim.keymap.set({ "", "!" }, "<C-b>", "<LEFT>")
-vim.keymap.set({ "", "!" }, "<C-n>", "<Down>")
-vim.keymap.set({ "", "!" }, "<C-p>", "<Up>")
-vim.keymap.set({ "", "!" }, "<C-a>", "<HOME>")
-vim.keymap.set({ "", "!" }, "<C-e>", "<END>")
-vim.keymap.set("i", "<C-k>", "<ESC>lDa")
 
 vim.keymap.set("n", "<C-w>o", function()
 	print('<C-w>o is disabled. Please use `:on` if you wanna close other windows.')
