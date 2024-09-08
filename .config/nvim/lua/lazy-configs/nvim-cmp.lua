@@ -33,13 +33,25 @@ export.dependencies = {
 	'saadparwaiz1/cmp_luasnip',
 }
 
-local mapping = {}
-
-mapping.insert = function(cmp)
+local mapping = function(cmp)
 	return {
 		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
 		['<CR>'] = {
 			i = function(fallback)
+				if cmp.visible() then
+					if (cmp.get_active_entry() == nil) then
+						cmp.abort()
+					else
+						cmp.confirm({
+							behavior = cmp.ConfirmBehavior.Replace,
+							select = false,
+						})
+					end
+				else
+					fallback()
+				end
+			end,
+			c = function(fallback)
 				if cmp.visible() then
 					if (cmp.get_active_entry() == nil) then
 						cmp.abort()
@@ -62,6 +74,13 @@ mapping.insert = function(cmp)
 		},
 		['<Tab>'] = {
 			i = cmp.mapping.select_next_item(),
+			c = function()
+				if require('cmp').visible() then
+					require('cmp').select_next_item()
+				else
+					require('cmp').complete()
+				end
+			end,
 		},
 		['<C-p>'] = {
 			i = cmp.mapping.select_prev_item(),
@@ -71,47 +90,6 @@ mapping.insert = function(cmp)
 		},
 		['<S-Tab>'] = {
 			i = cmp.mapping.select_prev_item(),
-		},
-	}
-end
-
-mapping.command = function(cmp)
-	return {
-		['<CR>'] = {
-			c = function(fallback)
-				if cmp.visible() then
-					if (cmp.get_active_entry() == nil) then
-						cmp.abort()
-					else
-						cmp.confirm({
-							behavior = cmp.ConfirmBehavior.Replace,
-							select = false,
-						})
-					end
-				else
-					fallback()
-				end
-			end,
-		},
-		['<Tab>'] = {
-			c = function()
-				if require('cmp').visible() then
-					require('cmp').select_next_item()
-				else
-					require('cmp').complete()
-				end
-			end,
-		},
-		-- ['<S-Tab>'] = {
-		-- 	c = function()
-		-- 		if require('cmp').visible() then
-		-- 			require('cmp').select_prev_item()
-		-- 		else
-		-- 			require('cmp').complete()
-		-- 		end
-		-- 	end,
-		-- },
-		['<S-Tab>'] = {
 			c = function()
 				if require('cmp').visible() then
 					require('cmp').select_next_item()
@@ -165,18 +143,16 @@ export.config = function()
 			{ name = 'nvim_lsp' },
 			{ name = 'luasnip' },
 		},
-		mapping = mapping.insert(cmp),
+		mapping = mapping(cmp),
 	}
 
 	cmp.setup.cmdline("/", {
-		mapping = mapping.command(cmp),
 		sources = {
 			{ name = "buffer" },
 		},
 	})
 
 	cmp.setup.cmdline(":", {
-		mapping = mapping.command(cmp),
 		sources = cmp.config.sources({
 			{ name = "path" },
 		}, {
