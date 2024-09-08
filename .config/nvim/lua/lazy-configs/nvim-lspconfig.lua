@@ -94,6 +94,9 @@ export.config = function()
 		capabilities = capabilities,
 		settings = { -- custom settings for lua
 			Lua = {
+				runtime = {
+					version = 'Lua 5.1',
+				},
 				-- make the language server recognize "vim" global
 				diagnostics = {
 					globals = { "vim" },
