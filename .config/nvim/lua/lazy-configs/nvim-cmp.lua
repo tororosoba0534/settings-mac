@@ -42,10 +42,12 @@ local has_words_before = function()
 end
 
 export.config = function()
-	require("cmp").setup {
+	local cmp = require("cmp")
+
+	cmp.setup {
 		window = {
-			completion = require("cmp").config.window.bordered(),
-			documentation = require("cmp").config.window.bordered(),
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
 		},
 		snippet = {
 			expand = function(args)
@@ -76,12 +78,12 @@ export.config = function()
 			-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
 			['<CR>'] = {
 				i = function(fallback)
-					if require("cmp").visible() then
-						if (require("cmp").get_active_entry() == nil) then
-							require("cmp").abort()
+					if cmp.visible() then
+						if (cmp.get_active_entry() == nil) then
+							cmp.abort()
 						else
-							require("cmp").confirm({
-								behavior = require("cmp").ConfirmBehavior.Replace,
+							cmp.confirm({
+								behavior = cmp.ConfirmBehavior.Replace,
 								select = false,
 							})
 						end
@@ -91,32 +93,32 @@ export.config = function()
 				end,
 			},
 			['<C-n>'] = {
-				i = require("cmp").mapping.select_next_item(),
+				i = cmp.mapping.select_next_item(),
 			},
 			['<Down>'] = {
-				i = require("cmp").mapping.select_next_item(),
+				i = cmp.mapping.select_next_item(),
 			},
 			['<Tab>'] = {
-				i = require("cmp").mapping.select_next_item(),
+				i = cmp.mapping.select_next_item(),
 			},
 			['<C-p>'] = {
-				i = require("cmp").mapping.select_prev_item(),
+				i = cmp.mapping.select_prev_item(),
 			},
 			['<Up>'] = {
-				i = require("cmp").mapping.select_prev_item(),
+				i = cmp.mapping.select_prev_item(),
 			},
 			['<S-Tab>'] = {
-				i = require("cmp").mapping.select_prev_item(),
+				i = cmp.mapping.select_prev_item(),
 			},
 		},
 	}
 
-	require("cmp").setup.cmdline("/", {
+	cmp.setup.cmdline("/", {
 		mapping = {
 			['<C-n>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_next_item()
+					if cmp.visible() then
+						cmp.select_next_item()
 					else
 						fallback()
 					end
@@ -124,8 +126,8 @@ export.config = function()
 			},
 			['<C-p>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_prev_item()
+					if cmp.visible() then
+						cmp.select_prev_item()
 					else
 						fallback()
 					end
@@ -133,8 +135,8 @@ export.config = function()
 			},
 			['<Up>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_next_item()
+					if cmp.visible() then
+						cmp.select_next_item()
 					else
 						fallback()
 					end
@@ -142,8 +144,8 @@ export.config = function()
 			},
 			['<Down>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_prev_item()
+					if cmp.visible() then
+						cmp.select_prev_item()
 					else
 						fallback()
 					end
@@ -151,10 +153,10 @@ export.config = function()
 			},
 			['<TAB>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").close()
+					if cmp.visible() then
+						cmp.close()
 					else
-						require("cmp").complete()
+						cmp.complete()
 					end
 				end,
 			},
@@ -164,16 +166,16 @@ export.config = function()
 		},
 	})
 
-	require("cmp").setup.cmdline(":", {
+	cmp.setup.cmdline(":", {
 		mapping = {
 			['<CR>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						if (require("cmp").get_active_entry() == nil) then
-							require("cmp").abort()
+					if cmp.visible() then
+						if (cmp.get_active_entry() == nil) then
+							cmp.abort()
 						else
-							require("cmp").confirm({
-								behavior = require("cmp").ConfirmBehavior.Replace,
+							cmp.confirm({
+								behavior = cmp.ConfirmBehavior.Replace,
 								select = false,
 							})
 						end
@@ -191,10 +193,19 @@ export.config = function()
 					end
 				end,
 			},
+			-- ['<S-Tab>'] = {
+			-- 	c = function()
+			-- 		if require('cmp').visible() then
+			-- 			require('cmp').select_prev_item()
+			-- 		else
+			-- 			require('cmp').complete()
+			-- 		end
+			-- 	end,
+			-- },
 			['<S-Tab>'] = {
 				c = function()
 					if require('cmp').visible() then
-						require('cmp').select_prev_item()
+						require('cmp').select_next_item()
 					else
 						require('cmp').complete()
 					end
@@ -210,7 +221,7 @@ export.config = function()
 				end,
 			},
 		},
-		sources = require("cmp").config.sources({
+		sources = cmp.config.sources({
 			{ name = "path" },
 		}, {
 			{
