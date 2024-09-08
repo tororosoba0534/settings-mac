@@ -1,10 +1,15 @@
-local M = {}
+-- Original: keaising/im-select.nvim
+--
+-- You need `im-select` executable on your PC.
+-- https://github.com/daipeihust/im-select
+--
+-- If you are in trouble, please check whether you have executable suitable for your cpu architecture.
 
 local function all_trim(s)
 	return s:match("^%s*(.-)%s*$")
 end
 
-local function determine_os()
+local function get_os()
 	if vim.fn.has("macunix") == 1 then
 		return "macOS"
 	elseif vim.fn.has("win32") == 1 then
@@ -17,62 +22,42 @@ local function determine_os()
 end
 
 local function is_supported()
-	local os = determine_os()
+	local os = get_os()
 	-- macOS, Windows, WSL
 	if os ~= "Linux" then
 		return true
 	end
 
-	-- only support fcitx5
-	-- other frameworks are not support yet, PR welcome
 	if vim.fn.executable("fcitx5-remote") then
 		return true
 	end
 end
 
--- local config
-local C = {
-	-- im-select binary's name, or the binary's full path
-	default_command = "im-select.exe",
-	-- default input method in normal mode.
-	default_method_selected = "1033",
-	-- auto restore to method to latest used in insert mode when InsertEnter
-	auto_restore = true,
-}
-
-local function set_default_config()
-	local current_os = determine_os()
+-- return type: {
+--   command: im-select binary's name, or the binary's full path
+--   input_method: default input method in normal mode.
+-- }
+local function get_config()
+	local current_os = get_os()
 	if current_os == "macOS" then
-		C.default_command = "im-select"
-		C.default_method_selected = "com.apple.keylayout.ABC"
+		return {
+			command = "im-select",
+			input_method = "com.apple.keylayout.ABC",
+		}
 	elseif current_os == "Windows" or current_os == "WSL" then
-		-- WSL share same config with Windows
-		C.default_command = "im-select.exe"
-		C.default_method_selected = "1033"
+		return {
+			-- WSL share same config with Windows
+			command = "im-select.exe",
+			input_method = "1033",
+		}
 	else
-		-- fcitx5-remote -n: rime/keyboard-us
-		-- fcitx5-remote -s rime
-		-- fcitx5-remote -s keyboard-us
-		C.default_command = "fcitx5-remote"
-		C.default_method_selected = "keyboard-us"
-	end
-end
-
-local function set_opts(opts)
-	if opts == nil or type(opts) ~= "table" then
-		return
-	end
-
-	if opts.default_im_select ~= nil then
-		C.default_method_selected = opts.default_im_select
-	end
-
-	if opts.disable_auto_restore == 1 then
-		C.auto_restore = false
-	end
-
-	if opts.default_command ~= nil then
-		C.default_command = opts.default_command
+		return {
+			-- fcitx5-remote -n: rime/keyboard-us
+			-- fcitx5-remote -s rime
+			-- fcitx5-remote -s keyboard-us
+			command = "fcitx5-remote",
+			input_method = "keyboard-us",
+		}
 	end
 end
 
@@ -94,15 +79,19 @@ local function change_im_select(cmd, method)
 	end
 end
 
-M.setup = function(opts)
+-----------------------------------------------------
+-----------------------------------------------------
+
+local export = {}
+
+export.setup = function()
 	if not is_supported() then
 		return
 	end
 
-	set_default_config()
-	set_opts(opts)
+	local config = get_config()
 
-	if vim.fn.executable(C.default_command) ~= 1 then
+	if vim.fn.executable(config.command) ~= 1 then
 		vim.api.nvim_err_writeln(
 			[[please install `im-select` binary first, repo url: https://github.com/daipeihust/im-select]]
 		)
@@ -110,34 +99,32 @@ M.setup = function(opts)
 	end
 
 	-- set autocmd
-	if C.auto_restore then
-		vim.api.nvim_create_autocmd({ "InsertEnter" }, {
-			callback = function()
-				local current_select = get_current_select(C.default_command)
-				local save = vim.g["im_select_current_im_select"]
+	vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+		callback = function()
+			local current_select = get_current_select(config.command)
+			local save = vim.g["im_select_current_im_select"]
 
-				if current_select ~= save then
-					change_im_select(C.default_command, save)
-				end
-			end,
-		})
-	end
+			if current_select ~= save then
+				change_im_select(config.command, save)
+			end
+		end,
+	})
 
 	vim.api.nvim_create_autocmd({ "InsertLeave", "VimEnter" }, {
 		callback = function()
-			local current_select = get_current_select(C.default_command)
+			local current_select = get_current_select(config.command)
 			vim.api.nvim_set_var("im_select_current_im_select", current_select)
 
-			if current_select ~= C.default_method_selected then
-				change_im_select(C.default_command, C.default_method_selected)
+			if current_select ~= config.input_method then
+				change_im_select(config.command, config.input_method)
 			end
 		end,
 	})
 	vim.api.nvim_create_autocmd({ "CmdlineLeave" }, {
 		callback = function()
-			change_im_select(C.default_command, C.default_method_selected)
+			change_im_select(config.command, config.input_method)
 		end,
 	})
 end
 
-return M
+return export
