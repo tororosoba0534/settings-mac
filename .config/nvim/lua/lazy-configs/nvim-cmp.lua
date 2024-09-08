@@ -110,67 +110,6 @@ local mapping = function(cmp)
 	}
 end
 
--- https://github.com/hrsh7th/nvim-cmp/discussions/1834
-local kind_priority = {
-	Parameter = 100,
-	Variable = 95,
-	Field = 90,
-	Property = 85,
-	Constant = 80,
-	Enum = 75,
-	EnumMember = 70,
-	Event = 65,
-	Function = 60,
-	Method = 55,
-	Operator = 50,
-	Reference = 45,
-	Struct = 40,
-	File = 35,
-	Folder = 30,
-	Class = 27,
-	Color = 25,
-	Module = 20,
-	Keyword = 16,
-	Constructor = 13,
-	Interface = 10,
-	Snippet = 7,
-	TypeParameter = 5,
-	Unit = 3,
-	Value = 1,
-	Text = 0,
-}
-
-local kind_priority_comparator = function(cmp_types_lsp)
-	local lsp = cmp_types_lsp
-	return function(entry1, entry2)
-		if entry1.source.name ~= "nvim_lsp" then
-			if entry2.source.name == "nvim_lsp" then
-				return false
-			else
-				return nil
-			end
-		end
-		local kind1 = lsp.CompletionItemKind[entry1:get_kind()]
-		local kind2 = lsp.CompletionItemKind[entry2:get_kind()]
-		-- if kind1 == "Variable" and entry1:get_completion_item().label:match("%w*=") then
-		-- 	kind1 = "Parameter"
-		-- end
-		-- if kind2 == "Variable" and entry2:get_completion_item().label:match("%w*=") then
-		-- 	kind2 = "Parameter"
-		-- end
-
-		local priority1 = kind_priority[kind1] or 0
-		local priority2 = kind_priority[kind2] or 0
-		if priority1 == priority2 then
-			return nil
-		end
-		return priority1 < priority2
-	end
-end
-
-local label_comparator = function(entry1, entry2)
-	return entry1.completion_item.label > entry2.completion_item.label
-end
 
 export.config = function()
 	local cmp = require("cmp")
@@ -187,8 +126,8 @@ export.config = function()
 		},
 		sources = {
 			{ name = 'luasnip',  group_index = 1, },
-			{ name = 'nvim_lsp', group_index = 5, },
-			{ name = "path",     group_index = 10, },
+			{ name = 'nvim_lsp', group_index = 2, },
+			{ name = "path",     group_index = 3, },
 			{
 				name = "buffer",
 				option = {
@@ -202,15 +141,11 @@ export.config = function()
 						return { buf }
 					end
 				},
-				group_index = 20,
+				group_index = 4,
 			},
 			-- { name = "copilot", group_index = 2 },
 		},
 		mapping = mapping(cmp),
-		comparators = {
-			kind_priority_comparator(require('cmp.types.lsp')),
-			label_comparator,
-		}
 	}
 
 	cmp.setup.cmdline("/", {
