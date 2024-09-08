@@ -43,31 +43,14 @@ end
 
 export.config = function()
 	require("cmp").setup.global({
-		snippet = {
-			expand = function(args)
-				require('luasnip').lsp_expand(args.body)
-			end,
-		},
 		window = {
 			completion = require("cmp").config.window.bordered(),
 			documentation = require("cmp").config.window.bordered(),
 		},
-		mapping = {
-			['<CR>'] = require("cmp").mapping.confirm({
-				behavior = require("cmp").ConfirmBehavior.Replace,
-				selec = true,
-			}),
-			['<C-p>'] = require("cmp").mapping.select_prev_item(),
-			['<C-n>'] = require("cmp").mapping.select_next_item(),
-			['<Up>'] = require("cmp").mapping.select_prev_item(),
-			['<Down>'] = require("cmp").mapping.select_next_item(),
-			['<Tab>'] = vim.schedule_wrap(function(fallback)
-				if require("cmp").visible() and has_words_before() then
-					require("cmp").select_next_item({ behavior = require("cmp").SelectBehavior.Select })
-				else
-					fallback()
-				end
-			end),
+		snippet = {
+			expand = function(args)
+				require('luasnip').lsp_expand(args.body)
+			end,
 		},
 		sources = {
 			{
@@ -88,6 +71,18 @@ export.config = function()
 			-- { name = "copilot", group_index = 2 },
 			{ name = 'nvim_lsp' },
 			{ name = 'luasnip' },
+		},
+		mapping = {
+			['<CR>'] = require("cmp").mapping.confirm({
+				behavior = require("cmp").ConfirmBehavior.Replace,
+				select = false,
+			}),
+			['<C-n>'] = require("cmp").mapping.select_next_item(),
+			['<Down>'] = require("cmp").mapping.select_next_item(),
+			['<Tab>'] = require("cmp").mapping.select_next_item(),
+			['<C-p>'] = require("cmp").mapping.select_prev_item(),
+			['<Up>'] = require("cmp").mapping.select_prev_item(),
+			['<S-Tab>'] = require("cmp").mapping.select_prev_item(),
 		},
 	})
 
