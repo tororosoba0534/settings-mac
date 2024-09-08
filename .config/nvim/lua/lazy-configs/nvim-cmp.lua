@@ -2,7 +2,7 @@ local export = { 'hrsh7th/nvim-cmp' }
 
 export.lazy = true
 
-export.event = { "InsertEnter" }
+export.event = { "InsertEnter", "CmdlineEnter" }
 
 export.dependencies = {
 	'hrsh7th/cmp-buffer',
@@ -166,48 +166,46 @@ export.config = function()
 
 	require("cmp").setup.cmdline(":", {
 		mapping = {
-			['<C-n>'] = {
+			['<CR>'] = {
 				c = function(fallback)
 					if require("cmp").visible() then
-						require("cmp").select_next_item()
+						if (require("cmp").get_active_entry() == nil) then
+							require("cmp").abort()
+						else
+							require("cmp").confirm({
+								behavior = require("cmp").ConfirmBehavior.Replace,
+								select = false,
+							})
+						end
 					else
 						fallback()
 					end
 				end,
 			},
-			['<C-p>'] = {
-				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_prev_item()
+			['<Tab>'] = {
+				c = function()
+					if require('cmp').visible() then
+						require('cmp').select_next_item()
 					else
-						fallback()
+						require('cmp').complete()
 					end
 				end,
 			},
-			['<Up>'] = {
-				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_next_item()
+			['<S-Tab>'] = {
+				c = function()
+					if require('cmp').visible() then
+						require('cmp').select_prev_item()
 					else
-						fallback()
+						require('cmp').complete()
 					end
 				end,
 			},
-			['<Down>'] = {
+			['<ESC>'] = {
 				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").select_prev_item()
+					if require('cmp').visible() then
+						require('cmp').abort()
 					else
 						fallback()
-					end
-				end,
-			},
-			['<TAB>'] = {
-				c = function(fallback)
-					if require("cmp").visible() then
-						require("cmp").close()
-					else
-						require("cmp").complete()
 					end
 				end,
 			},
