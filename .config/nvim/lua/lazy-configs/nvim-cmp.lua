@@ -33,12 +33,103 @@ export.dependencies = {
 	'saadparwaiz1/cmp_luasnip',
 }
 
-local has_words_before = function()
-	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-		return false
-	end
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+local mapping = {}
+
+mapping.insert = function(cmp)
+	return {
+		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
+		['<CR>'] = {
+			i = function(fallback)
+				if cmp.visible() then
+					if (cmp.get_active_entry() == nil) then
+						cmp.abort()
+					else
+						cmp.confirm({
+							behavior = cmp.ConfirmBehavior.Replace,
+							select = false,
+						})
+					end
+				else
+					fallback()
+				end
+			end,
+		},
+		['<C-n>'] = {
+			i = cmp.mapping.select_next_item(),
+		},
+		['<Down>'] = {
+			i = cmp.mapping.select_next_item(),
+		},
+		['<Tab>'] = {
+			i = cmp.mapping.select_next_item(),
+		},
+		['<C-p>'] = {
+			i = cmp.mapping.select_prev_item(),
+		},
+		['<Up>'] = {
+			i = cmp.mapping.select_prev_item(),
+		},
+		['<S-Tab>'] = {
+			i = cmp.mapping.select_prev_item(),
+		},
+	}
+end
+
+mapping.command = function(cmp)
+	return {
+		['<CR>'] = {
+			c = function(fallback)
+				if cmp.visible() then
+					if (cmp.get_active_entry() == nil) then
+						cmp.abort()
+					else
+						cmp.confirm({
+							behavior = cmp.ConfirmBehavior.Replace,
+							select = false,
+						})
+					end
+				else
+					fallback()
+				end
+			end,
+		},
+		['<Tab>'] = {
+			c = function()
+				if require('cmp').visible() then
+					require('cmp').select_next_item()
+				else
+					require('cmp').complete()
+				end
+			end,
+		},
+		-- ['<S-Tab>'] = {
+		-- 	c = function()
+		-- 		if require('cmp').visible() then
+		-- 			require('cmp').select_prev_item()
+		-- 		else
+		-- 			require('cmp').complete()
+		-- 		end
+		-- 	end,
+		-- },
+		['<S-Tab>'] = {
+			c = function()
+				if require('cmp').visible() then
+					require('cmp').select_next_item()
+				else
+					require('cmp').complete()
+				end
+			end,
+		},
+		['<ESC>'] = {
+			c = function(fallback)
+				if require('cmp').visible() then
+					require('cmp').abort()
+				else
+					fallback()
+				end
+			end,
+		},
+	}
 end
 
 export.config = function()
@@ -74,153 +165,18 @@ export.config = function()
 			{ name = 'nvim_lsp' },
 			{ name = 'luasnip' },
 		},
-		mapping = {
-			-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
-			['<CR>'] = {
-				i = function(fallback)
-					if cmp.visible() then
-						if (cmp.get_active_entry() == nil) then
-							cmp.abort()
-						else
-							cmp.confirm({
-								behavior = cmp.ConfirmBehavior.Replace,
-								select = false,
-							})
-						end
-					else
-						fallback()
-					end
-				end,
-			},
-			['<C-n>'] = {
-				i = cmp.mapping.select_next_item(),
-			},
-			['<Down>'] = {
-				i = cmp.mapping.select_next_item(),
-			},
-			['<Tab>'] = {
-				i = cmp.mapping.select_next_item(),
-			},
-			['<C-p>'] = {
-				i = cmp.mapping.select_prev_item(),
-			},
-			['<Up>'] = {
-				i = cmp.mapping.select_prev_item(),
-			},
-			['<S-Tab>'] = {
-				i = cmp.mapping.select_prev_item(),
-			},
-		},
+		mapping = mapping.insert(cmp),
 	}
 
 	cmp.setup.cmdline("/", {
-		mapping = {
-			['<C-n>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					else
-						fallback()
-					end
-				end,
-			},
-			['<C-p>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					else
-						fallback()
-					end
-				end,
-			},
-			['<Up>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_next_item()
-					else
-						fallback()
-					end
-				end,
-			},
-			['<Down>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					else
-						fallback()
-					end
-				end,
-			},
-			['<TAB>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						cmp.close()
-					else
-						cmp.complete()
-					end
-				end,
-			},
-		},
+		mapping = mapping.command(cmp),
 		sources = {
 			{ name = "buffer" },
 		},
 	})
 
 	cmp.setup.cmdline(":", {
-		mapping = {
-			['<CR>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						if (cmp.get_active_entry() == nil) then
-							cmp.abort()
-						else
-							cmp.confirm({
-								behavior = cmp.ConfirmBehavior.Replace,
-								select = false,
-							})
-						end
-					else
-						fallback()
-					end
-				end,
-			},
-			['<Tab>'] = {
-				c = function()
-					if require('cmp').visible() then
-						require('cmp').select_next_item()
-					else
-						require('cmp').complete()
-					end
-				end,
-			},
-			-- ['<S-Tab>'] = {
-			-- 	c = function()
-			-- 		if require('cmp').visible() then
-			-- 			require('cmp').select_prev_item()
-			-- 		else
-			-- 			require('cmp').complete()
-			-- 		end
-			-- 	end,
-			-- },
-			['<S-Tab>'] = {
-				c = function()
-					if require('cmp').visible() then
-						require('cmp').select_next_item()
-					else
-						require('cmp').complete()
-					end
-				end,
-			},
-			['<ESC>'] = {
-				c = function(fallback)
-					if require('cmp').visible() then
-						require('cmp').abort()
-					else
-						fallback()
-					end
-				end,
-			},
-		},
+		mapping = mapping.command(cmp),
 		sources = cmp.config.sources({
 			{ name = "path" },
 		}, {
