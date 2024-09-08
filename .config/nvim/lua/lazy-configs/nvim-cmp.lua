@@ -174,7 +174,7 @@ export.config = function()
 		sources = {
 			-- { name = 'luasnip',  group_index = 1, },
 			{ name = "copilot",  group_index = 1 },
-			{ name = 'nvim_lsp', group_index = 2, },
+			{ name = 'nvim_lsp', group_index = 1, },
 			{ name = "path",     group_index = 3, },
 			{
 				name = "buffer",
@@ -189,7 +189,7 @@ export.config = function()
 						return { buf }
 					end
 				},
-				group_index = 4,
+				group_index = 3,
 			},
 		},
 		mapping = mapping(cmp),
