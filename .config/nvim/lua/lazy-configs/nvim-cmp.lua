@@ -26,21 +26,28 @@ export.dependencies = {
 			},
 		}
 	},
-	{
-		"L3MON4D3/LuaSnip",
-		build = "make install_jsregexp",
-	},
-	'saadparwaiz1/cmp_luasnip',
+	-- {
+	-- 	"L3MON4D3/LuaSnip",
+	-- 	-- build = "make install_jsregexp",
+	-- },
+	-- 'saadparwaiz1/cmp_luasnip',
 }
 
 local mapping = function(cmp)
+	local has_words_before = function()
+		if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+			return false
+		end
+		local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+		return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+	end
 	return {
 		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
 		['<CR>'] = {
 			i = function(fallback)
 				if cmp.visible() then
 					if (cmp.get_active_entry() == nil) then
-						cmp.abort()
+						fallback()
 					else
 						cmp.confirm({
 							behavior = cmp.ConfirmBehavior.Replace,
@@ -159,13 +166,14 @@ export.config = function()
 			completion = cmp.config.window.bordered(),
 			documentation = cmp.config.window.bordered(),
 		},
-		snippet = {
-			expand = function(args)
-				require('luasnip').lsp_expand(args.body)
-			end,
-		},
+		-- snippet = {
+		-- 	expand = function(args)
+		-- 		require('luasnip').lsp_expand(args.body)
+		-- 	end,
+		-- },
 		sources = {
-			{ name = 'luasnip',  group_index = 1, },
+			-- { name = 'luasnip',  group_index = 1, },
+			{ name = "copilot",  group_index = 1 },
 			{ name = 'nvim_lsp', group_index = 2, },
 			{ name = "path",     group_index = 3, },
 			{
@@ -183,7 +191,6 @@ export.config = function()
 				},
 				group_index = 4,
 			},
-			-- { name = "copilot", group_index = 2 },
 		},
 		mapping = mapping(cmp),
 	}

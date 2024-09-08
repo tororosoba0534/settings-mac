@@ -86,7 +86,7 @@ export.config = function()
 	lspconfig["texlab"].setup({
 		capabilities = capabilities,
 	})
-	lspconfig["tsserver"].setup({
+	lspconfig["ts_ls"].setup({
 		capabilities = capabilities,
 		filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.tsx" },
 	})

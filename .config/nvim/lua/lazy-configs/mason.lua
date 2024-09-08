@@ -15,7 +15,7 @@ export.config = function()
 			"rust_analyzer",
 			"gopls",
 			"jsonls",
-			"tsserver",
+			"ts_ls",
 			"html",
 			"cssls",
 			"pyright",
