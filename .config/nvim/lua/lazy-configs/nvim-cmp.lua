@@ -42,7 +42,7 @@ local has_words_before = function()
 end
 
 export.config = function()
-	require("cmp").setup.global({
+	require("cmp").setup {
 		window = {
 			completion = require("cmp").config.window.bordered(),
 			documentation = require("cmp").config.window.bordered(),
@@ -73,18 +73,43 @@ export.config = function()
 			{ name = 'luasnip' },
 		},
 		mapping = {
-			['<CR>'] = require("cmp").mapping.confirm({
-				behavior = require("cmp").ConfirmBehavior.Replace,
-				select = false,
-			}),
-			['<C-n>'] = require("cmp").mapping.select_next_item(),
-			['<Down>'] = require("cmp").mapping.select_next_item(),
-			['<Tab>'] = require("cmp").mapping.select_next_item(),
-			['<C-p>'] = require("cmp").mapping.select_prev_item(),
-			['<Up>'] = require("cmp").mapping.select_prev_item(),
-			['<S-Tab>'] = require("cmp").mapping.select_prev_item(),
+			-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
+			['<CR>'] = {
+				i = function(fallback)
+					if require("cmp").visible() then
+						if (require("cmp").get_active_entry() == nil) then
+							require("cmp").abort()
+						else
+							require("cmp").confirm({
+								behavior = require("cmp").ConfirmBehavior.Replace,
+								select = false,
+							})
+						end
+					else
+						fallback()
+					end
+				end,
+			},
+			['<C-n>'] = {
+				i = require("cmp").mapping.select_next_item(),
+			},
+			['<Down>'] = {
+				i = require("cmp").mapping.select_next_item(),
+			},
+			['<Tab>'] = {
+				i = require("cmp").mapping.select_next_item(),
+			},
+			['<C-p>'] = {
+				i = require("cmp").mapping.select_prev_item(),
+			},
+			['<Up>'] = {
+				i = require("cmp").mapping.select_prev_item(),
+			},
+			['<S-Tab>'] = {
+				i = require("cmp").mapping.select_prev_item(),
+			},
 		},
-	})
+	}
 
 	require("cmp").setup.cmdline("/", {
 		mapping = {
