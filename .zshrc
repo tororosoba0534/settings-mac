@@ -134,7 +134,7 @@ function stg {
 function stg-secret {
 	cd ~/settings-mac-secret
 	tmux rename-window settings-mac-secret
-	nvim secret.zsh -c "NvimTreeOpen"
+	ls -a
 }
 
 ####################
