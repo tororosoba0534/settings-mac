@@ -41,7 +41,7 @@ local mapping = function(cmp)
 		['<CR>'] = {
 			i = function(fallback)
 				if cmp.visible() then
-					if (cmp.get_active_entry() == nil) then
+					if cmp.get_selected_entry() == nil then
 						fallback()
 					elseif luasnip.expandable() then
 						luasnip.expand()
@@ -57,49 +57,41 @@ local mapping = function(cmp)
 			end,
 			c = function(fallback)
 				if cmp.visible() then
-					if (cmp.get_active_entry() == nil) then
-						cmp.abort()
-					else
-						cmp.confirm({
-							behavior = cmp.ConfirmBehavior.Replace,
-							select = false,
-						})
-					end
+					cmp.confirm({
+						behavior = cmp.ConfirmBehavior.Replace,
+						select = false,
+					})
 				else
 					fallback()
 				end
 			end,
 		},
 		['<C-n>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_next_item()
-				elseif luasnip.locally_jumpable(1) then
-					luasnip.jump(1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 		},
 		['<Down>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_next_item()
-				elseif luasnip.locally_jumpable(1) then
-					luasnip.jump(1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 		},
 		['<Tab>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_next_item()
 				elseif luasnip.locally_jumpable(1) then
 					luasnip.jump(1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 			c = function()
@@ -111,35 +103,31 @@ local mapping = function(cmp)
 			end,
 		},
 		['<C-p>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_prev_item()
-				elseif luasnip.locally_jumpable(-1) then
-					luasnip.jump(-1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 		},
 		['<Up>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_prev_item()
-				elseif luasnip.locally_jumpable(-1) then
-					luasnip.jump(-1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 		},
 		['<S-Tab>'] = {
-			i = function(fallback)
+			i = function()
 				if cmp.visible() then
 					cmp.select_prev_item()
 				elseif luasnip.locally_jumpable(-1) then
 					luasnip.jump(-1)
 				else
-					fallback()
+					cmp.complete()
 				end
 			end,
 			c = function()
@@ -150,16 +138,31 @@ local mapping = function(cmp)
 				end
 			end,
 		},
+		['<C-e>'] = {
+			i = function()
+				if cmp.visible_docs() then
+					cmp.close_docs()
+				elseif cmp.visible() then
+					cmp.close()
+				else
+					cmp.complete()
+				end
+			end,
+			c = function()
+				if cmp.visible() then
+					cmp.abort()
+				else
+					cmp.complete()
+				end
+			end,
+		},
 		['<ESC>'] = {
 			i = function(fallback)
 				if cmp.visible() then
-					if (cmp.get_active_entry() == nil) then
+					if cmp.get_active_entry() == nil then
 						fallback()
 					else
-						cmp.confirm({
-							behavior = cmp.ConfirmBehavior.Replace,
-							select = false,
-						})
+						cmp.abort()
 					end
 				else
 					fallback()

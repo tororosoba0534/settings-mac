@@ -73,7 +73,6 @@
 -- -- If you are in trouble of python3 provider, please make sure your pip version is latest.
 -- vim.g.python3_host_prog = "/usr/local/bin/python3"
 
-vim.opt.completeopt = { "menu", "menuone", "preview", "noselect" }
 vim.opt.termguicolors = true
 vim.o.mouse = "a"
 vim.o.tabstop = 4
