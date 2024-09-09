@@ -129,6 +129,7 @@ alias st='tmux source-file ~/.tmux.conf'
 function stg {
 	cd ~/settings-mac
 	tmux rename-window settings-mac
+	ls -a
 }
 
 function stg-secret {
