@@ -26,14 +26,16 @@ export.dependencies = {
 			},
 		}
 	},
-	-- {
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	-- build = "make install_jsregexp",
-	-- },
-	-- 'saadparwaiz1/cmp_luasnip',
+	{
+		'saadparwaiz1/cmp_luasnip',
+		dependencies = {
+			'L3MON4D3/LuaSnip',
+		},
+	},
 }
 
 local mapping = function(cmp)
+	local luasnip = require("luasnip")
 	return {
 		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
 		['<CR>'] = {
@@ -41,6 +43,8 @@ local mapping = function(cmp)
 				if cmp.visible() then
 					if (cmp.get_active_entry() == nil) then
 						fallback()
+					elseif luasnip.expandable() then
+						luasnip.expand()
 					else
 						cmp.confirm({
 							behavior = cmp.ConfirmBehavior.Replace,
@@ -67,13 +71,37 @@ local mapping = function(cmp)
 			end,
 		},
 		['<C-n>'] = {
-			i = cmp.mapping.select_next_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif luasnip.locally_jumpable(1) then
+					luasnip.jump(1)
+				else
+					fallback()
+				end
+			end,
 		},
 		['<Down>'] = {
-			i = cmp.mapping.select_next_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif luasnip.locally_jumpable(1) then
+					luasnip.jump(1)
+				else
+					fallback()
+				end
+			end,
 		},
 		['<Tab>'] = {
-			i = cmp.mapping.select_next_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif luasnip.locally_jumpable(1) then
+					luasnip.jump(1)
+				else
+					fallback()
+				end
+			end,
 			c = function()
 				if cmp.visible() then
 					cmp.select_next_item()
@@ -83,13 +111,37 @@ local mapping = function(cmp)
 			end,
 		},
 		['<C-p>'] = {
-			i = cmp.mapping.select_prev_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif luasnip.locally_jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end,
 		},
 		['<Up>'] = {
-			i = cmp.mapping.select_prev_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif luasnip.locally_jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end,
 		},
 		['<S-Tab>'] = {
-			i = cmp.mapping.select_prev_item(),
+			i = function(fallback)
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif luasnip.locally_jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end,
 			c = function()
 				if cmp.visible() then
 					cmp.select_next_item()
@@ -159,13 +211,13 @@ export.config = function()
 			completion = cmp.config.window.bordered(),
 			documentation = cmp.config.window.bordered(),
 		},
-		-- snippet = {
-		-- 	expand = function(args)
-		-- 		require('luasnip').lsp_expand(args.body)
-		-- 	end,
-		-- },
+		snippet = {
+			expand = function(args)
+				require('luasnip').lsp_expand(args.body)
+			end,
+		},
 		sources = {
-			-- { name = 'luasnip',  group_index = 1, },
+			{ name = 'luasnip',  group_index = 1, },
 			{ name = "copilot",  group_index = 1 },
 			{ name = 'nvim_lsp', group_index = 1, },
 			{ name = "path",     group_index = 3, },
