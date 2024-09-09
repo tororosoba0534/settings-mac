@@ -69,11 +69,11 @@ export.config = function()
 	vim.api.nvim_create_user_command("TelescopeMyBuffers", function(opts)
 		local entering_normal_mode = opts.bang
 		require("telescope.builtin").buffers {
-			on_complete = { function()
-				if entering_normal_mode then
-					vim.cmd("stopinsert")
-				end
-			end },
+			-- on_complete = { function()
+			-- 	if entering_normal_mode then
+			-- 		vim.cmd("stopinsert")
+			-- 	end
+			-- end },
 			attach_mappings = function(_, map)
 				local delete_selected_buffers = function(_prompt_bufnr)
 					local base_bufnr = vim.fn.bufnr('#')
