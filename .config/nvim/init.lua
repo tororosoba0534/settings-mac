@@ -90,6 +90,7 @@ vim.o.splitright = true
 vim.o.timeoutlen = 1000
 -- For eliminating delays on ESC
 vim.o.ttimeoutlen = 0
+vim.cmd([[colorscheme vim]])
 
 ---------------------------------------
 ---------------------------------------
