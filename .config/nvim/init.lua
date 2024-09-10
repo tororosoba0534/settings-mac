@@ -73,7 +73,6 @@
 -- -- If you are in trouble of python3 provider, please make sure your pip version is latest.
 -- vim.g.python3_host_prog = "/usr/local/bin/python3"
 
-vim.opt.termguicolors = true
 vim.o.mouse = "a"
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
@@ -89,7 +88,14 @@ vim.o.splitright = true
 vim.o.timeoutlen = 1000
 -- For eliminating delays on ESC
 vim.o.ttimeoutlen = 0
-vim.cmd([[colorscheme vim]])
+
+---------------------------------------
+---------------------------------------
+-- Syntax Highlight
+---------------------------------------
+---------------------------------------
+vim.cmd([[colorscheme mine]])
+vim.o.termguicolors = true
 
 ---------------------------------------
 ---------------------------------------
