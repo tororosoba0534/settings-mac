@@ -38,56 +38,81 @@ local mapping = function(cmp)
 	local luasnip = require("luasnip")
 	return {
 		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
-		['<CR>'] = {
+		['<CR>'] = cmp.mapping(
+			function(fallback)
+				if cmp.visible() and cmp.get_selected_entry() ~= nil then
+					cmp.confirm({
+						behavior = cmp.ConfirmBehavior.Replace,
+						select = false,
+					})
+				else
+					fallback()
+				end
+			end,
+			{ 'i', 'c' }
+		),
+		['<ESC>'] = {
 			i = function(fallback)
-				if cmp.visible() then
-					if cmp.get_selected_entry() == nil then
-						fallback()
-						-- elseif luasnip.expandable() then
-						-- 	luasnip.expand()
-					else
-						cmp.confirm({
-							behavior = cmp.ConfirmBehavior.Replace,
-							select = false,
-						})
-					end
+				if cmp.visible() and cmp.get_selected_entry() ~= nil then
+					cmp.abort()
+					cmp.complete()
 				else
 					fallback()
 				end
 			end,
-			c = function(fallback)
+			c = function()
+				if cmp.visible() and cmp.get_selected_entry() ~= nil then
+					cmp.abort()
+					cmp.complete()
+				else
+					-- Send <C-c>
+					local key = vim.api.nvim_replace_termcodes('<C-c>', true, false, true)
+					vim.api.nvim_feedkeys(key, 'm', false)
+				end
+			end,
+		},
+		['<C-e>'] = cmp.mapping(function()
 				if cmp.visible() then
-					if (cmp.get_selected_entry() == nil) then
-						fallback()
+					cmp.close()
+				else
+					cmp.complete()
+				end
+			end,
+			{ 'i', 'c' }
+		),
+		['<C-k>'] = cmp.mapping(function()
+				if cmp.visible() then
+					if cmp.visible_docs() then
+						cmp.close_docs()
 					else
-						cmp.confirm({
-							behavior = cmp.ConfirmBehavior.Replace,
-							select = false,
-						})
+						cmp.open_docs()
 					end
+				else
+					cmp.complete()
+				end
+			end,
+			{ 'i', 'c' }
+		),
+		['<C-n>'] = cmp.mapping(
+			function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
 				else
 					fallback()
 				end
 			end,
-		},
-		['<C-n>'] = {
-			i = function()
+			{ 'i', 'c' }
+		),
+		['<Down>'] = cmp.mapping(
+			function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
 				else
-					cmp.complete()
+					fallback()
 				end
 			end,
-		},
-		['<Down>'] = {
-			i = function()
-				if cmp.visible() then
-					cmp.select_next_item()
-				else
-					cmp.complete()
-				end
-			end,
-		},
+			{ 'i', 'c' }
+		),
 		['<Tab>'] = {
 			i = function()
 				if cmp.visible() then
@@ -106,24 +131,26 @@ local mapping = function(cmp)
 				end
 			end,
 		},
-		['<C-p>'] = {
-			i = function()
+		['<C-p>'] = cmp.mapping(
+			function(fallback)
 				if cmp.visible() then
-					cmp.select_prev_item()
+					cmp.select_next_item()
 				else
-					cmp.complete()
+					fallback()
 				end
 			end,
-		},
-		['<Up>'] = {
-			i = function()
+			{ 'i', 'c' }
+		),
+		['<Up>'] = cmp.mapping(
+			function(fallback)
 				if cmp.visible() then
-					cmp.select_prev_item()
+					cmp.select_next_item()
 				else
-					cmp.complete()
+					fallback()
 				end
 			end,
-		},
+			{ 'i', 'c' }
+		),
 		['<S-Tab>'] = {
 			i = function()
 				if cmp.visible() then
@@ -139,46 +166,6 @@ local mapping = function(cmp)
 					cmp.select_next_item()
 				else
 					cmp.complete()
-				end
-			end,
-		},
-		['<C-e>'] = {
-			i = function()
-				if cmp.visible_docs() then
-					cmp.close_docs()
-				elseif cmp.visible() then
-					cmp.close()
-				else
-					cmp.complete()
-				end
-			end,
-			c = function()
-				if cmp.visible() then
-					cmp.abort()
-				else
-					cmp.complete()
-				end
-			end,
-		},
-		['<ESC>'] = {
-			i = function(fallback)
-				if cmp.visible() then
-					if cmp.get_selected_entry() == nil then
-						fallback()
-					else
-						cmp.abort()
-					end
-				else
-					fallback()
-				end
-			end,
-			c = function()
-				if cmp.visible() then
-					cmp.abort()
-				else
-					-- Send <C-c>
-					local key = vim.api.nvim_replace_termcodes('<C-c>', true, false, true)
-					vim.api.nvim_feedkeys(key, 'm', false)
 				end
 			end,
 		},
@@ -216,10 +203,16 @@ export.config = function()
 			end,
 		},
 		sources = {
-			{ name = 'luasnip',  group_index = 1, },
-			{ name = "copilot",  group_index = 1 },
-			{ name = 'nvim_lsp', group_index = 1, },
-			{ name = "path",     group_index = 3, },
+			{ name = 'luasnip', group_index = 1, },
+			{ name = "copilot", group_index = 1 },
+			{
+				name = 'nvim_lsp',
+				group_index = 1,
+				-- entry_filter = function(entry)
+				-- 	return entry:get_kind() ~= cmp.lsp.CompletionItemKind.Snippet
+				-- end,
+			},
+			{ name = "path", group_index = 3, },
 			{
 				name = "buffer",
 				option = {
