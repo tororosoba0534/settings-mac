@@ -119,6 +119,8 @@ fi
 alias g='git'
 alias gs='git status'
 
+alias ls='ls -F'
+
 function fmt-jsonnet-all() {
 	git diff --name-only HEAD *sonnet  | xargs jsonnetfmt -i
 }
