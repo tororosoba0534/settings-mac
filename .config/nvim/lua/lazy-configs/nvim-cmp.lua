@@ -43,8 +43,8 @@ local mapping = function(cmp)
 				if cmp.visible() then
 					if cmp.get_selected_entry() == nil then
 						fallback()
-					elseif luasnip.expandable() then
-						luasnip.expand()
+						-- elseif luasnip.expandable() then
+						-- 	luasnip.expand()
 					else
 						cmp.confirm({
 							behavior = cmp.ConfirmBehavior.Replace,
@@ -57,10 +57,14 @@ local mapping = function(cmp)
 			end,
 			c = function(fallback)
 				if cmp.visible() then
-					cmp.confirm({
-						behavior = cmp.ConfirmBehavior.Replace,
-						select = false,
-					})
+					if (cmp.get_selected_entry() == nil) then
+						fallback()
+					else
+						cmp.confirm({
+							behavior = cmp.ConfirmBehavior.Replace,
+							select = false,
+						})
+					end
 				else
 					fallback()
 				end
@@ -159,7 +163,7 @@ local mapping = function(cmp)
 		['<ESC>'] = {
 			i = function(fallback)
 				if cmp.visible() then
-					if cmp.get_active_entry() == nil then
+					if cmp.get_selected_entry() == nil then
 						fallback()
 					else
 						cmp.abort()
@@ -181,29 +185,20 @@ local mapping = function(cmp)
 	}
 end
 
-local mapping_cmd_search = function(cmp, cmp_utils_misc)
-	return cmp_utils_misc.merge(
-		{
-			['<CR>'] = {
-				c = function(fallback)
-					if cmp.visible() then
-						if (cmp.get_active_entry() == nil) then
-							fallback()
-						else
-							cmp.confirm({
-								behavior = cmp.ConfirmBehavior.Replace,
-								select = false,
-							})
-						end
-					else
-						fallback()
-					end
-				end,
-			},
-		},
-		mapping(cmp)
-	)
-end
+-- -- If you want to merge some bindings, setup like this:
+-- local mapping_cmd_search = function(cmp, cmp_utils_misc)
+-- 	return cmp_utils_misc.merge(
+-- 		{
+-- 			['<CR>'] = {
+-- 				c = function(fallback)
+-- 				        -- Do something
+-- 					end
+-- 				end,
+-- 			},
+-- 		},
+-- 		mapping(cmp)
+-- 	)
+-- end
 
 
 export.config = function()
@@ -214,6 +209,7 @@ export.config = function()
 			completion = cmp.config.window.bordered(),
 			documentation = cmp.config.window.bordered(),
 		},
+		preselect = cmp.PreselectMode.None,
 		snippet = {
 			expand = function(args)
 				require('luasnip').lsp_expand(args.body)
@@ -247,7 +243,6 @@ export.config = function()
 		sources = {
 			{ name = "buffer" },
 		},
-		mapping = mapping_cmd_search(cmp, require('cmp.utils.misc')),
 	})
 
 	cmp.setup.cmdline(":", {
