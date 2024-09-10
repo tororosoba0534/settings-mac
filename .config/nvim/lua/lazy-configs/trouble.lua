@@ -4,10 +4,10 @@ export.dependencies = "nvim-tree/nvim-web-devicons"
 export.lazy = true
 
 export.init = function()
-	vim.api.nvim_create_user_command("E", "TroubleToggle", {})
+	vim.api.nvim_create_user_command("E", "Trouble diagnostics toggle focus=true", {})
 end
 
-export.cmd = { "TroubleToggle" }
+export.cmd = { 'Trouble' }
 
 export.config = function()
 	require("trouble").setup({})
