@@ -35,7 +35,6 @@ export.dependencies = {
 }
 
 local mapping = function(cmp)
-	local luasnip = require("luasnip")
 	return {
 		-- CAUTION: cmp.foo is NOT equals to cmp.mapping.foo
 		['<CR>'] = cmp.mapping(
@@ -113,28 +112,10 @@ local mapping = function(cmp)
 			end,
 			{ 'i', 'c' }
 		),
-		['<Tab>'] = {
-			i = function()
-				if cmp.visible() then
-					cmp.select_next_item()
-				elseif luasnip.locally_jumpable(1) then
-					luasnip.jump(1)
-				else
-					cmp.complete()
-				end
-			end,
-			c = function()
-				if cmp.visible() then
-					cmp.select_next_item()
-				else
-					cmp.complete()
-				end
-			end,
-		},
 		['<C-p>'] = cmp.mapping(
 			function(fallback)
 				if cmp.visible() then
-					cmp.select_next_item()
+					cmp.select_prev_item()
 				else
 					fallback()
 				end
@@ -144,31 +125,13 @@ local mapping = function(cmp)
 		['<Up>'] = cmp.mapping(
 			function(fallback)
 				if cmp.visible() then
-					cmp.select_next_item()
+					cmp.select_prev_item()
 				else
 					fallback()
 				end
 			end,
 			{ 'i', 'c' }
 		),
-		['<S-Tab>'] = {
-			i = function()
-				if cmp.visible() then
-					cmp.select_prev_item()
-				elseif luasnip.locally_jumpable(-1) then
-					luasnip.jump(-1)
-				else
-					cmp.complete()
-				end
-			end,
-			c = function()
-				if cmp.visible() then
-					cmp.select_next_item()
-				else
-					cmp.complete()
-				end
-			end,
-		},
 	}
 end
 
