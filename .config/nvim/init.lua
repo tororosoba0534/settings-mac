@@ -143,21 +143,9 @@ vim.keymap.set("n", "<C-w>o", function()
 	print('<C-w>o is disabled. Please use `:on` if you wanna close other windows.')
 end)
 
--- help command wrapper
 vim.api.nvim_create_user_command("H", function(opts)
 	local page = opts.fargs[1] or ''
-
-	-- If there is only one window, then open vertically split help window
-	if #vim.api.nvim_list_wins() == 1 then
-		vim.cmd('vert help ' .. page)
-	end
-
-	-- If there are multiple windows, then open help page in the current window
-	local tmp = vim.api.nvim_create_buf(true, true)
-	vim.api.nvim_set_current_buf(tmp)
-	vim.api.nvim_set_option_value('buftype', 'help', { buf = tmp })
-	vim.cmd('help ' .. page)
-	-- TODO: garbage-collect tmp buffers
+	require('help-wrapper').open_help(page)
 end, {
 	nargs = '?',
 	bar = true,

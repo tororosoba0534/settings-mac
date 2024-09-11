@@ -111,7 +111,7 @@ export.pick_help_page = function(opts)
 					-- elseif cmd == "tab" then
 					-- 	vim.cmd("tab help " .. selection.value)
 					-- end
-					vim.cmd("H " .. selection.value)
+					require('help-wrapper').open_help(selection.value)
 				end)
 
 				return true
