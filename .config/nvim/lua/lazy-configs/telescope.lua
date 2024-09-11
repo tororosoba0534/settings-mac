@@ -20,12 +20,12 @@ export.init = function()
 	-- Find text
 	vim.keymap.set('n', '<Leader>t', "<CMD>TelescopeLiveGrepArgs<CR>", {})
 	-- Find help page
-	vim.keymap.set('n', '<Leader>h', '<CMD>Telescope help_tags<CR>', {})
+	vim.keymap.set('n', '<Leader>h', '<CMD>TelescopeMyHelpPage<CR>', {})
 	-- Find buffer
 	vim.keymap.set('n', '<Leader>b', '<CMD>TelescopeMyBuffers!<CR>', {})
 end
 
-export.cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers" }
+export.cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers", "TelescopeMyHelpPage" }
 
 export.config = function()
 	local telescope = require("telescope")
@@ -105,6 +105,7 @@ export.config = function()
 	end, { bang = true })
 	vim.api.nvim_create_user_command("TelescopeLiveGrepArgs",
 		require("telescope").extensions.live_grep_args.live_grep_args, {})
+	vim.api.nvim_create_user_command("TelescopeMyHelpPage", require('custom.telescope').pick_help_page, {})
 end
 
 return export
