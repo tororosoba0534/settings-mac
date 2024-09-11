@@ -80,7 +80,6 @@ vim.o.number = true
 vim.o.scrolloff = 10
 vim.o.wrap = true
 vim.o.showbreak = ">>>"
-vim.o.statusline = "%F %m (modified %{len(filter(getbufinfo(), 'v:val.changed == 1'))})%=%l/%L lines (%p%%)"
 vim.o.guicursor = "i-ci:ver30-iCursor-blinkwait300-blinkon200-blinkoff150"
 vim.cmd([[set clipboard+=unnamedplus]])
 vim.o.splitbelow = true
@@ -96,6 +95,42 @@ vim.o.ttimeoutlen = 0
 ---------------------------------------
 vim.cmd([[colorscheme mine]])
 vim.o.termguicolors = true
+
+vim.o.statusline = "%F %m (modified %{len(filter(getbufinfo(), 'v:val.changed == 1'))})%=%l/%L lines (%p%%)"
+
+vim.api.nvim_set_hl(0, 'StatusLineIsModified', { bg = 'firebrick1', bold = true })
+vim.api.nvim_set_hl(0, 'StatusLineIsNotModified', { reverse = true, bold = true })
+
+-- local statusline =
+-- 	"%{"
+-- 	.. "len(filter(getbufinfo(), 'v:val.changed == 1')) == 0 ? "
+-- 	.. "'%#StatusLineIsNotModified#no change'"
+-- 	.. ":"
+-- 	.. "'%#StatusLineIsModified#there exists modified buffer'"
+-- 	.. "}"
+
+-- local statusline = ""
+-- 	.. "%#StatusLineIsNotModified#"
+-- 	.. "%{"
+-- 	.. "len(filter(getbufinfo(), 'v:val.changed == 1')) != 0 ? '' :"
+-- 	.. "'there exists modified buffer'"
+-- 	.. "}"
+-- 	.. "%#StatusLineIsModified#"
+-- 	.. "%{"
+-- 	.. "len(filter(getbufinfo(), 'v:val.changed == 1')) == 0 ? '' :"
+-- 	.. "'no change'"
+-- 	.. "}"
+
+
+-- local statusline = "%#StatusLineIsModified#here %#StatusLineIsNotModified#comes the sun"
+-- vim.o.statusline = statusline
+
+
+--
+-- vim.cmd("set statusline+=%#StatusLineIsModified#%{len(filter(getbufinfo(), 'v:val.changed == 1'))==0?'':'%F %m (modified %{len(filter(getbufinfo(), %'v:val.changed == 1%'))})%=%l/%L lines (%p%%)'}")
+-- vim.cmd("set statusline+=%#StatusLineIsNotModified#%{len(filter(getbufinfo(), 'v:val.changed ~= 1'))==0?'':'%F %m (modified %{len(filter(getbufinfo(), %'v:val.changed == 1%'))})%=%l/%L lines (%p%%)'}")
+
+-- vim.api.nvim_set_hl(0, 'StatusLine', {bg = 'firebrick1'})
 
 ---------------------------------------
 ---------------------------------------
