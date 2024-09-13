@@ -16,6 +16,14 @@
 
 - Keys -> Hotkey -> check "Show/hide all windows wih a system-wide hotkey" -> Hotkey: ⌥Space
 
+### Disable keymap
+
+In terminal:
+```
+# Disable cmd + / binding for neovim
+$ defaults write com.googlecode.iterm2 NSUserKeyEquivalents -dict-add "Find Cursor" nil
+```
+
 ## Chrome extensions
 
 ### Vimium
