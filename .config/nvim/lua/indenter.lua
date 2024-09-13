@@ -38,14 +38,14 @@ local function update_lines(line_converter)
 	local y, x_old = unpack(vim.api.nvim_win_get_cursor(0))
 	local line_len_before = vim.api.nvim_get_current_line():len()
 
-	local row_start, row_end, lines = require('utils.selection-getter').get_lines()
+	local row_start, row_end, lines = require('utils.selection-getter').get_rows()
 
 	--- @type string[]
 	local new_lines = {}
 	for _, line in ipairs(lines) do
 		table.insert(new_lines, line_converter(line))
 	end
-	vim.api.nvim_buf_set_lines(0, row_start, row_end, true, new_lines)
+	vim.api.nvim_buf_set_lines(0, row_start, row_end + 1, true, new_lines)
 
 	local line_len_after = vim.api.nvim_get_current_line():len()
 	local x_new = math.max(0, x_old + line_len_after - line_len_before)
