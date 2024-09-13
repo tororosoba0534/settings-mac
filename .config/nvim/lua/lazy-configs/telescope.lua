@@ -105,7 +105,9 @@ export.config = function()
 	end, { bang = true })
 	vim.api.nvim_create_user_command("TelescopeLiveGrepArgs",
 		require("telescope").extensions.live_grep_args.live_grep_args, {})
-	vim.api.nvim_create_user_command("TelescopeMyHelpPage", require('custom.telescope').pick_help_page, {})
+	vim.api.nvim_create_user_command("TelescopeMyHelpPage", function()
+		require('custom.telescope').pick_help_page { default_text = vim.fn.expand('<cword>') }
+	end, {})
 end
 
 return export
