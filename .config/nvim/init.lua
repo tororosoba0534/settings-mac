@@ -180,22 +180,22 @@ require("lazy").setup({
 	require('lazy-configs.nvim-cmp'),
 
 	-- Language Servers Management
-	require('lazy-configs/mason'),
+	require('lazy-configs.mason'),
 
 	-- LSP
-	require('lazy-configs/nvim-lspconfig'),
+	require('lazy-configs.nvim-lspconfig'),
 
 	-- Formatters
-	require('lazy-configs/conform'),
+	require('lazy-configs.conform'),
 
 	-- Others
-	require('lazy-configs/telescope'),
-	require('lazy-configs/undotree'),
-	require('lazy-configs/trouble'),
-	require('lazy-configs/neoscroll'),
-	require('lazy-configs/im-select'),
-	require('lazy-configs/nvim-window'),
-	require('lazy-configs/following-cursor'),
+	require('lazy-configs.telescope'),
+	require('lazy-configs.undotree'),
+	require('lazy-configs.trouble'),
+	require('lazy-configs.neoscroll'),
+	require('lazy-configs.im-select'),
+	require('lazy-configs.nvim-window'),
+	require('lazy-configs.indenter'),
 }, {
 	defaults = {
 		lazy = true,
