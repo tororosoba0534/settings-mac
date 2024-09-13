@@ -195,6 +195,7 @@ require("lazy").setup({
 	require('lazy-configs/neoscroll'),
 	require('lazy-configs/im-select'),
 	require('lazy-configs/nvim-window'),
+	require('lazy-configs/following-cursor'),
 }, {
 	defaults = {
 		lazy = true,
