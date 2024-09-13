@@ -1,5 +1,3 @@
-local export = {}
-
 --- @return string indent_string
 local function get_indent_string()
 	if vim.o.expandtab then
@@ -7,9 +5,6 @@ local function get_indent_string()
 	end
 	return '\t'
 end
-
---- @alias LineConverter fun(line_before: string): string
-
 
 --- @type LineConverter[]
 local line_converters = {
@@ -40,23 +35,37 @@ local line_converters = {
 }
 
 
---- @return integer row_start (zero-based)
---- @return integer row_end (zero-based, exclusive)
---- @return string[] lines
---- Zero-based and end-exclusive indexing style follows the specification of vim.api.nvim_buf_(get|set)_line.
-local function get_lines()
-	local mode = vim.api.nvim_get_mode().mode
-	if mode ~= 'v' and mode ~= 'V' and mode ~= "CTRL-V" then
-		local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
-		return row - 1, row, { vim.api.nvim_get_current_line() }
-	end
+--- @return integer row_top The top of the selection (0-indexed)
+--- @return integer row_bottom The bottom of the selection (0-indexed, exclusive)
+local get_selection_row_number = function()
+	-- Cursor row (0-indexed, inclusive)
+	local row_cursor = vim.api.nvim_win_get_cursor(0)[1] - 1
 
-	local vstart = vim.fn.getpos("'<")
-	local vend = vim.fn.getpos("'>")
-	local row_start = vstart[2]
-	local row_end = vend[2]
-	local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, true)
-	return row_start, row_end, lines
+	-- Selection start row (0-indexed, inclusive)
+	local row_vstart = vim.fn.line('v') - 1
+
+	if row_cursor <= row_vstart then
+		return row_cursor, row_vstart + 1
+	else
+		return row_vstart, row_cursor + 1
+	end
+end
+
+--- @return integer row_top The top of the selection (0-indexed)
+--- @return integer row_bottom The bottom of the selection (0-indexed, exclusive)
+--- @return string[] lines The lines under selection
+local get_lines = function()
+	-- 0-indexed & end-exclusive indexing style
+	local row_top, row_bottom = get_selection_row_number()
+
+
+	-- nvim_buf_get_line uses 0-indexed & end-exclusive indexing style
+	local lines = vim.api.nvim_buf_get_lines(0, row_top, row_bottom, true)
+
+	-- -- For debugging purpose
+	-- error(vim.inspect(lines))
+
+	return row_top, row_bottom, lines
 end
 
 --- @param line_converter LineConverter
@@ -65,8 +74,6 @@ local function update_lines(line_converter)
 	local line_len_before = vim.api.nvim_get_current_line():len()
 
 	local row_start, row_end, lines = get_lines()
-
-	print('row_start:', row_start, 'row_end', row_end, 'first_lines:', lines[1], 'last_lines:', lines[#lines])
 
 	--- @type string[]
 	local new_lines = {}
@@ -80,12 +87,12 @@ local function update_lines(line_converter)
 	vim.api.nvim_win_set_cursor(0, { y, x_new })
 end
 
-export.increase_indent = function()
-	update_lines(line_converters.increase_indent)
-end
+return {
+	increase_indent = function()
+		update_lines(line_converters.increase_indent)
+	end,
 
-export.decrease_indent = function()
-	update_lines(line_converters.decrease_indent)
-end
-
-return export
+	decrease_indent = function()
+		update_lines(line_converters.decrease_indent)
+	end,
+}
