@@ -210,6 +210,14 @@ function note {
 	ls -a
 }
 
+function keep {
+	local root_dir="${HOME}/keep/"
+	mkdir -p $root_dir
+	cd $root_dir
+	tmux rename-window keep
+	ls -a
+}
+
 function cheat {
 	local root_dir="${HOME}/cheat/"
 	if [ ! -d $root_dir ]; then
