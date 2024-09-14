@@ -16,16 +16,18 @@ export.lazy = true
 
 export.init = function()
 	-- Find file
-	vim.keymap.set('n', '<Leader>f', "<CMD>Telescope find_files<CR>", {})
+	vim.keymap.set({ 'n' }, '<Leader>f', "<CMD>Telescope find_files<CR>", {})
 	-- Find text
-	vim.keymap.set('n', '<Leader>t', "<CMD>TelescopeLiveGrepArgs<CR>", {})
+	vim.keymap.set({ 'n' }, '<Leader>t', "<CMD>TelescopeLiveGrepArgs<CR>", {})
 	-- Find help page
 	vim.keymap.set('n', '<Leader>h', '<CMD>TelescopeMyHelpPage<CR>', {})
+	vim.keymap.set('x', '<Leader>h', '<CMD>TelescopeMyHelpPageVisual<CR>', {})
 	-- Find buffer
-	vim.keymap.set('n', '<Leader>b', '<CMD>TelescopeMyBuffers!<CR>', {})
+	vim.keymap.set({ 'n', 'x' }, '<Leader>b', '<CMD>TelescopeMyBuffers!<CR>', {})
 end
 
-export.cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers", "TelescopeMyHelpPage" }
+export.cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers", "TelescopeMyHelpPage",
+	"TelescopeMyHelpPageVisual" }
 
 export.config = function()
 	local telescope = require("telescope")
@@ -107,6 +109,12 @@ export.config = function()
 		require("telescope").extensions.live_grep_args.live_grep_args, {})
 	vim.api.nvim_create_user_command("TelescopeMyHelpPage", function()
 		require('custom.telescope').pick_help_page { default_text = vim.fn.expand('<cword>') }
+	end, {})
+	vim.api.nvim_create_user_command("TelescopeMyHelpPageVisual", function()
+		local default_text = require('utils.selection-getter').get_texts()[1]
+		local esc_key = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+		vim.api.nvim_feedkeys(esc_key, "n", false)
+		require('custom.telescope').pick_help_page { default_text = default_text }
 	end, {})
 end
 
