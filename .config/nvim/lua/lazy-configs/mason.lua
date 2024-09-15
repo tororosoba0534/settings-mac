@@ -23,6 +23,8 @@ export.config = function()
 			"kotlin_language_server",
 			"texlab",
 			"hls",
+			"clangd",
+			"clang-format",
 		},
 		automatic_installation = true,
 	})

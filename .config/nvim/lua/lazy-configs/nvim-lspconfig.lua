@@ -114,6 +114,9 @@ export.config = function()
 	lspconfig["hls"].setup({
 		capabilities = capabilities,
 	})
+	lspconfig["clangd"].setup({
+		capabilities = capabilities,
+	})
 end
 
 return export
