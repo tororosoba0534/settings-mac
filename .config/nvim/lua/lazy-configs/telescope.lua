@@ -19,15 +19,17 @@ export.init = function()
 	vim.keymap.set({ 'n' }, '<Leader>f', "<CMD>Telescope find_files<CR>", {})
 	-- Find text
 	vim.keymap.set({ 'n' }, '<Leader>t', "<CMD>TelescopeLiveGrepArgs<CR>", {})
+	vim.keymap.set({ 'x' }, '<Leader>t', "<CMD>TelescopeLiveGrepArgsSelected<CR>", {})
 	-- Find help page
 	vim.keymap.set('n', '<Leader>h', '<CMD>TelescopeMyHelpPage<CR>', {})
-	vim.keymap.set('n', '<Leader>H', '<CMD>TelescopeMyHelpPageUnderCursor<CR>', {})
+	vim.keymap.set('x', '<Leader>h', '<CMD>TelescopeMyHelpPageSelected<CR>', {})
 	-- Find buffer
 	vim.keymap.set({ 'n' }, '<Leader>b', '<CMD>TelescopeMyBuffers!<CR>', {})
 end
 
-export.cmd = { "Telescope", "TelescopeLiveGrepArgs", "TelescopeMyBuffers", "TelescopeMyHelpPage",
-	"TelescopeMyHelpPageUnderCursor" }
+export.cmd = { "Telescope", "TelescopeMyBuffers", "TelescopeLiveGrepArgs", "TelescopeLiveGrepArgsSelected",
+	"TelescopeMyHelpPage",
+	"TelescopeMyHelpPageSelected" }
 
 export.config = function()
 	local telescope = require("telescope")
@@ -107,11 +109,18 @@ export.config = function()
 	end, { bang = true })
 	vim.api.nvim_create_user_command("TelescopeLiveGrepArgs",
 		require("telescope").extensions.live_grep_args.live_grep_args, {})
+	vim.api.nvim_create_user_command("TelescopeLiveGrepArgsSelected", function()
+		local text = require('utils.selection-getter').get_texts()[1]
+		vim.cmd("noh") -- Workaround for deleting remained selection highlight
+		require("telescope").extensions.live_grep_args.live_grep_args { default_text = text }
+	end, {})
 	vim.api.nvim_create_user_command("TelescopeMyHelpPage", function()
 		require('custom.telescope').pick_help_page {}
 	end, {})
-	vim.api.nvim_create_user_command("TelescopeMyHelpPageUnderCursor", function()
-		require('custom.telescope').pick_help_page { default_text = vim.fn.expand('<cword>') }
+	vim.api.nvim_create_user_command("TelescopeMyHelpPageSelected", function()
+		local text = require('utils.selection-getter').get_texts()[1]
+		vim.cmd("noh") -- Workaround for deleting remained selection highlight
+		require('custom.telescope').pick_help_page { default_text = text }
 	end, {})
 end
 
