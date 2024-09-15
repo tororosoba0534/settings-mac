@@ -11,6 +11,9 @@ end
 local line_converters = {
 	--- @type LineConverter
 	increase_indent = function(line_before)
+		if line_before == '' then
+			return ''
+		end
 		return get_indent_string() .. line_before
 	end,
 
