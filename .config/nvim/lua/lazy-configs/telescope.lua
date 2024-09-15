@@ -59,6 +59,16 @@ export.config = function()
 				-- path = vim.fn.expand("$HOME") .. '/.local/share/nvim/databases/telescope_history.sqlite3',
 				limit = 100,
 			},
+			vimgrep_arguments = {
+				"rg",
+				"--color=never",
+				"--no-heading",
+				"--with-filename",
+				"--line-number",
+				"--column",
+				"--smart-case",
+				"--hidden",
+			},
 		},
 		pickers = {
 			find_files = {
@@ -107,12 +117,13 @@ export.config = function()
 			end,
 		}
 	end, { bang = true })
-	vim.api.nvim_create_user_command("TelescopeLiveGrepArgs",
-		require("telescope").extensions.live_grep_args.live_grep_args, {})
+	vim.api.nvim_create_user_command("TelescopeLiveGrepArgs", function()
+		require("telescope.builtin").live_grep { glob_pattern = '!.git' }
+	end, {})
 	vim.api.nvim_create_user_command("TelescopeLiveGrepArgsSelected", function()
 		local text = require('utils.selection-getter').get_texts()[1]
 		vim.cmd("noh") -- Workaround for deleting remained selection highlight
-		require("telescope").extensions.live_grep_args.live_grep_args { default_text = text }
+		require("telescope.builtin").live_grep { default_text = text, glob_pattern = '!.git' }
 	end, {})
 	vim.api.nvim_create_user_command("TelescopeMyHelpPage", function()
 		require('custom.telescope').pick_help_page {}
