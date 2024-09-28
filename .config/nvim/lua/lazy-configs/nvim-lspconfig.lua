@@ -56,11 +56,9 @@ export.init = function()
 	-- vim.keymap.set("n", "<leader>rs", "<CMD>LspRestart<CR>", opts)
 end
 
-
 export.config = function()
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 	local lspconfig = require("lspconfig")
-
 	lspconfig["html"].setup({
 		capabilities = capabilities,
 	})
@@ -88,29 +86,10 @@ export.config = function()
 	lspconfig["texlab"].setup({
 		capabilities = capabilities,
 	})
-
-	local is_node_dir = function()
-		return lspconfig.util.root_pattern('package.json')(vim.fn.getcwd())
-	end
 	lspconfig["ts_ls"].setup({
 		capabilities = capabilities,
-		on_attach = function(client)
-			if not is_node_dir() then
-				client.stop(true)
-			end
-		end,
 		filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.tsx" },
 	})
-	lspconfig["denols"].setup {
-		capabilities = capabilities,
-		on_attach = function(client)
-			if is_node_dir() then
-				client.stop(true)
-			end
-		end,
-		filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.tsx" },
-	}
-
 	lspconfig["lua_ls"].setup({
 		capabilities = capabilities,
 		settings = { -- custom settings for lua
