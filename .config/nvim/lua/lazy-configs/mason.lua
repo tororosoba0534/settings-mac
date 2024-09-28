@@ -16,6 +16,7 @@ export.config = function()
 			"gopls",
 			"jsonls",
 			"ts_ls",
+			"denols",
 			"html",
 			"cssls",
 			"pyright",
