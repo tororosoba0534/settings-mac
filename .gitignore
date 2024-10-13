@@ -1,4 +1,7 @@
 sources/**/*
 clone/**/*
+.config/xmonad/.stack-work/**/*
+.config/xmonad/xmonad.hi
+.config/xmonad/xmonad.o
 .config/xmonad/xmonad/**/*
 .config/xmonad/xmonad-contrib/**/*
