@@ -44,3 +44,7 @@ Exec=xmonad
 Icon=xmonad.png
 Type=XSession
 ```
+
+## AutoKey
+
+sudo apt install autokey-gtk
