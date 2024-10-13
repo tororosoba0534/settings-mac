@@ -1,2 +1,4 @@
 sources/**/*
 clone/**/*
+.config/xmonad/xmonad/**/*
+.config/xmonad/xmonad-contrib/**/*
