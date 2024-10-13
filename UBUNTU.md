@@ -1,8 +1,10 @@
 # Ubuntu 24.04 settings
 
-## Neovim
+## Neovim, Alacritty
 
-Instal from source
+- Clone source under `~/source/`
+- Build
+- Copy executables to /usr/local/bin
 
 ### :checkhealth
 
