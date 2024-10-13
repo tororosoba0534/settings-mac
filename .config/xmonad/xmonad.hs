@@ -56,8 +56,17 @@ myModMask = mod4Mask
 -------------------------------------------------
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) =
-  M.fromList $
-    [ ((modm, xK_space), namedScratchpadAction myScratchPads "terminal")
+  M.fromList
+    [ ((modm, xK_space), namedScratchpadAction myScratchPads "terminal"),
+      ((modm, xK_o), spawn "dmenu_run"),
+      ((modm, xK_c), kill),
+      ((modm .|. shiftMask, xK_q), io exitSuccess),
+      ((modm, xK_q), unsafeSpawn "xmonad --recompile && xmonad --restart"),
+      -- -- Move focus to the other window
+      -- next
+      ((modm, xK_j), windows W.focusUp),
+      -- previous
+      ((modm, xK_k), windows W.focusDown)
     ]
 
 -------------------------------------------------
@@ -77,12 +86,13 @@ myScratchPads =
 
 main :: IO ()
 main =
-  xmonad
+  xmonad . workspaceNamesEwmh . ewmh $
     def
       { terminal = myTerminal,
         focusFollowsMouse = myFocusFollowsMouse,
         clickJustFocuses = myClickJustFocuses,
         borderWidth = myBorderWidth,
         modMask = myModMask,
-        keys = myKeys
+        keys = myKeys,
+        handleEventHook = mempty
       }
