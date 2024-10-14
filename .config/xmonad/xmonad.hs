@@ -1,35 +1,14 @@
--- import XMonad.Layout.ResizableThreeColumns
-
 import qualified Data.Map as M
-import Data.Monoid
 import System.Exit
 import XMonad
 import XMonad.Actions.CycleWS
-import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt, removeWorkspace)
-import XMonad.Actions.Minimize
-import XMonad.Actions.RotSlaves
-import XMonad.Actions.Submap
-import XMonad.Actions.WindowGo
 import XMonad.Actions.WorkspaceNames
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
-import XMonad.Layout
-import XMonad.Layout.Accordion
-import qualified XMonad.Layout.BoringWindows as BW
-import XMonad.Layout.GridVariants
-import XMonad.Layout.Magnifier as Mag
-import XMonad.Layout.Minimize
-import XMonad.Layout.MultiColumns
-import XMonad.Layout.Renamed
-import XMonad.Layout.Spiral
-import XMonad.Layout.ThreeColumns (ThreeCol (ThreeCol))
-import XMonad.Prompt
-import XMonad.Prompt.RunOrRaise
-import XMonad.Prompt.Workspace
+import XMonad.Layout.MultiColumns (multiCol)
 import qualified XMonad.StackSet as W
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
@@ -47,14 +26,17 @@ myFocusFollowsMouse = True
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
+myBorderWidth :: Dimension
 myBorderWidth = 5
 
+myModMask :: KeyMask
 myModMask = mod4Mask
 
 -------------------------------------------------
 -- Key Bindings
 -------------------------------------------------
 
+myKeys :: XConfig Layout -> M.Map (ButtonMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) =
   M.fromList
     [ ((modm, xK_space), namedScratchpadAction myScratchPads "terminal"),
@@ -66,8 +48,21 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       -- next
       ((modm, xK_j), windows W.focusUp),
       -- previous
-      ((modm, xK_k), windows W.focusDown)
+      ((modm, xK_k), windows W.focusDown),
+      -- -- Move current workspace
+      -- right
+      ((modm, xK_l), moveTo Next $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag]),
+      -- left
+      ((modm, xK_h), moveTo Prev $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag]),
+      -- -- Layout
+      -- next
+      ((modm, xK_w), sendMessage NextLayout)
     ]
+
+-------------------------------------------------
+-- Workspaces
+-------------------------------------------------
+myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 -------------------------------------------------
 -- Named Scratchpad
@@ -84,9 +79,31 @@ myScratchPads =
         w = 1
         h = 0.98
 
+myStartupHook :: X ()
+myStartupHook = do
+  spawnOnce "autokey"
+
+mySB :: StatusBarConfig
+mySB =
+  statusBarProp
+    "xmobar -x 0 ~/.config/xmobar/xmobar.hs"
+    ( workspaceNamesPP . filterOutWsPP [scratchpadWorkspaceTag] $
+        xmobarPP
+          { ppOrder = \(ws : l : _) -> [l, ws]
+          }
+    )
+
+myLayoutHook = tiled ||| Full
+  where
+    tiled = Tall nmaster delta ratio
+      where
+        nmaster = 1
+        ratio = 1 / 2
+        delta = 3 / 100
+
 main :: IO ()
 main =
-  xmonad . workspaceNamesEwmh . ewmh $
+  xmonad . withSB mySB . workspaceNamesEwmh . ewmh . docks $
     def
       { terminal = myTerminal,
         focusFollowsMouse = myFocusFollowsMouse,
@@ -94,5 +111,9 @@ main =
         borderWidth = myBorderWidth,
         modMask = myModMask,
         keys = myKeys,
-        handleEventHook = mempty
+        workspaces = myWorkspaces,
+        handleEventHook = mempty,
+        startupHook = myStartupHook,
+        logHook = return (),
+        layoutHook = myLayoutHook
       }
