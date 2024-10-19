@@ -8,6 +8,20 @@
 
 ### :checkhealth
 
+## xremap
+
+- Clone source under `~/source/`
+- Build
+- Copy executables to `/usr/local/bin`
+- Enable executable to be executed without `sudo`
+  - https://github.com/xremap/xremap?tab=readme-ov-file#running-xremap-without-sudo
+  - sudo gpasswd -a YOUR_USER input
+  - echo 'KERNEL=="uinput", GROUP="input", TAG+="uaccess"' | sudo tee /etc/udev/rules.d/input.rules
+
+
+TODO: Don't place executable in `$PATH` and call proper binary suitable to the current window system.
+
+
 ## XKB
 
 ```

@@ -1,0 +1,15 @@
+modmap:
+  - name: global
+    remap:
+      CapsLock: Ctrl_L
+keymap:
+  - name: Basics
+    remap:
+      C-b: { with_mark: left }
+      C-f: { with_mark: right }
+      C-p: { with_mark: up }
+      C-n: { with_mark: down }
+      C-a: { with_mark: home }
+      C-e: { with_mark: end }
+      C-g: [ esc, { set_mark: false }]
+      C-h: [ backspace, { set_mark: false }]

@@ -81,7 +81,7 @@ myScratchPads =
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "autokey"
+  spawnOnce "xremap ~/settings-mac/.config/xremap/config.yml"
 
 mySB :: StatusBarConfig
 mySB =
