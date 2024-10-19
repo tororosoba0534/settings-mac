@@ -34,6 +34,14 @@ $ sudo systemctl restart console-setup
 # Log out then log in again
 ```
 
+## hoogle
+
+cabal install hoogle
+
+hoogle generate
+
+hoogle server
+
 ## XMonad
 
 GHCup
