@@ -191,6 +191,7 @@ require("lazy").setup({
 	-- Others
 	require('lazy-configs.telescope'),
 	require('lazy-configs.undotree'),
+	require('lazy-configs.nvim-tree'),
 	require('lazy-configs.trouble'),
 	require('lazy-configs.neoscroll'),
 	require('lazy-configs.im-select'),
