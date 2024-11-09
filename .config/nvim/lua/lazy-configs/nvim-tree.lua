@@ -3,17 +3,15 @@ local export = { "nvim-tree/nvim-tree.lua" }
 export.lazy = true
 
 export.init = function()
-	vim.api.nvim_create_user_command("F", "NvimTreeToggle", {})
-	vim.api.nvim_create_user_command(
-		'NvimTreeOpenTreeWithoutFocus',
-		function()
-			require("nvim-tree.api").tree.toggle({ focus = false })
-		end,
-		{ nargs = 0 }
-	)
+	vim.api.nvim_create_user_command("F", function()
+		local api = require("nvim-tree.api")
+		if api.tree.is_tree_buf() then
+			api.tree.close()
+		else
+			api.tree.open()
+		end
+	end, { nargs = 0 })
 end
-
-export.cmd = { "NvimTreeToggle", "NvimTreeOpenTreeWithoutFocus" }
 
 export.config = function()
 	local nvim_tree = require("nvim-tree")
