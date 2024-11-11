@@ -2,7 +2,6 @@ local export = { "nvim-tree/nvim-tree.lua" }
 
 export.dependencies = {
 	{
-		'b0o/nvim-tree-preview.lua',
 		'nvim-lua/plenary.nvim', -- for custom plugin
 	},
 }
