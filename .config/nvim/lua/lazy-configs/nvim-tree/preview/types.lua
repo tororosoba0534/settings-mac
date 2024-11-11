@@ -8,6 +8,11 @@
 ---@field tree_buf number?
 ---@field node Node?
 
+---@class Enterer
+---@field augroup number?
+---@field tree_buf number?
+---@field tree_win number?
+
 ---@class WinMgr
 ---@field win number?
 ---@field buf number?

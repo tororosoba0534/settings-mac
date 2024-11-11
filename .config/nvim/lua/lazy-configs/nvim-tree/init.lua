@@ -42,10 +42,6 @@ export.config = function()
 
 			vim.keymap.set('n', '<CR>', nvim_tree_api.node.open.edit, opts('Open'))
 			vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, opts('Open'))
-			-- vim.keymap.set('n', 'o', function(node)
-			-- 	nvim_tree_api.node.open.edit(node)
-			-- 	nvim_tree_api.tree.focus()
-			-- end, opts('Open and focus tree'))
 			vim.keymap.set('n', 'o', function()
 				local preview = require('lazy-configs.nvim-tree.preview')
 				if preview.is_watching() then
@@ -53,6 +49,10 @@ export.config = function()
 				else
 					preview.watch()
 				end
+			end, opts('Toggle preview watch'))
+			vim.keymap.set('n', 'O', function()
+				local preview = require('lazy-configs.nvim-tree.preview')
+				preview.enter()
 			end, opts('Toggle preview watch'))
 			vim.keymap.set('n', 'g', nvim_tree_api.tree.change_root_to_node, opts('Change root directory'))
 			vim.keymap.set('n', 'x', nvim_tree_api.fs.cut, opts('Cut'))

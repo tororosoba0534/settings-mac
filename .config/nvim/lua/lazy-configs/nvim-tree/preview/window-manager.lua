@@ -29,16 +29,20 @@ function WinMgr:update_win_opts()
 end
 
 ---@param node Node
-function WinMgr:show(node)
+---@param focus_preview boolean
+function WinMgr:show(node, focus_preview)
 	self.buf = vim.api.nvim_create_buf(false, true)
 	vim.schedule(function()
 		loader.load(node, self.buf)
 	end)
 	if self.win == nil or not vim.api.nvim_win_is_valid(self.win) then
-		self.win = vim.api.nvim_open_win(self.buf, false, get_win_opts())
+		self.win = vim.api.nvim_open_win(self.buf, focus_preview, get_win_opts())
 	else
 		vim.api.nvim_win_set_buf(self.win, self.buf)
 		self:update_win_opts()
+		if focus_preview then
+			vim.api.nvim_set_current_win(self.win)
+		end
 	end
 end
 

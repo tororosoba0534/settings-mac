@@ -46,7 +46,7 @@ function Watcher:_open_under_cursor()
 	local ok, node = pcall(require('nvim-tree.api').tree.get_node_under_cursor)
 	if ok and node and self:_has_node_changed(node) then
 		self.node = node
-		winmgr:show(node)
+		winmgr:show(node, false)
 	end
 end
 
