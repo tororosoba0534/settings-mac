@@ -9,13 +9,21 @@ export.dependencies = {
 export.lazy = true
 
 export.init = function()
-	vim.api.nvim_create_user_command("F", function()
+	---@param find_file boolean
+	local toggle_tree = function(find_file)
 		local api = require("nvim-tree.api")
 		if api.tree.is_tree_buf() then
 			api.tree.close()
 		else
-			api.tree.open()
+			api.tree.open({ find_file = find_file })
 		end
+	end
+
+	vim.api.nvim_create_user_command("F", function()
+		toggle_tree(true)
+	end, { nargs = 0 })
+	vim.api.nvim_create_user_command("FF", function()
+		toggle_tree(false)
 	end, { nargs = 0 })
 end
 
