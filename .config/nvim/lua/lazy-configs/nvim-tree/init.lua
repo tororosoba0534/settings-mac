@@ -102,18 +102,6 @@ export.config = function()
 			end, opts('Open horizontally and keep focus'))
 		end,
 	})
-
-	local Path = require('plenary.path')
-
-	vim.api.nvim_create_user_command("TEST", function(details)
-		local path = details.fargs[1]
-
-		-- print(path)
-
-		Path:new(path):read(vim.schedule_wrap(function(data)
-			print(data)
-		end))
-	end, { nargs = 1 })
 end
 
 return export
