@@ -1,5 +1,5 @@
-local loader = require('lazy-configs.nvim-tree.preview.loader')
-local config = require('lazy-configs.nvim-tree.preview.config')
+local loader = require('custom.nvim-tree.preview.loader')
+local config = require('custom.nvim-tree.preview.config')
 
 ---@class WinMgr
 ---@field private win number?

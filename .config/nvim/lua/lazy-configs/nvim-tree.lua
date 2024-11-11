@@ -32,7 +32,7 @@ local WIDTH = 30
 export.config = function()
 	local nvim_tree = require("nvim-tree")
 	local nvim_tree_api = require("nvim-tree.api")
-	local preview = require('lazy-configs.nvim-tree.preview')
+	local preview = require('custom.nvim-tree.preview')
 
 	local is_root_node = function(node)
 		local RootNode = require('nvim-tree.node.root')

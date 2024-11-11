@@ -1,4 +1,4 @@
-local winmgr = require('lazy-configs.nvim-tree.preview.window-manager')
+local winmgr = require('custom.nvim-tree.preview.window-manager')
 
 ---@alias Mode 'tree' | 'watch' | 'enter'
 

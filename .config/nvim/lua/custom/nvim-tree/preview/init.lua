@@ -1,5 +1,5 @@
-local modemgr = require('lazy-configs.nvim-tree.preview.mode-manager')
-local config = require('lazy-configs.nvim-tree.preview.config')
+local modemgr = require('custom.nvim-tree.preview.mode-manager')
+local config = require('custom.nvim-tree.preview.config')
 
 local export = {}
 
