@@ -20,10 +20,15 @@ export.init = function()
 	end, { nargs = 0 })
 end
 
+local WIDTH = 30
+
 export.config = function()
 	local nvim_tree = require("nvim-tree")
 	local nvim_tree_api = require("nvim-tree.api")
 	nvim_tree.setup({
+		view = {
+			width = WIDTH,
+		},
 		on_attach = function(bufnr)
 			local function opts(desc)
 				return {
@@ -68,7 +73,7 @@ export.config = function()
 				nvim_tree_api.node.open.horizontal(node)
 				nvim_tree_api.tree.focus()
 			end, opts('Open horizontally and keep focus'))
-		end
+		end,
 	})
 
 	local Path = require('plenary.path')

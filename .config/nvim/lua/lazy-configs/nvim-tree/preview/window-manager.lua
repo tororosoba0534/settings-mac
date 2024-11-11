@@ -6,6 +6,28 @@ local WinMgr = {
 	buf = nil,
 }
 
+-- TODO: get current tree width dynamically
+local TREE_WIDTH = 30
+
+local get_win_opts = function()
+	local height = math.ceil(vim.o.lines * 2 / 3)
+	print('vim.fn.screenrow() = ' .. vim.fn.screenrow())
+	return {
+		relative = 'win',
+		width = math.min(vim.o.columns - TREE_WIDTH, 100),
+		height = height,
+		row = 5,
+		col = TREE_WIDTH + 1,
+	}
+end
+
+function WinMgr:update_win_opts()
+	if not self.win or not vim.api.nvim_win_is_valid(self.win) then
+		return
+	end
+	vim.api.nvim_win_set_config(self.win, get_win_opts())
+end
+
 ---@param node Node
 function WinMgr:show(node)
 	self.buf = vim.api.nvim_create_buf(false, true)
@@ -13,16 +35,10 @@ function WinMgr:show(node)
 		loader.load(node, self.buf)
 	end)
 	if self.win == nil or not vim.api.nvim_win_is_valid(self.win) then
-		self.win = vim.api.nvim_open_win(self.buf, false, {
-			-- TODO: improve window optinos
-			relative = 'win',
-			width = 100,
-			height = 10,
-			row = math.max(0, vim.fn.screenrow() - 1),
-			col = vim.fn.winwidth(0) + 1
-		})
+		self.win = vim.api.nvim_open_win(self.buf, false, get_win_opts())
 	else
 		vim.api.nvim_win_set_buf(self.win, self.buf)
+		self:update_win_opts()
 	end
 end
 
