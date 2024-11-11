@@ -1,6 +1,6 @@
 local winmgr = require('custom.nvim-tree.preview.window-manager')
 
----@alias Mode 'tree' | 'watch' | 'enter'
+---@alias Mode 'exit' | 'watch' | 'enter'
 
 ---@class ModeMgr
 ---@field private mode Mode
@@ -9,7 +9,7 @@ local winmgr = require('custom.nvim-tree.preview.window-manager')
 ---@field private tree_win integer?
 ---@field private node Node?
 local ModeMgr = {
-	mode = 'tree',
+	mode = 'exit',
 	augroup = nil,
 	tree_buf = nil,
 	tree_win = nil,
@@ -22,8 +22,8 @@ function ModeMgr:is(mode)
 	return self.mode == mode
 end
 
-function ModeMgr:to_tree_mode()
-	if self:is('tree') then
+function ModeMgr:to_exit_mode()
+	if self:is('exit') then
 		return
 	end
 	if self.augroup then
@@ -31,7 +31,7 @@ function ModeMgr:to_tree_mode()
 	end
 	winmgr:close()
 
-	self.mode = 'tree'
+	self.mode = 'exit'
 	self.augroup = nil
 	self.tree_buf = nil
 	self.tree_win = nil
@@ -39,9 +39,9 @@ function ModeMgr:to_tree_mode()
 end
 
 function ModeMgr:to_watch_mode()
-	if self:is("watch") then
+	if self:is('watch') then
 		return
-	elseif self:is("tree") then
+	elseif self:is('exit') then
 		self:_setup_preview_win(false)
 	else
 		-- Focus tree window
@@ -53,9 +53,9 @@ function ModeMgr:to_watch_mode()
 end
 
 function ModeMgr:to_enter_mode()
-	if self:is("enter") then
+	if self:is('enter') then
 		return
-	elseif self:is("tree") then
+	elseif self:is('exit') then
 		self:_setup_preview_win(true)
 	else
 		winmgr:focus_preview()
@@ -70,7 +70,7 @@ function ModeMgr:_setup_preview_win(focus_preview)
 		vim.notify('Cannot setup preview: current buffer is not NvimTree', vim.log.levels.ERROR)
 		return
 	end
-	if not self:is('tree') then
+	if not self:is('exit') then
 		return
 	end
 
@@ -91,7 +91,7 @@ function ModeMgr:_setup_preview_win(focus_preview)
 		callback = function()
 			local buf = vim.api.nvim_get_current_buf()
 			if buf ~= self.tree_buf and not winmgr:is_preview_buf(buf) then
-				self:to_tree_mode()
+				self:to_exit_mode()
 			end
 		end,
 	})

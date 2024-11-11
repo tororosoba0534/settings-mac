@@ -16,9 +16,8 @@ export.is_enter_mode = function()
 	return modemgr:is('enter')
 end
 
--- TODO: rename mode
 export.is_exit_mode = function()
-	return modemgr:is('tree')
+	return modemgr:is('exit')
 end
 
 export.watch = function()
@@ -30,7 +29,7 @@ export.enter = function()
 end
 
 export.exit = function()
-	return modemgr:to_tree_mode()
+	return modemgr:to_exit_mode()
 end
 
 return export
