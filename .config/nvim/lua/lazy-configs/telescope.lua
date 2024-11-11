@@ -17,16 +17,41 @@ export.lazy = true
 export.init = function()
 	-- Find file
 	vim.keymap.set({ 'n' }, '<Leader>f', function()
+		require("telescope.builtin").find_files {
+			cwd = require("telescope.utils").buffer_dir(),
+		}
+	end, {})
+	vim.keymap.set({ 'n' }, '<Leader>F', function()
 		require("telescope.builtin").find_files()
 	end, {})
 	-- Find text
 	vim.keymap.set({ 'n' }, '<Leader>t', function()
-		require("telescope.builtin").live_grep { glob_pattern = '!.git' }
+		require("telescope.builtin").live_grep {
+			cwd = require("telescope.utils").buffer_dir(),
+			glob_pattern = '!.git',
+		}
 	end, {})
 	vim.keymap.set({ 'x' }, '<Leader>t', function()
 		local text = require('utils.selection-getter').get_texts()[1]
 		vim.cmd("noh") -- Workaround for deleting remained selection highlight
-		require("telescope.builtin").live_grep { default_text = text, glob_pattern = '!.git' }
+		require("telescope.builtin").live_grep {
+			cwd = require("telescope.utils").buffer_dir(),
+			default_text = text,
+			glob_pattern = '!.git',
+		}
+	end, {})
+	vim.keymap.set({ 'n' }, '<Leader>T', function()
+		require("telescope.builtin").live_grep {
+			glob_pattern = '!.git',
+		}
+	end, {})
+	vim.keymap.set({ 'x' }, '<Leader>T', function()
+		local text = require('utils.selection-getter').get_texts()[1]
+		vim.cmd("noh") -- Workaround for deleting remained selection highlight
+		require("telescope.builtin").live_grep {
+			default_text = text,
+			glob_pattern = '!.git',
+		}
 	end, {})
 	-- Find help page
 	vim.keymap.set('n', '<Leader>h', function()
