@@ -47,6 +47,9 @@ local keymaps = {
 ---@param node Node
 ---@param focus_preview boolean
 function WinMgr:show(node, focus_preview)
+	if self.buf and vim.api.nvim_buf_is_valid(self.buf) then
+		vim.api.nvim_buf_delete(self.buf, { force = true })
+	end
 	self.buf = vim.api.nvim_create_buf(false, true)
 	vim.schedule(function()
 		loader.load(node, self.buf)
@@ -66,6 +69,9 @@ end
 function WinMgr:close()
 	if self.win ~= nil and vim.api.nvim_win_is_valid(self.win) then
 		vim.api.nvim_win_close(self.win, true)
+	end
+	if self.buf ~= nil and vim.api.nvim_buf_is_valid(self.buf) then
+		vim.api.nvim_buf_delete(self.buf, { force = true })
 	end
 	self.win = nil
 	self.buf = nil
