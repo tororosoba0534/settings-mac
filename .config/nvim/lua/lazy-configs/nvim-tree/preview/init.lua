@@ -1,6 +1,12 @@
 local modemgr = require('lazy-configs.nvim-tree.preview.mode-manager')
+local config = require('lazy-configs.nvim-tree.preview.config')
 
 local export = {}
+
+---@param opts Config
+export.setup = function(opts)
+	config:set(opts)
+end
 
 export.is_watching = function()
 	return modemgr:is('watch')

@@ -32,6 +32,23 @@ export.config = function()
 		return node:as(RootNode) ~= nil
 	end
 
+	preview.setup {
+		preview_buf_keymaps = {
+			{
+				key = 'o',
+				callback = function()
+					preview.watch()
+				end,
+			},
+			{
+				key = 'O',
+				callback = function()
+					preview.exit()
+				end,
+			},
+		},
+	}
+
 	nvim_tree.setup({
 		view = {
 			width = WIDTH,

@@ -1,4 +1,5 @@
 local loader = require('lazy-configs.nvim-tree.preview.loader')
+local config = require('lazy-configs.nvim-tree.preview.config')
 
 ---@class WinMgr
 ---@field private win number?
@@ -31,23 +32,6 @@ function WinMgr:_update_win_opts()
 	vim.api.nvim_win_set_config(self.win, _get_win_opts())
 end
 
--- TODO: Place keymap definition in appropriate place
----@type Keymap[]
-local keymaps = {
-	{
-		key = 'o',
-		callback = function()
-			require('lazy-configs.nvim-tree.preview.mode-manager'):to_watch_mode()
-		end,
-	},
-	{
-		key = 'O',
-		callback = function()
-			require('lazy-configs.nvim-tree.preview.mode-manager'):to_tree_mode()
-		end,
-	},
-}
-
 ---@param node Node
 ---@param focus_preview boolean
 function WinMgr:show(node, focus_preview)
@@ -67,7 +51,7 @@ function WinMgr:show(node, focus_preview)
 			vim.api.nvim_set_current_win(self.win)
 		end
 	end
-	self:_set_keymap(keymaps)
+	self:_set_keymap()
 end
 
 function WinMgr:close()
@@ -88,12 +72,11 @@ function WinMgr:is_preview_buf(buf)
 end
 
 ---@private
----@param keymaps Keymap[]
-function WinMgr:_set_keymap(keymaps)
+function WinMgr:_set_keymap()
 	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
 		return
 	end
-	for _, keymap in ipairs(keymaps) do
+	for _, keymap in ipairs(config:get_preview_buf_keymaps()) do
 		vim.api.nvim_buf_set_keymap(self.buf, 'n', keymap.key, '', {
 			noremap = true,
 			callback = keymap.callback,
