@@ -43,15 +43,18 @@ export.config = function()
 		preview_buf_keymaps = {
 			{
 				key = 'o',
-				callback = function()
-					preview.watch()
-				end,
+				callback = preview.watch,
 			},
 			{
 				key = 'O',
+				callback = preview.exit,
+			},
+			{
+				key = '<CR>',
 				callback = function()
 					preview.exit()
-				end,
+					nvim_tree_api.node.open.edit()
+				end
 			},
 		},
 	}
