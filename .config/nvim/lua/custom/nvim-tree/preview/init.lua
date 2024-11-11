@@ -8,8 +8,17 @@ export.setup = function(opts)
 	config:set(opts)
 end
 
-export.is_watching = function()
+export.is_watch_mode = function()
 	return modemgr:is('watch')
+end
+
+export.is_enter_mode = function()
+	return modemgr:is('enter')
+end
+
+-- TODO: rename mode
+export.is_exit_mode = function()
+	return modemgr:is('tree')
 end
 
 export.watch = function()

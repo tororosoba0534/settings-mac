@@ -46,7 +46,11 @@ export.config = function()
 				callback = preview.watch,
 			},
 			{
-				key = 'O',
+				key = '<ESC>',
+				callback = preview.exit,
+			},
+			{
+				key = 'q',
 				callback = preview.exit,
 			},
 			{
@@ -54,6 +58,14 @@ export.config = function()
 				callback = function()
 					preview.exit()
 					nvim_tree_api.node.open.edit()
+				end
+			},
+			{
+				key = 'O',
+				callback = function()
+					preview.exit()
+					nvim_tree_api.node.open.edit()
+					nvim_tree_api.tree.focus()
 				end
 			},
 		},
@@ -78,17 +90,24 @@ export.config = function()
 			vim.keymap.set('n', '<2-LeftMouse>', nvim_tree_api.node.open.edit, opts('Open'))
 			vim.keymap.set('n', 'o', function()
 				local node = nvim_tree_api.tree.get_node_under_cursor()
-				if not preview.is_watching() then
-					preview.watch()
-				elseif node.type == 'directory' then
+				if node.type == 'directory' then
 					if not is_root_node(node) then
 						nvim_tree_api.node.open.edit(node)
 					end
+				elseif not preview.is_watch_mode() then
+					preview.watch()
 				else
 					preview.enter()
 				end
 			end, opts('Preview'))
 			vim.keymap.set('n', 'O', function()
+				nvim_tree_api.node.open.edit()
+				nvim_tree_api.tree.focus()
+			end, opts('Open keeping focus on tree'))
+			vim.keymap.set('n', '<ESC>', function()
+				preview.exit()
+			end, opts('Exit preview'))
+			vim.keymap.set('n', 'q', function()
 				preview.exit()
 			end, opts('Exit preview'))
 			vim.keymap.set('n', 'g', function()
