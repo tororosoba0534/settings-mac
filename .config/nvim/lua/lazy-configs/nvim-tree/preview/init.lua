@@ -6,16 +6,17 @@ local export = {}
 ---@type Keymap[]
 local preview_buf_keymaps = {
 	{
-		key = 'O',
-		callback = function()
-			enterer:exit(true)
-		end,
-	},
-	{
 		key = 'o',
 		callback = function()
 			enterer:exit(true)
 			watcher:watch()
+		end,
+	},
+	{
+		key = 'O',
+		callback = function()
+			enterer:exit(true)
+			watcher:unwatch()
 		end,
 	},
 }
@@ -36,6 +37,10 @@ end
 export.enter = function()
 	watcher:unwatch()
 	enterer:enter(preview_buf_keymaps)
+end
+
+export.exit = function()
+	enterer:exit(true)
 end
 
 return export
