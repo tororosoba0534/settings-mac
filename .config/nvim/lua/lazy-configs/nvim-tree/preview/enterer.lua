@@ -7,17 +7,8 @@ local Enterer = {
 	tree_win = nil,
 }
 
----@type Keymap[]
-local keymaps = {
-	{
-		key = 'O',
-		callback = function()
-			Enterer:exit(true)
-		end,
-	},
-}
-
-function Enterer:enter()
+---@param keymaps Keymap[]
+function Enterer:enter(keymaps)
 	if vim.bo.ft ~= 'NvimTree' then
 		vim.notify('Cannot watch preview: current buffer is not NvimTree', vim.log.levels.ERROR)
 		return

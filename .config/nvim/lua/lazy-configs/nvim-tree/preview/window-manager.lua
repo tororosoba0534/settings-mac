@@ -60,8 +60,11 @@ function WinMgr:is_preview_buf(buf)
 	return self.buf == buf
 end
 
----@param keymaps Keymap[]
+---@param keymaps Keymap[]|nil
 function WinMgr:set_keymap(keymaps)
+	if not keymaps then
+		return
+	end
 	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
 		return
 	end
