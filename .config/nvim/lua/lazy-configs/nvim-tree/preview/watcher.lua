@@ -16,7 +16,6 @@ end
 function Watcher:watch()
 	if self.augroup then
 		self:unwatch()
-		return
 	end
 	if vim.bo.ft ~= 'NvimTree' then
 		vim.notify('Cannot watch preview: current buffer is not NvimTree', vim.log.levels.ERROR)
