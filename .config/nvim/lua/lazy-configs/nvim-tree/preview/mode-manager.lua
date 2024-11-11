@@ -91,7 +91,7 @@ function ModeMgr:_setup_preview_win(focus_preview)
 		callback = function()
 			local buf = vim.api.nvim_get_current_buf()
 			if buf ~= self.tree_buf and not winmgr:is_preview_buf(buf) then
-				self:_to_tree_mode()
+				self:to_tree_mode()
 			end
 		end,
 	})
