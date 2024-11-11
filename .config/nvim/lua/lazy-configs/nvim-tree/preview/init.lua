@@ -1,46 +1,21 @@
-local watcher = require('lazy-configs.nvim-tree.preview.watcher')
-local enterer = require('lazy-configs.nvim-tree.preview.enterer')
+local modemgr = require('lazy-configs.nvim-tree.preview.mode-manager')
 
 local export = {}
 
----@type Keymap[]
-local preview_buf_keymaps = {
-	{
-		key = 'o',
-		callback = function()
-			enterer:exit(true)
-			watcher:watch()
-		end,
-	},
-	{
-		key = 'O',
-		callback = function()
-			enterer:exit(true)
-			watcher:unwatch()
-		end,
-	},
-}
-
 export.is_watching = function()
-	return watcher:is_watching()
+	return modemgr:is('watch')
 end
 
 export.watch = function()
-	enterer:exit(true)
-	watcher:watch()
-end
-
-export.unwatch = function()
-	watcher:unwatch()
+	return modemgr:to_watch_mode()
 end
 
 export.enter = function()
-	watcher:unwatch()
-	enterer:enter(preview_buf_keymaps)
+	return modemgr:to_enter_mode()
 end
 
 export.exit = function()
-	enterer:exit(true)
+	return modemgr:to_tree_mode()
 end
 
 return export

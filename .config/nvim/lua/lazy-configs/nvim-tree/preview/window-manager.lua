@@ -11,7 +11,6 @@ local TREE_WIDTH = 30
 
 local get_win_opts = function()
 	local height = math.ceil(vim.o.lines * 2 / 3)
-	print('vim.fn.screenrow() = ' .. vim.fn.screenrow())
 	return {
 		relative = 'win',
 		width = math.min(vim.o.columns - TREE_WIDTH, 100),
@@ -27,6 +26,23 @@ function WinMgr:update_win_opts()
 	end
 	vim.api.nvim_win_set_config(self.win, get_win_opts())
 end
+
+-- TODO: Place keymap definition in appropriate place
+---@type Keymap[]
+local keymaps = {
+	{
+		key = 'o',
+		callback = function()
+			require('lazy-configs.nvim-tree.preview.mode-manager'):to_watch_mode()
+		end,
+	},
+	{
+		key = 'O',
+		callback = function()
+			require('lazy-configs.nvim-tree.preview.mode-manager'):to_tree_mode()
+		end,
+	},
+}
 
 ---@param node Node
 ---@param focus_preview boolean
@@ -44,6 +60,7 @@ function WinMgr:show(node, focus_preview)
 			vim.api.nvim_set_current_win(self.win)
 		end
 	end
+	self:_set_keymap(keymaps)
 end
 
 function WinMgr:close()
@@ -60,11 +77,8 @@ function WinMgr:is_preview_buf(buf)
 	return self.buf == buf
 end
 
----@param keymaps Keymap[]|nil
-function WinMgr:set_keymap(keymaps)
-	if not keymaps then
-		return
-	end
+---@param keymaps Keymap[]
+function WinMgr:_set_keymap(keymaps)
 	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
 		return
 	end
@@ -74,6 +88,12 @@ function WinMgr:set_keymap(keymaps)
 			callback = keymap.callback,
 			desc = 'exit enter mode'
 		})
+	end
+end
+
+function WinMgr:focus_preview()
+	if self.win and vim.api.nvim_win_is_valid(self.win) then
+		vim.api.nvim_set_current_win(self.win)
 	end
 end
 
