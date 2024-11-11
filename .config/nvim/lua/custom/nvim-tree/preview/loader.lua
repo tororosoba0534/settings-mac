@@ -59,6 +59,18 @@ end
 
 ---@param node Node
 ---@param buf number?
+local update_filetype = function(node, buf)
+	if not buf or not vim.api.nvim_buf_is_valid(buf) then
+		return
+	end
+	local ft = vim.filetype.match { buf = buf, filename = node.absolute_path }
+	if ft and vim.bo[buf].filetype ~= ft then
+		vim.bo[buf].filetype = ft
+	end
+end
+
+---@param node Node
+---@param buf number?
 local load_file = function(node, buf)
 	local path = node.absolute_path
 
@@ -68,8 +80,10 @@ local load_file = function(node, buf)
 			content = { "" }
 		end
 		set_content(buf, content)
+		update_filetype(node, buf)
 	end))
 end
+
 
 
 ---@param node Node
