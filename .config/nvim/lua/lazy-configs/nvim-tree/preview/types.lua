@@ -1,0 +1,4 @@
+---@class Node
+---@field type 'file' | 'directory' | 'link'
+---@field name string
+---@field absolute_path string
