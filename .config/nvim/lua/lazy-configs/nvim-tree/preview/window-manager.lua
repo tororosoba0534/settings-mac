@@ -60,4 +60,18 @@ function WinMgr:is_preview_buf(buf)
 	return self.buf == buf
 end
 
+---@param keymaps Keymap[]
+function WinMgr:set_keymap(keymaps)
+	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
+		return
+	end
+	for _, keymap in ipairs(keymaps) do
+		vim.api.nvim_buf_set_keymap(self.buf, 'n', keymap.key, '', {
+			noremap = true,
+			callback = keymap.callback,
+			desc = 'exit enter mode'
+		})
+	end
+end
+
 return WinMgr

@@ -16,3 +16,7 @@
 ---@class WinMgr
 ---@field win number?
 ---@field buf number?
+
+---@class Keymap
+---@field key string
+---@field callback function
