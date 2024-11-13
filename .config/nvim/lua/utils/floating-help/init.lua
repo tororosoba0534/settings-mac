@@ -30,8 +30,14 @@ function FloatHelp:open(term)
 	vim.bo[self.buf].buftype = "help"
 	vim.bo[self.buf].swapfile = false
 
+	if term ~= nil then
+		vim.api.nvim_buf_call(self.buf, function()
+			vim.cmd('help ' .. term)
+		end)
+	end
+
 	local ui = vim.api.nvim_list_uis()[1]
-	local width = 100
+	local width = math.floor(ui.width / 2)
 	local height = math.floor(ui.height * 2 / 3)
 
 	self.win = vim.api.nvim_open_win(self.buf, true, {
@@ -42,18 +48,16 @@ function FloatHelp:open(term)
 		row = math.floor((ui.height / 2) - (height / 2)),
 		anchor = "NW",
 		border = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
+		title = "    " .. vim.fs.basename(vim.api.nvim_buf_get_name(self.buf)) .. "    ",
+		title_pos = "center",
 	})
 
 	self.hl_ns = vim.api.nvim_create_namespace('floating-help')
 	vim.api.nvim_set_hl(self.hl_ns, "NormalFloat", { bg = "none" })
 	vim.api.nvim_set_hl(self.hl_ns, "FloatBorder", { bg = "none", fg = '#ffffff' })
+	vim.api.nvim_set_hl(self.hl_ns, "FloatTitle", { bg = "none", fg = '#ffffff' })
 	vim.api.nvim_win_set_hl_ns(self.win, self.hl_ns)
 
-	if term ~= nil then
-		vim.api.nvim_win_call(self.win, function()
-			vim.cmd('help ' .. term)
-		end)
-	end
 	vim.cmd('setlocal number')
 end
 
