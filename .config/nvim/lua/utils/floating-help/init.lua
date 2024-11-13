@@ -1,9 +1,11 @@
 ---@class FloatHelp
 ---@field private win number?
 ---@field private buf number?
+---@field private hl_ns number?
 local FloatHelp = {
 	win = nil,
 	buf = nil,
+	hl_ns = nil,
 }
 
 ---@return boolean
@@ -22,7 +24,7 @@ function FloatHelp:open(term)
 		self:close()
 	end
 
-	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
+	if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) or term ~= nil then
 		self.buf = vim.api.nvim_create_buf(false, true)
 	end
 	vim.bo[self.buf].buftype = "help"
@@ -39,13 +41,20 @@ function FloatHelp:open(term)
 		col = math.floor((ui.width / 2) - (width / 2)),
 		row = math.floor((ui.height / 2) - (height / 2)),
 		anchor = "NW",
+		border = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
 	})
+
+	self.hl_ns = vim.api.nvim_create_namespace('floating-help')
+	vim.api.nvim_set_hl(self.hl_ns, "NormalFloat", { bg = "none" })
+	vim.api.nvim_set_hl(self.hl_ns, "FloatBorder", { bg = "none", fg = '#ffffff' })
+	vim.api.nvim_win_set_hl_ns(self.win, self.hl_ns)
 
 	if term ~= nil then
 		vim.api.nvim_win_call(self.win, function()
 			vim.cmd('help ' .. term)
 		end)
 	end
+	vim.cmd('setlocal number')
 end
 
 function FloatHelp:close()
