@@ -1,6 +1,6 @@
 local export = {}
 
-export.pick_help_page = function(opts)
+local core = function(opts, callback)
 	local previewers = require('telescope.previewers')
 	local conf = require('telescope.config').values
 	local utils = require('telescope.utils')
@@ -111,13 +111,25 @@ export.pick_help_page = function(opts)
 					-- elseif cmd == "tab" then
 					-- 	vim.cmd("tab help " .. selection.value)
 					-- end
-					require('help-wrapper').open_help(selection.value)
+					callback(selection.value)
 				end)
 
 				return true
 			end,
 		})
 		:find()
+end
+
+export.pick_help_page = function(opts)
+	core(opts, function(term)
+		require('help-wrapper').open_help(term)
+	end)
+end
+
+export.float_help_page = function(opts)
+	core(opts, function(term)
+		require('utils.floating-help'):open(term)
+	end)
 end
 
 return export

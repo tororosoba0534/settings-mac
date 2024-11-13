@@ -55,12 +55,17 @@ export.init = function()
 	end, {})
 	-- Find help page
 	vim.keymap.set('n', '<Leader>h', function()
-		require('custom.telescope').pick_help_page {}
+		local floating_help = require('utils.floating-help')
+		if floating_help:is_open() then
+			floating_help:close()
+		elseif floating_help:is_buf_loaded() then
+			floating_help:open()
+		else
+			require('custom.telescope').float_help_page {}
+		end
 	end, {})
-	vim.keymap.set('x', '<Leader>h', function()
-		local text = require('utils.selection-getter').get_texts()[1]
-		vim.cmd("noh") -- Workaround for deleting remained selection highlight
-		require('custom.telescope').pick_help_page { default_text = text }
+	vim.keymap.set('n', '<Leader>H', function()
+		require('custom.telescope').float_help_page {}
 	end, {})
 	-- Find buffer
 	vim.keymap.set({ 'n' }, '<Leader>b', function()
