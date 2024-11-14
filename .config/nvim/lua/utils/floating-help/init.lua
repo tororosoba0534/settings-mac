@@ -8,6 +8,15 @@ local FloatHelp = {
 	hl_ns = nil,
 }
 
+function FloatHelp:inspect()
+	local value = {
+		win = self.win,
+		buf = self.buf,
+		hl_ns = self.hl_ns,
+	}
+	print(vim.inspect(value))
+end
+
 ---@return boolean
 function FloatHelp:is_open()
 	return self.win ~= nil
