@@ -3,6 +3,7 @@ local export = { "nvim-telescope/telescope.nvim" }
 export.dependencies = {
 	"nvim-lua/plenary.nvim",
 	"nvim-telescope/telescope-live-grep-args.nvim",
+	"nvim-telescope/telescope-file-browser.nvim",
 	-- {
 	-- 	"nvim-telescope/telescope-smart-history.nvim",
 	-- 	dependencies = {
@@ -100,11 +101,19 @@ export.init = function()
 			end,
 		}
 	end, {})
+
+	-- Open note
+	vim.keymap.set('n', '<Leader>n', function()
+		local dir = string.format("%s/notes/%s/%s/%s", os.getenv("HOME"), os.date("%Y"), os.date("%m"), os.date("%d"))
+		require('telescope').extensions.file_browser.file_browser({
+			path = dir,
+		})
+	end, {})
 end
 
 export.config = function()
 	local telescope = require("telescope")
-	require("telescope").load_extension("live_grep_args")
+	telescope.load_extension("live_grep_args")
 	local actions = require("telescope.actions")
 	telescope.setup({
 		defaults = {
@@ -147,8 +156,12 @@ export.config = function()
 		},
 		extensions = {
 			live_grep_args = {},
+			file_browser = {
+				hijack_netrw = true,
+			},
 		},
 	})
+	telescope.load_extension "file_browser"
 end
 
 return export
