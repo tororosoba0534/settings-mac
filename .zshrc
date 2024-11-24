@@ -81,6 +81,9 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # Go
 export PATH="$(go env GOPATH)/bin:$PATH"
 
+# Scala
+export PATH="$PATH:${HOME}/Library/Application Support/Coursier/bin"
+
 
 # completion
 fpath=(~/settings-mac/shell/completion $fpath)
