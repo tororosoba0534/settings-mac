@@ -203,8 +203,9 @@ unfunction create_nested_pattern
 
 function note {
 	local year=$(date "+%Y")
-	local today=$(date "+%m%d")
-	local root_dir="${HOME}/notes/${year}/${today}"
+	local month=$(date "+%m")
+	local day=$(date "+%d")
+	local root_dir="${HOME}/notes/${year}/${month}/${day}"
 
 	mkdir -p $root_dir
 	cd $root_dir
