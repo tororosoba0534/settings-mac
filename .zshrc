@@ -209,7 +209,7 @@ function note {
 
 	mkdir -p $root_dir
 	cd $root_dir
-	tmux rename-window $today
+	tmux rename-window ${month}/${day}
 	pwd
 	ls -a
 }
