@@ -8,6 +8,15 @@ export.dependencies = {
 }
 
 export.init = function()
+	if vim.loop.os_uname().sysname ~= "Linux" then
+		-- Set PATH for language servers installed by mason.nvim.
+		-- This settings is executed in setup function of mason.nvim,
+		-- but mason.nvim is so heavy that it is loaded lazily,
+		-- then we need set PATH explicitly here.
+		-- Path separator ":" might not work on Windows.
+		vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.expand("$HOME") .. "/.local/share/nvim/mason/bin"
+	end
+
 	local opts = { noremap = true, silent = true }
 
 	opts.desc = "Show documentation for what is under cursor"
