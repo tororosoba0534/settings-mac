@@ -15,6 +15,8 @@
 -- -- LSP
 -- K  Hover
 --
+--
+
 -- -- netrw
 -- :Ex                  Open netrw from current buffer's directory
 -- :Vex                 Open netrw vertically from current buffer's directory
@@ -98,8 +100,8 @@ vim.o.termguicolors = true
 
 vim.o.statusline = "%F %m (modified %{len(filter(getbufinfo(), 'v:val.changed == 1'))})%=%l/%L lines (%p%%)"
 
-vim.api.nvim_set_hl(0, 'StatusLineIsModified', { bg = 'firebrick1', bold = true })
-vim.api.nvim_set_hl(0, 'StatusLineIsNotModified', { reverse = true, bold = true })
+vim.api.nvim_set_hl(0, "StatusLineIsModified", { bg = "firebrick1", bold = true })
+vim.api.nvim_set_hl(0, "StatusLineIsNotModified", { reverse = true, bold = true })
 
 -- local statusline =
 -- 	"%{"
@@ -121,10 +123,8 @@ vim.api.nvim_set_hl(0, 'StatusLineIsNotModified', { reverse = true, bold = true 
 -- 	.. "'no change'"
 -- 	.. "}"
 
-
 -- local statusline = "%#StatusLineIsModified#here %#StatusLineIsNotModified#comes the sun"
 -- vim.o.statusline = statusline
-
 
 --
 -- vim.cmd("set statusline+=%#StatusLineIsModified#%{len(filter(getbufinfo(), 'v:val.changed == 1'))==0?'':'%F %m (modified %{len(filter(getbufinfo(), %'v:val.changed == 1%'))})%=%l/%L lines (%p%%)'}")
@@ -140,16 +140,16 @@ vim.api.nvim_set_hl(0, 'StatusLineIsNotModified', { reverse = true, bold = true 
 vim.g.mapleader = " "
 
 vim.keymap.set("n", "<C-w>o", function()
-	print('<C-w>o is disabled. Please use `:on` if you wanna close other windows.')
+	print("<C-w>o is disabled. Please use `:on` if you wanna close other windows.")
 end)
 
 vim.api.nvim_create_user_command("H", function(opts)
-	local page = opts.fargs[1] or ''
-	require('help-wrapper').open_help(page)
+	local page = opts.fargs[1] or ""
+	require("help-wrapper").open_help(page)
 end, {
-	nargs = '?',
+	nargs = "?",
 	bar = true,
-	complete = 'help',
+	complete = "help",
 })
 
 --------------------------------------------------
@@ -174,34 +174,39 @@ require("lazy").setup({
 	{ "folke/lazy.nvim" },
 
 	-- Snippet
-	require('lazy-configs.luasnip'),
+	require("lazy-configs.luasnip"),
 
 	-- Completion
-	require('lazy-configs.nvim-cmp'),
-
-	-- Language Servers Management
-	require('lazy-configs.mason'),
+	require("lazy-configs.nvim-cmp"),
 
 	-- LSP
-	require('lazy-configs.nvim-lspconfig'),
+	require("lazy-configs.nvim-lspconfig"),
 
 	-- Formatters
-	require('lazy-configs.conform'),
+	require("lazy-configs.conform"),
+
+	-- Other programs management
+	require("lazy-configs.mason"),
 
 	-- Others
-	require('lazy-configs.telescope'),
-	require('lazy-configs.undotree'),
-	require('lazy-configs.nvim-tree'),
-	require('lazy-configs.trouble'),
-	require('lazy-configs.neoscroll'),
-	require('lazy-configs.im-select'),
-	require('lazy-configs.nvim-window'),
-	require('lazy-configs.indenter'),
+	require("lazy-configs.telescope"),
+	require("lazy-configs.undotree"),
+	require("lazy-configs.nvim-tree"),
+	require("lazy-configs.trouble"),
+	require("lazy-configs.neoscroll"),
+	require("lazy-configs.harpoon"),
 }, {
 	defaults = {
 		lazy = true,
 	},
-	dev = {
-		path = "~/settings-mac/.config/nvim/lua",
-	},
 })
+
+-- local plugins
+require("im-select").setup()
+
+vim.keymap.set({ "i", "x" }, "<Tab>", require("indenter").increase, { noremap = true, silent = false })
+vim.keymap.set({ "i", "x" }, "<S-Tab>", require("indenter").decrease, { noremap = true, silent = false })
+
+require("nvim-window").setup({})
+vim.keymap.set({ "n" }, "<Leader><Leader>", require("nvim-window").pick, { noremap = true, silent = true })
+vim.keymap.set({ "n" }, "<Leader>c", require("nvim-window").close, { noremap = true, silent = true })

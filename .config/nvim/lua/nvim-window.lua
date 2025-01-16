@@ -15,39 +15,39 @@ local float_width = 6
 local config = {
 	-- The characters available for hinting windows.
 	chars = {
-		'f',
-		'j',
-		'd',
-		'k',
-		's',
-		'l',
-		'a',
-		'n',
-		'b',
-		'm',
-		'v',
-		'o',
-		'w',
-		'e',
-		'i',
-		'r',
-		'u',
-		't',
-		'y',
-		'p',
-		'q',
+		"f",
+		"j",
+		"d",
+		"k",
+		"s",
+		"l",
+		"a",
+		"n",
+		"b",
+		"m",
+		"v",
+		"o",
+		"w",
+		"e",
+		"i",
+		"r",
+		"u",
+		"t",
+		"y",
+		"p",
+		"q",
 	},
 
 	-- A group to use for overwriting the Normal highlight group in the floating
 	-- window. This can be used to change the background color.
-	normal_hl = 'Normal',
+	normal_hl = "Normal",
 
 	-- The highlight group to apply to the line that contains the hint characters.
 	-- This is used to make them stand out more.
-	hint_hl = 'Bold',
+	hint_hl = "Bold",
 
 	-- The border style to use for the floating window.
-	border = 'single',
+	border = "single",
 }
 
 -- Returns a table that maps the hint keys to their corresponding windows.
@@ -111,24 +111,18 @@ local function open_floats(mapping)
 			local row = math.max(0, math.floor((win_height / 2) - 1))
 			local col = math.max(0, math.floor((win_width / 2) - float_width))
 
-			api.nvim_buf_set_lines(
-				bufnr,
-				0,
-				-1,
-				true,
-				{ '', '  ' .. string.upper(key) .. '  ', '' }
-			)
+			api.nvim_buf_set_lines(bufnr, 0, -1, true, { "", "  " .. string.upper(key) .. "  ", "" })
 			api.nvim_buf_add_highlight(bufnr, 0, config.hint_hl, 1, 0, -1)
 
 			local float_window = api.nvim_open_win(bufnr, false, {
-				relative = 'win',
+				relative = "win",
 				win = window,
 				row = row,
 				col = col,
 				width = #key == 1 and float_width - 1 or float_width,
 				height = float_height,
 				focusable = false,
-				style = 'minimal',
+				style = "minimal",
 				border = config.border,
 				noautocmd = true,
 			})
@@ -138,24 +132,16 @@ local function open_floats(mapping)
 			-- 	'winhl',
 			-- 	'Normal:' .. config.normal_hl
 			-- )
-			api.nvim_set_option_value(
-				'winhl',
-				'Normal:' .. config.normal_hl,
-				{ win = float_window }
-			)
+			api.nvim_set_option_value("winhl", "Normal:" .. config.normal_hl, { win = float_window })
 			-- api.nvim_win_set_option(float_window, 'diff', false)
-			api.nvim_set_option_value(
-				'diff',
-				false,
-				{ win = float_window }
-			)
+			api.nvim_set_option_value("diff", false, { win = float_window })
 
 			floats[float_window] = bufnr
 		end
 	end
 
 	-- We need to redraw here, otherwise the floats won't show up
-	vim.cmd('redraw')
+	vim.cmd("redraw")
 
 	return floats
 end
@@ -175,12 +161,12 @@ end
 
 -- Configures the plugin by merging the given settings into the default ones.
 function M.setup(user_config)
-	config = vim.tbl_extend('force', config, user_config)
+	config = vim.tbl_extend("force", config, user_config)
 end
 
 local function core()
 	local windows = vim.tbl_filter(function(id)
-		return api.nvim_win_get_config(id).relative == ''
+		return api.nvim_win_get_config(id).relative == ""
 	end, api.nvim_tabpage_list_wins(0))
 
 	local window_keys = window_keys(windows)

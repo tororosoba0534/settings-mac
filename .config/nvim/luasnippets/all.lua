@@ -4,6 +4,6 @@ local t = ls.text_node
 
 return {
 	s("hello", {
-		t('println("Hello, world!")')
+		t('println("Hello, world!")'),
 	}),
 }

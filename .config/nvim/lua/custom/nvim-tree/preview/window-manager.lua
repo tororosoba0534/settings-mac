@@ -1,5 +1,5 @@
-local loader = require('custom.nvim-tree.preview.loader')
-local config = require('custom.nvim-tree.preview.config')
+local loader = require("custom.nvim-tree.preview.loader")
+local config = require("custom.nvim-tree.preview.config")
 
 ---@class WinMgr
 ---@field private win number?
@@ -16,7 +16,7 @@ local TREE_WIDTH = 30
 local _get_win_opts = function()
 	local height = math.ceil(vim.o.lines * 2 / 3)
 	return {
-		relative = 'win',
+		relative = "win",
 		width = math.min(vim.o.columns - TREE_WIDTH, 100),
 		height = height,
 		row = 5,
@@ -77,10 +77,10 @@ function WinMgr:_set_keymap()
 		return
 	end
 	for _, keymap in ipairs(config:get_preview_buf_keymaps()) do
-		vim.api.nvim_buf_set_keymap(self.buf, 'n', keymap.key, '', {
+		vim.api.nvim_buf_set_keymap(self.buf, "n", keymap.key, "", {
 			noremap = true,
 			callback = keymap.callback,
-			desc = 'exit enter mode'
+			desc = "exit enter mode",
 		})
 	end
 end

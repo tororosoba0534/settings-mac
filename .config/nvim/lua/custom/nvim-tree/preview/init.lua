@@ -1,5 +1,5 @@
-local modemgr = require('custom.nvim-tree.preview.mode-manager')
-local config = require('custom.nvim-tree.preview.config')
+local modemgr = require("custom.nvim-tree.preview.mode-manager")
+local config = require("custom.nvim-tree.preview.config")
 
 local export = {}
 
@@ -9,15 +9,15 @@ export.setup = function(opts)
 end
 
 export.is_watch_mode = function()
-	return modemgr:is('watch')
+	return modemgr:is("watch")
 end
 
 export.is_enter_mode = function()
-	return modemgr:is('enter')
+	return modemgr:is("enter")
 end
 
 export.is_exit_mode = function()
-	return modemgr:is('exit')
+	return modemgr:is("exit")
 end
 
 export.watch = function()

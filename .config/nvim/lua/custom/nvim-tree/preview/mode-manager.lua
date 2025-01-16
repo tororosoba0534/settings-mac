@@ -1,4 +1,4 @@
-local winmgr = require('custom.nvim-tree.preview.window-manager')
+local winmgr = require("custom.nvim-tree.preview.window-manager")
 
 ---@alias Mode 'exit' | 'watch' | 'enter'
 
@@ -9,7 +9,7 @@ local winmgr = require('custom.nvim-tree.preview.window-manager')
 ---@field private tree_win integer?
 ---@field private node Node?
 local ModeMgr = {
-	mode = 'exit',
+	mode = "exit",
 	augroup = nil,
 	tree_buf = nil,
 	tree_win = nil,
@@ -23,7 +23,7 @@ function ModeMgr:is(mode)
 end
 
 function ModeMgr:to_exit_mode()
-	if self:is('exit') then
+	if self:is("exit") then
 		return
 	end
 	if self.augroup then
@@ -31,7 +31,7 @@ function ModeMgr:to_exit_mode()
 	end
 	winmgr:close()
 
-	self.mode = 'exit'
+	self.mode = "exit"
 	self.augroup = nil
 	self.tree_buf = nil
 	self.tree_win = nil
@@ -39,9 +39,9 @@ function ModeMgr:to_exit_mode()
 end
 
 function ModeMgr:to_watch_mode()
-	if self:is('watch') then
+	if self:is("watch") then
 		return
-	elseif self:is('exit') then
+	elseif self:is("exit") then
 		self:_setup_preview_win(false)
 	else
 		-- Focus tree window
@@ -49,36 +49,36 @@ function ModeMgr:to_watch_mode()
 			vim.api.nvim_set_current_win(self.tree_win)
 		end
 	end
-	self.mode = 'watch'
+	self.mode = "watch"
 end
 
 function ModeMgr:to_enter_mode()
-	if self:is('enter') then
+	if self:is("enter") then
 		return
-	elseif self:is('exit') then
+	elseif self:is("exit") then
 		self:_setup_preview_win(true)
 	else
 		winmgr:focus_preview()
 	end
-	self.mode = 'enter'
+	self.mode = "enter"
 end
 
 ---@private
 ---@param focus_preview boolean
 function ModeMgr:_setup_preview_win(focus_preview)
-	if vim.bo.ft ~= 'NvimTree' then
-		vim.notify('Cannot setup preview: current buffer is not NvimTree', vim.log.levels.ERROR)
+	if vim.bo.ft ~= "NvimTree" then
+		vim.notify("Cannot setup preview: current buffer is not NvimTree", vim.log.levels.ERROR)
 		return
 	end
-	if not self:is('exit') then
+	if not self:is("exit") then
 		return
 	end
 
 	self.tree_buf = vim.api.nvim_get_current_buf()
 	self.tree_win = vim.api.nvim_get_current_win()
 
-	self.augroup = vim.api.nvim_create_augroup('nvim_tree_preview', { clear = true })
-	vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
+	self.augroup = vim.api.nvim_create_augroup("nvim_tree_preview", { clear = true })
+	vim.api.nvim_create_autocmd({ "CursorMoved" }, {
 		group = self.augroup,
 		buffer = self.tree_buf,
 		callback = function()
@@ -86,7 +86,7 @@ function ModeMgr:_setup_preview_win(focus_preview)
 			self:_open_under_cursor(false)
 		end,
 	})
-	vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+	vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
 		group = self.augroup,
 		callback = function()
 			local buf = vim.api.nvim_get_current_buf()
@@ -101,7 +101,7 @@ end
 ---@private
 ---@param focus_preview boolean
 function ModeMgr:_open_under_cursor(focus_preview)
-	local ok, node = pcall(require('nvim-tree.api').tree.get_node_under_cursor)
+	local ok, node = pcall(require("nvim-tree.api").tree.get_node_under_cursor)
 	if ok and node and self:_has_node_changed(node) then
 		self.node = node
 		winmgr:show(node, focus_preview)

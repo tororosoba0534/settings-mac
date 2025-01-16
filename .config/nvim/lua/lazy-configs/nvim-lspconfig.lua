@@ -4,22 +4,16 @@ export.event = { "BufReadPre", "BufNewFile" }
 
 export.dependencies = {
 	"hrsh7th/cmp-nvim-lsp",
-	{ 'antosha417/nvim-lsp-file-operations' },
-	-- 'williamboman/mason-lspconfig.nvim',
+	{ "antosha417/nvim-lsp-file-operations" },
 }
 
 export.init = function()
-	-- Set PATH for language servers installed by mason.nvim.
-	-- This settings is executed in setup function of mason.nvim,
-	-- but mason.nvim is so heavy that it is loaded lazily,
-	-- then we need set PATH explicitly here.
-	-- Path separator ":" might not work on Windows.
-	vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.expand("$HOME") .. "/.local/share/nvim/mason/bin"
 	local opts = { noremap = true, silent = true }
 
 	opts.desc = "Show documentation for what is under cursor"
 	vim.keymap.set("n", "gh", function()
 		vim.lsp.buf.hover()
+		vim.lsp.buf.clear_references()
 		vim.lsp.buf.document_highlight()
 	end, opts)
 
@@ -88,14 +82,21 @@ export.config = function()
 	})
 	lspconfig["ts_ls"].setup({
 		capabilities = capabilities,
-		filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.tsx" },
+		filetypes = {
+			"typescript",
+			"typescriptreact",
+			"typescript.tsx",
+			"javascript",
+			"javascriptreact",
+			"javascript.tsx",
+		},
 	})
 	lspconfig["lua_ls"].setup({
 		capabilities = capabilities,
 		settings = { -- custom settings for lua
 			Lua = {
 				runtime = {
-					version = 'Lua 5.1',
+					version = "Lua 5.1",
 				},
 				-- make the language server recognize "vim" global
 				diagnostics = {
@@ -109,6 +110,9 @@ export.config = function()
 				},
 			},
 		},
+	})
+	lspconfig["nil_ls"].setup({
+		capabilities = capabilities,
 	})
 	lspconfig["hls"].setup({
 		capabilities = capabilities,

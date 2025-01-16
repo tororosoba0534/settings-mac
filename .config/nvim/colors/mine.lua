@@ -9,8 +9,8 @@
 -- This is Vim's default color scheme. It doesn't define the Normal
 -- highlighting, it uses whatever the colors used to be.
 
-vim.cmd.highlight('clear')
-vim.g.colors_name = 'mine'
+vim.cmd.highlight("clear")
+vim.g.colors_name = "mine"
 
 local hi = function(name, val)
 	-- Force links

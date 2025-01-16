@@ -3,7 +3,7 @@ local export = {}
 --- :help command wrapper.
 --- @param term string
 export.open_help = function(term)
-	vim.cmd('vert help ' .. term)
+	vim.cmd("vert help " .. term)
 
 	-- if #vim.api.nvim_list_wins() == 1 then
 	-- 	vim.cmd('vert help ' .. term)

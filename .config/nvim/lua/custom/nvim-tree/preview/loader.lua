@@ -1,4 +1,4 @@
-local Path = require('plenary.path')
+local Path = require("plenary.path")
 
 local Loader = {}
 
@@ -14,7 +14,7 @@ local set_content = function(buf, content)
 end
 
 local load_link = function(node, buf)
-	local content = { node.name .. ' → ' .. node.link_to }
+	local content = { node.name .. " → " .. node.link_to }
 	set_content(buf, content)
 end
 
@@ -23,12 +23,12 @@ end
 ---@return string[] after
 local format_directory_content = function(node, before)
 	if not before or #before == 0 then
-		return { 'Error reading directory' }
+		return { "Error reading directory" }
 	end
 	local files = vim.tbl_map(function(name)
 		return {
 			name = name,
-			is_dir = vim.fn.isdirectory(node.absolute_path .. '/' .. name) == 1,
+			is_dir = vim.fn.isdirectory(node.absolute_path .. "/" .. name) == 1,
 		}
 	end, before)
 	table.sort(files, function(a, b)
@@ -37,11 +37,11 @@ local format_directory_content = function(node, before)
 		end
 		return a.name < b.name
 	end)
-	local after = { '  ' .. node.name .. '/' }
+	local after = { "  " .. node.name .. "/" }
 	for i, file in ipairs(files) do
-		local prefix = i == #files and ' └ ' or ' │ '
+		local prefix = i == #files and " └ " or " │ "
 		if file.is_dir then
-			table.insert(after, prefix .. file.name .. '/')
+			table.insert(after, prefix .. file.name .. "/")
 		else
 			table.insert(after, prefix .. file.name)
 		end
@@ -63,7 +63,7 @@ local update_filetype = function(node, buf)
 	if not buf or not vim.api.nvim_buf_is_valid(buf) then
 		return
 	end
-	local ft = vim.filetype.match { buf = buf, filename = node.absolute_path }
+	local ft = vim.filetype.match({ buf = buf, filename = node.absolute_path })
 	if ft and vim.bo[buf].filetype ~= ft then
 		vim.bo[buf].filetype = ft
 	end
@@ -75,7 +75,7 @@ local load_file = function(node, buf)
 	local path = node.absolute_path
 
 	Path:new(path):read(vim.schedule_wrap(function(data)
-		local content = vim.split(data, '[\r]?\n')
+		local content = vim.split(data, "[\r]?\n")
 		if not content then
 			content = { "" }
 		end
@@ -84,19 +84,17 @@ local load_file = function(node, buf)
 	end))
 end
 
-
-
 ---@param node Node
 ---@param buf number?
 function Loader.load(node, buf)
-	if node.type == 'directory' then
+	if node.type == "directory" then
 		return load_directory(node, buf)
-	elseif node.type == 'file' then
+	elseif node.type == "file" then
 		return load_file(node, buf)
-	elseif node.type == 'link' then
+	elseif node.type == "link" then
 		return load_link(node, buf)
 	else
-		vim.notify('Unexpected node type: ' .. vim.inspect(node.type), vim.log.levels.ERROR)
+		vim.notify("Unexpected node type: " .. vim.inspect(node.type), vim.log.levels.ERROR)
 	end
 end
 

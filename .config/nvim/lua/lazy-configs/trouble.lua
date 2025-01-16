@@ -8,7 +8,7 @@ export.init = function()
 	vim.api.nvim_create_user_command("Ea", "TroubleToggleMyMenuAll", {})
 end
 
-export.cmd = { 'Trouble', 'TroubleToggleMyMenuCurrent', 'TroubleToggleMyMenuAll' }
+export.cmd = { "Trouble", "TroubleToggleMyMenuCurrent", "TroubleToggleMyMenuAll" }
 
 export.config = function()
 	local trouble = require("trouble")
@@ -24,7 +24,7 @@ export.config = function()
 					position = "right",
 					size = 0.3,
 				},
-				filter = { buf = 0 }
+				filter = { buf = 0 },
 			},
 			all = {
 				mode = "diagnostics",
@@ -40,20 +40,20 @@ export.config = function()
 	})
 
 	local toggle_current = function()
-		if trouble.is_open('all') then
-			trouble.close('all')
-			trouble.open('current')
+		if trouble.is_open("all") then
+			trouble.close("all")
+			trouble.open("current")
 		else
-			trouble.toggle('current')
+			trouble.toggle("current")
 		end
 	end
 
 	local toggle_all = function()
-		if trouble.is_open('current') then
-			trouble.close('current')
-			trouble.open('all')
+		if trouble.is_open("current") then
+			trouble.close("current")
+			trouble.open("all")
 		else
-			trouble.toggle('all')
+			trouble.toggle("all")
 		end
 	end
 

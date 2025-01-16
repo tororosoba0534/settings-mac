@@ -12,8 +12,8 @@ local get_selection_positions = function()
 	}
 
 	local vstart = {
-		row = vim.fn.line('v') - 1,
-		col = vim.fn.col('v') - 1,
+		row = vim.fn.line("v") - 1,
+		col = vim.fn.col("v") - 1,
 	}
 
 	if vstart.row < cursor.row or (vstart.row == cursor.row and vstart.col <= cursor.col) then
@@ -32,7 +32,6 @@ local get_rows = function()
 	-- 0-indexed & end-exclusive indexing style
 	local pos_start, pos_end = get_selection_positions()
 	local row_top, row_bottom = pos_start.row, pos_end.row
-
 
 	-- nvim_buf_get_line uses 0-indexed & end-exclusive indexing style
 	local lines = vim.api.nvim_buf_get_lines(0, row_top, row_bottom + 1, true)
@@ -95,9 +94,9 @@ end
 local get_texts = function()
 	local texts
 	local mode = vim.api.nvim_get_mode().mode
-	if mode == 'v' then
+	if mode == "v" then
 		_, _, texts = get_normal_selected()
-	elseif mode == 'V' then
+	elseif mode == "V" then
 		_, _, texts = get_rows()
 	else
 		_, _, texts = get_rectangle_selected()

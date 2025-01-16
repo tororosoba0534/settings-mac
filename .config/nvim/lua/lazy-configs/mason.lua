@@ -1,13 +1,16 @@
-local export = { 'williamboman/mason.nvim' }
+local export = { "williamboman/mason.nvim" }
 
 export.dependencies = {
-	'williamboman/mason-lspconfig.nvim',
+	"williamboman/mason-lspconfig.nvim",
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 }
 
 export.cmd = "Mason"
 
 export.config = function()
+	if vim.loop.os_uname().sysname == "Linux" then
+		return
+	end
 	require("mason").setup()
 	require("mason-lspconfig").setup({
 		ensure_installed = {
@@ -39,7 +42,7 @@ export.config = function()
 			"black",
 			-- -- rustfmt must be installed via rustup
 			-- "rustfmt",
-		}
+		},
 	})
 end
 
